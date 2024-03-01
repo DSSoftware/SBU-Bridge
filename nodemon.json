@@ -1,0 +1,3 @@
+{
+  "ignore": ["data/*.json", "config.js", "config.example.json", "auth-cache/*.json"]
+}
