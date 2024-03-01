@@ -12,10 +12,8 @@ If you found this project helpful or interesting, please consider giving it a st
 ## Table of Content
 
 - [Installation using NodeJS](#nodejs)
-- [Installation using Docker](#docker)
 - [Commands](#commands-2)
 - [Configuration](#configuration)
-- [To-Do List](#to-do-list)
 
 ## NodeJS
 
@@ -27,7 +25,8 @@ If you found this project helpful or interesting, please consider giving it a st
 
 To get started, clone down the repository using:
 
-    git clone https://github.com/DuckySoLucky/hypixel-discord-chat-bridge.git
+    cd /home/node && mkdir bridge && cd bridge && 
+    git clone https://github.com/DSSoftware/SBU-Bridge .
 
 Next go into the `hypixel-discord-chat-bridge` folder and install all the dependencies using NPM.
 
@@ -40,67 +39,6 @@ Once edited and the dependencies are installed, you can start the application us
     node index.js
 
 Using the link provided in the console, you sign into the Minecraft account of your choice.
-
-## Docker
-
-### Requirements
-
-- Git
-- Docker >= 20<br>
-  _Older versions may also work, but have not been tested._
-- A Minecraft account
-
-### Setup
-
-In here we are going to clone the repository, set up the configuration file, volume directory, build the image, and run the container.
-
-- Clone the repository and enter the directory:
-
-      git clone https://github.com/DuckySoLucky/hypixel-discord-chat-bridge.git
-      cd hypixel-discord-chat-bridge
-
-- Configure the volume directories in /opt/ as `root`:
-
-      mkdir -p /opt/docker/hypixel-discord-chat-bridge/data/
-      mkdir -p /opt/docker/hypixel-discord-chat-bridge/auth-cache/
-
-- Move the following files into the directory using:
-
-      mv config.example.json /opt/docker/hypixel-discord-chat-bridge/config.js
-      mv messages.json /opt/docker/hypixel-discord-chat-bridge/messages.json
-      mv data/* /opt/docker/hypixel-discord-chat-bridge/data
-
-- Change the ownership of the directory to the user you want to run the container as using:
-
-      chown -R 1000:1000 /opt/docker/hypixel-discord-chat-bridge/
-
-- Edit the configuration file called `config.js` in `/opt/docker/hypixel-discord-chat-bridge/` using the [Configuration](#configuration) section.
-
-- Build the image using:
-
-      docker build . -t hypixel-discord-chat-bridge:latest
-
-- Once the image is built, you can run the container for the first time using:
-
-      docker run -it \
-          -v /opt/docker/hypixel-discord-chat-bridge/data:/usr/src/app/data \
-          -v /opt/docker/hypixel-discord-chat-bridge/auth-cache:/usr/src/app/auth-cache \
-          -v /opt/docker/hypixel-discord-chat-bridge/config.js:/usr/src/app/config.js \
-          -v /opt/docker/hypixel-discord-chat-bridge/messages.json:/usr/src/app/messages.json \
-          -v /etc/localtime:/etc/localtime:ro \
-          --restart unless-stopped \
-          --name hypixel-discord-chat-bridge \
-          hypixel-discord-chat-bridge:latest
-
-- Using the link provided in the console, sign in to the minecraft account that you want to use.
-
-- Once you are signed in, you can stop the container using:
-
-      Ctrl + C
-
-- Now you can start the container using:
-
-      docker start hypixel-discord-chat-bridge
 
 ## Configuration
 

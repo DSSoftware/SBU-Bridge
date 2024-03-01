@@ -113,7 +113,7 @@ module.exports = {
       "allowedBots": ["155149108183695360"]
     },
     "replication": {
-      "enabled": true,
+      "enabled": process.env.replica_enabled == "true",
       "token": process.env.replica_token,
       "serverID": process.env.replica_server,
       "channels": {
