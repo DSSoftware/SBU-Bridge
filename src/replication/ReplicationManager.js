@@ -116,7 +116,6 @@ class ReplicationManager extends CommunicationBridge {
       if ((chat = "debugChannel")) {
         return;
       }
-      Logger.errorMessage(`Channel ${chat} not found!`);
       return;
     }
 

@@ -115,7 +115,6 @@ class DiscordManager extends CommunicationBridge {
 
     const channel = await this.stateHandler.getChannel(chat || "Guild");
     if (channel === undefined) {
-      Logger.errorMessage(`Channel ${chat} not found!`);
       return;
     }
 
