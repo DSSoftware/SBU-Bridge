@@ -121,6 +121,11 @@ if (cluster.isPrimary) {
         cluster.workers[id].kill();
       }
     }
+
+    if (code == 5) {
+      Logger.warnMessage("The bot is deploying the new version...");
+      process.exit();
+    }
     console.log(`Fork exited with exit code ${code}.`);
   });
 }
