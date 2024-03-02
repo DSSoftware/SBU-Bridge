@@ -14,7 +14,7 @@ class DiscordLinkCommand extends minecraftCommand {
     try {
       this.send(`/${channel} Discord: ${process.env.discord_invite}`);
     } catch (error) {
-      this.send("/${channel} Something went wrong..");
+      this.send(`/${channel} Something went wrong...`);
     }
   }
 }
