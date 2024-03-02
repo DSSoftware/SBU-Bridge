@@ -277,7 +277,7 @@ class StateHandler extends eventHandler {
 
       if (process.env.notify_enabled) {
         await client.channels.cache
-          .get(`${config.discord.channels.officerChannel}`)
+          .get(`${config.discord.channels.loggingChannel}`)
           .send(`${process.env.notify_content}\n${username} has joined the guild!`);
       }
 
