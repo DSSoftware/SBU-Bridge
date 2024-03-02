@@ -12,7 +12,9 @@ async function checkBlacklist(uuid) {
       axios.get(
         `https://sky.dssoftware.ru/api.php?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`,
       ),
-    ]).catch((error) => {});
+    ]).catch((error) => {
+      resolve(false);
+    });
 
     player_banned = player_banned[0]?.data ?? {};
     
