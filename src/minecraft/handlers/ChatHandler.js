@@ -247,7 +247,7 @@ class StateHandler extends eventHandler {
               iconURL: config.minecraft.API.SCF.logo,
             });
 
-      await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
+      client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
 
       if (
         skykings_scammer === true ||
@@ -266,8 +266,6 @@ class StateHandler extends eventHandler {
         
         return;
       }
-
-      await delay(1000);
 
       bot.chat(
         `/gc ${replaceVariables(messages.guildJoinMessage, {
