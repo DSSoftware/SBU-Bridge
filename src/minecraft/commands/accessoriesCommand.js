@@ -8,7 +8,7 @@ class AccessoriesCommand extends minecraftCommand {
     super(minecraft);
 
     this.name = "accessories";
-    this.aliases = ["acc", "talismans", "talisman"];
+    this.aliases = ["acc", "talismans", "talisman", "mp"];
     this.description = "Accessories of specified user.";
     this.options = [
       {
