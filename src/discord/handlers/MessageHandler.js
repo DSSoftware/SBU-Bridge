@@ -95,7 +95,7 @@ class MessageHandler {
             {
               color: 15548997,
               description:
-                "In order to use bridge, please use `" + `/${config.minecraft.bot.replication_prefix}` + "link" + "` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.",
+                "In order to use bridge, please use `" + `/${config.minecraft.bot.replication_prefix}` + "scf-link" + "` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.",
             },
           ],
         });
