@@ -278,7 +278,7 @@ class StateHandler extends eventHandler {
       if (config.minecraft.API.SCF.enabled) {
         await client.channels.cache
           .get(`${config.discord.channels.officerChannel}`)
-          .send(`<@&1172990412802248704>\n${username} has joined the guild!`);
+          .send(`<@${process.env.guildmaster_id}>\n${username} has joined the guild!`);
       }
 
       return [
