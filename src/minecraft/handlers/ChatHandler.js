@@ -275,10 +275,10 @@ class StateHandler extends eventHandler {
         })}`,
       );
 
-      if (config.minecraft.API.SCF.enabled) {
+      if (process.env.notify_enabled) {
         await client.channels.cache
           .get(`${config.discord.channels.officerChannel}`)
-          .send(`<@${process.env.guildmaster_id}>\n${username} has joined the guild!`);
+          .send(`<@${process.env.notify_content}>\n${username} has joined the guild!`);
       }
 
       return [
