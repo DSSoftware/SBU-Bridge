@@ -47,6 +47,7 @@ class CommandHandler {
       }
 
       Logger.minecraftMessage(`${player} - [${command}] ${message}`);
+      bot.chat(`/gc [SOOPY V2] ${player}, wait a bit...`);
 
       (async () => {
         try {
