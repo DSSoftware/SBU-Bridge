@@ -5,7 +5,7 @@ const axios = require("axios");
 const AuthProvider = require("../AuthProvider.js");
 
 module.exports = {
-  name: `${config.minecraft.bot.guild_prefix}` + "scf-link",
+  name: `${config.minecraft.bot.guild_prefix}` + "link",
   description: "Links the correct user account for the bridge.",
   options: [
     {
