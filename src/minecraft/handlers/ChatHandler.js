@@ -143,7 +143,7 @@ class StateHandler extends eventHandler {
                 title: `Banned player`,
                 icon: `https://mc-heads.net/avatar/${username}`,
                 color: 15548997,
-                channel: "Officer",
+                channel: "Logger",
               });
 
               await delay(10000);
@@ -259,7 +259,7 @@ class StateHandler extends eventHandler {
           title: `Banned player`,
           icon: `https://mc-heads.net/avatar/${username}`,
           color: 15548997,
-          channel: "Officer",
+          channel: "Logger",
         });
 
         bot.chat(`/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`);
