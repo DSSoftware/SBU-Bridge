@@ -2,6 +2,7 @@ const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 const { demojify } = require("discord-emoji-converter");
 const config = require("../../../config.js");
 const axios = require("axios");
+const scfBridgeLock = require("../../../API/utils/scfBridgeLock.js");
 
 const sender_cache = new Map();
 
@@ -99,6 +100,12 @@ class MessageHandler {
             },
           ],
         });
+        return;
+      }
+
+      const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
+      if(isBridgeLocked){
+        message.react("❌");
         return;
       }
 
