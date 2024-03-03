@@ -85,7 +85,6 @@ class StateHandler extends eventHandler {
         let meetRequirements = false;
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-        const weight = getWeight(profile?.profile)?.senither?.total || 0;
 
         const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
         const catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
@@ -96,7 +95,6 @@ class StateHandler extends eventHandler {
 
         let skill_requirements = true;
 
-        skill_requirements = skill_requirements && (weight >= config.minecraft.guildRequirements.requirements.senitherWeight);
         skill_requirements = skill_requirements && (skyblockLevel >= config.minecraft.guildRequirements.requirements.skyblockLevel);
         skill_requirements = skill_requirements && (catacombsLevel >= config.minecraft.guildRequirements.requirements.catacombsLevel);
 
@@ -108,11 +106,6 @@ class StateHandler extends eventHandler {
               {
                 name: "Skyblock Level",
                 value: `\`${skyblockLevel.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "Senither Weight",
-                value: `\`${weight.toLocaleString()}\``,
                 inline: true,
               },
               {
