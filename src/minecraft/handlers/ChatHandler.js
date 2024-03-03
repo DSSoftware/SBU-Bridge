@@ -186,7 +186,7 @@ class StateHandler extends eventHandler {
 
         bot.chat(
           `/oc ${username} ${meetRequirements ? "meets" : "Doesn't meet"
-          } Requirements. SB Level: ${skyblockLevel.toLocaleString()} | Scammer: ${skykings_scammer.toLocaleString()} | Blacklist: ${blacklisted.toLocaleString()}`,
+          } Requirements. SB Level: ${skyblockLevel.toLocaleString()} | Weight: ${weight.toLocaleString()} | Cata Level: ${catacombsLevel.toLocaleString()} | Scammer: ${skykings_scammer.toLocaleString()} | Blacklist: ${blacklisted.toLocaleString()}`,
         );
         await delay(1000);
 
