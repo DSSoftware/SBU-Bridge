@@ -35,7 +35,7 @@ async function checkBridgelock(uuid) {
       }
     }
 
-    this.getLockState(uuid).then((response)=>{
+    getLockState(uuid).then((response)=>{
       sender_cache.set(uuid, {
         last_save: Date.now(),
         locked: response,
