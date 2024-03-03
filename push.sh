@@ -1,5 +1,5 @@
 pkill -f node 
-cd /home/node/bridge 
+cd /nodeFiles/bridge 
 git pull 
 git fetch --all 
 git reset --hard 
