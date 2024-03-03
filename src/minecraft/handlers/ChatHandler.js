@@ -94,7 +94,7 @@ class StateHandler extends eventHandler {
         const blacklisted = await Blacklist.checkBlacklist(uuid);
         const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
 
-        let skill_requirements = false;
+        let skill_requirements = true;
 
         skill_requirements = skill_requirements && (weight >= config.minecraft.guildRequirements.requirements.senitherWeight);
         skill_requirements = skill_requirements && (skyblockLevel >= config.minecraft.guildRequirements.requirements.skyblockLevel);
