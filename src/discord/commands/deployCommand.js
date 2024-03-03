@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 const { exec } = require("child_process");
 
 module.exports = {
-  name: `${config.minecraft.bot.replication_prefix}` + "deploy",
+  name: `${config.minecraft.bot.guild_prefix}` + "deploy",
   description: "Deploys the new version from github.",
 
   execute: async (interaction) => {

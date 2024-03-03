@@ -4,7 +4,7 @@ const config = require("../../../config.js");
 const AuthProvider = require("../AuthProvider.js");
 
 module.exports = {
-  name: `${config.minecraft.bot.guild_prefix}` + `masskick`,
+  name: `${config.minecraft.bot.replication_prefix}` + `masskick`,
   description: "Kick the given users from the Guild.",
   options: [
     {
