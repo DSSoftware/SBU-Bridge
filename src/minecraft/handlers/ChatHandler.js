@@ -85,7 +85,7 @@ class StateHandler extends eventHandler {
         let meetRequirements = false;
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-        const weight = getWeight(profile.profile, profile.uuid)?.weight?.senither?.total || 0;
+        const weight = getWeight(profile?.profile)?.senither?.total || 0;
 
         const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
         const catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
