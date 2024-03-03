@@ -96,9 +96,9 @@ class StateHandler extends eventHandler {
 
         let skill_requirements = false;
 
-        skill_requirements = skill_requirements && (weight > config.minecraft.guildRequirements.requirements.senitherWeight);
-        skill_requirements = skill_requirements && (skyblockLevel > config.minecraft.guildRequirements.requirements.skyblockLevel);
-        skill_requirements = skill_requirements && (catacombsLevel > config.minecraft.guildRequirements.requirements.catacombsLevel);
+        skill_requirements = skill_requirements && (weight >= config.minecraft.guildRequirements.requirements.senitherWeight);
+        skill_requirements = skill_requirements && (skyblockLevel >= config.minecraft.guildRequirements.requirements.skyblockLevel);
+        skill_requirements = skill_requirements && (catacombsLevel >= config.minecraft.guildRequirements.requirements.catacombsLevel);
 
         const statsEmbed = new EmbedBuilder()
             .setColor(2067276)
