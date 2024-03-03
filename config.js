@@ -44,7 +44,9 @@ module.exports = {
       "enabled": process.env.req_enabled == "true",
       "autoAccept": process.env.req_autoaccept == "true",
       "requirements": {
-        "skyblockLevel": process.env.req_sb_lvl
+        "skyblockLevel": process.env.req_sb_lvl,
+        "senitherWeight": process.env.req_weight,
+        "catacombsLevel": process.env.req_cata
       }
     },
     "skyblockEventsNotifications": {

@@ -13,6 +13,7 @@ const axios = require("axios");
 const Skykings = require("../../../API/utils/skykings");
 const Blacklist = require("../../../API/utils/blacklist");
 const scfBlacklist = require("../../../API/utils/scfBlacklist");
+const getDungeons = require("../../../API/stats/dungeons.js");
 
 class StateHandler extends eventHandler {
   constructor(minecraft, command, discord) {
@@ -84,10 +85,20 @@ class StateHandler extends eventHandler {
         let meetRequirements = false;
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
+        const weight = getWeight(profile.profile, profile.uuid)?.weight?.senither?.total || 0;
+
+        const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
+        const catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
 
         const skykings_scammer = await Skykings.lookupUUID(uuid);
         const blacklisted = await Blacklist.checkBlacklist(uuid);
         const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
+
+        let skill_requirements = false;
+
+        skill_requirements = skill_requirements && (weight > config.minecraft.guildRequirements.requirements.senitherWeight);
+        skill_requirements = skill_requirements && (skyblockLevel > config.minecraft.guildRequirements.requirements.skyblockLevel);
+        skill_requirements = skill_requirements && (catacombsLevel > config.minecraft.guildRequirements.requirements.catacombsLevel);
 
         const statsEmbed = new EmbedBuilder()
             .setColor(2067276)
@@ -96,22 +107,37 @@ class StateHandler extends eventHandler {
             .addFields(
               {
                 name: "Skyblock Level",
-                value: `${skyblockLevel.toLocaleString()}`,
+                value: `\`${skyblockLevel.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "Senither Weight",
+                value: `\`${weight.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "Catacombs Level",
+                value: `\`${catacombsLevel.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "Passed Skill Requirements",
+                value: skill_requirements ? ":white_check_mark:" : ":x:",
                 inline: true,
               },
               {
                 name: "Skykings Flag",
-                value: `${skykings_scammer}`,
+                value: `\`${skykings_scammer}\``,
                 inline: true,
               },
               {
                 name: "Blacklist Flag",
-                value: `${blacklisted}`,
+                value: `\`${blacklisted}\``,
                 inline: true,
               },
               {
                 name: "SCF Flag",
-                value: `${scf_blacklisted}`,
+                value: `\`${scf_blacklisted}\``,
                 inline: true,
               },
             )
@@ -122,9 +148,9 @@ class StateHandler extends eventHandler {
             });
 
         await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
-            
+
         if (
-          skyblockLevel > config.minecraft.guildRequirements.requirements.skyblockLevel &&
+          skill_requirements &&
           skykings_scammer !== true &&
           blacklisted !== true &&
           scf_blacklisted !== true
@@ -227,17 +253,17 @@ class StateHandler extends eventHandler {
             .addFields(
               {
                 name: "Skykings Flag",
-                value: `${skykings_scammer}`,
+                value: `\`${skykings_scammer}\``,
                 inline: true,
               },
               {
                 name: "Blacklist Flag",
-                value: `${blacklisted}`,
+                value: `\`${blacklisted}\``,
                 inline: true,
               },
               {
                 name: "SCF Flag",
-                value: `${scf_blacklisted}`,
+                value: `\`${scf_blacklisted}\``,
                 inline: true,
               },
             )
