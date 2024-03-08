@@ -20,13 +20,13 @@ class CalculateCommand extends minecraftCommand {
 
     onCommand(username, message, channel = "gc") {
         try {
-            let data = message.split(" ", 1);
-            
-            const answer = mathjs.format(mathjs.evaluate(data[1]), { precision: 3 }).toString();
+            let data = message.toString().split(" ", 2);
+            console.log(data);
+
+            const answer = mathjs.format(mathjs.evaluate(data[1] ?? ""), { precision: 3 }).toString();
 
             this.send(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
-            console.log(error, message);
             this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
     }
