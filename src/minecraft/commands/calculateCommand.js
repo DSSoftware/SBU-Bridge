@@ -21,7 +21,6 @@ class CalculateCommand extends minecraftCommand {
     onCommand(username, message, channel = "gc") {
         try {
             let data = message.toString().split(" ", 2);
-            console.log(data);
 
             const answer = mathjs.format(mathjs.evaluate(data[1] ?? ""), { precision: 3 }).toString();
 
