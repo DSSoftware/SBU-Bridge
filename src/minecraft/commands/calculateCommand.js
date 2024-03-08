@@ -26,7 +26,7 @@ class CalculateCommand extends minecraftCommand {
 
             //this.send(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
-            console.log(error);
+            console.log(error, message);
             this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
     }
