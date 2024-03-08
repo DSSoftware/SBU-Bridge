@@ -22,7 +22,7 @@ class CalculateCommand extends minecraftCommand {
         try {
             let data = message.toString().split(" ", 2);
 
-            const answer = mathjs.format(mathjs.evaluate(data[1] ?? ""), { precision: 3 }).toString();
+            const answer = mathjs.evaluate(data[1] ?? "").toString();
 
             this.send(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
