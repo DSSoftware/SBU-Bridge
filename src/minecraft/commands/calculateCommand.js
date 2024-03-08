@@ -18,16 +18,16 @@ class CalculateCommand extends minecraftCommand {
         ];
     }
 
-    onCommand(username, message) {
+    onCommand(username, message, channel = "gc") {
         try {
-            const calculation = message;
-            const answer = mathjs.format(mathjs.evaluate(calculation), { precision: 3 }).toString();
+            console.log(mathjs.evaluate(message));
+            //const answer = mathjs.format(, { precision: 3 }).toString();
 
 
-            this.send(`/gc ${username}, the answer is '${answer}'`);
+            //this.send(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
             console.log(error);
-            this.send(`/gc [ERROR] The expression cannot be evaluated.`);
+            this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
     }
 }
