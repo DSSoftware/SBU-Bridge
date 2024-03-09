@@ -137,10 +137,13 @@ class DiscordManager extends CommunicationBridge {
           ],
         });
 
-        if (message.includes("https://")) {
+        try{
           const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
 
           channel.send(links);
+        }
+        catch(e){
+          console.log("Malformed URL, ignore this.");
         }
 
         break;
@@ -172,11 +175,6 @@ class DiscordManager extends CommunicationBridge {
           ],
         });
 
-        /*if (message.includes("https://")) {
-          const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
-
-          channel.send(links);
-        }*/
         break;
 
       default:

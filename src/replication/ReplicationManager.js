@@ -139,9 +139,14 @@ class ReplicationManager extends CommunicationBridge {
         });
 
         if (message.includes("https://")) {
-          const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
+          try{
+            const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
 
-          channel.send(links);
+            channel.send(links);
+          }
+          catch(e){
+            console.log("Malformed URL, ignore this.");
+          }
         }
 
         break;
@@ -172,12 +177,7 @@ class ReplicationManager extends CommunicationBridge {
             }),
           ],
         });
-
-        /*if (message.includes("https://")) {
-          const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
-
-          channel.send(links);
-        }*/
+        
         break;
 
       default:
