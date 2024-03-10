@@ -7,7 +7,7 @@ async function checkBlacklist(uuid) {
       resolve(false);
       return;
     }
-    const API_URL = config.API.url;
+    const API_URL = config.minecraft.API.banlist.URL;
 
     await axios.get(API_URL, {
       headers: {
