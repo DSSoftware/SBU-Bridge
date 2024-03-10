@@ -17,6 +17,8 @@ async function checkBlacklist(uuid) {
 
     let blacklisted = false;
 
+    console.log(`Looking up ${uuid}`);
+
     axios
       .get(API_URL + `?uuid=${uuid}`)
       .then(function (response) {
@@ -24,10 +26,12 @@ async function checkBlacklist(uuid) {
           blacklisted = true;
         }
         resolve(blacklisted);
+        console.log(`Successfully looked up, result - ${response}.`);
       })
       .catch(function (error) {
         blacklisted = true;
         resolve(blacklisted);
+        console.log(`Failed to lookup, assuming they are blacklisted.`);
       });
   });
 }
