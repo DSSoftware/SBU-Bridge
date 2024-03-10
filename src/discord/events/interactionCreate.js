@@ -13,7 +13,7 @@ module.exports = {
   async execute(interaction) {
     try {
       if (interaction.isChatInputCommand()) {
-        console.log(await interaction.deferReply({ ephemeral: false }).catch(() => {}));
+        await interaction.deferReply({ ephemeral: false }).catch((e) => {console.log(e)});
 
         const command = interaction.client.commands.get(interaction.commandName);
         if (command === undefined) {
