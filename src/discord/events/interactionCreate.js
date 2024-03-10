@@ -33,30 +33,34 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+      try{
+        const errrorMessage =
+          error instanceof HypixelDiscordChatBridgeError
+            ? ""
+            : "Please try again later. The error has been sent to the Developers.\n\n";
 
-      const errrorMessage =
-        error instanceof HypixelDiscordChatBridgeError
-          ? ""
-          : "Please try again later. The error has been sent to the Developers.\n\n";
+        const errorEmbed = new ErrorEmbed(`${errrorMessage}\`\`\`${error}\`\`\``);
 
-      const errorEmbed = new ErrorEmbed(`${errrorMessage}\`\`\`${error}\`\`\``);
+        await interaction.editReply({ embeds: [errorEmbed] });
 
-      await interaction.editReply({ embeds: [errorEmbed] });
+        if (error instanceof HypixelDiscordChatBridgeError === false) {
+          const username = interaction.user.username ?? interaction.user.tag ?? "Unknown";
+          const commandOptions = JSON.stringify(interaction.options.data) ?? "Unknown";
+          const commandName = interaction.commandName ?? "Unknown";
+          const errorStack = error.stack ?? error ?? "Unknown";
+          const userID = interaction.user.id ?? "Unknown";
 
-      if (error instanceof HypixelDiscordChatBridgeError === false) {
-        const username = interaction.user.username ?? interaction.user.tag ?? "Unknown";
-        const commandOptions = JSON.stringify(interaction.options.data) ?? "Unknown";
-        const commandName = interaction.commandName ?? "Unknown";
-        const errorStack = error.stack ?? error ?? "Unknown";
-        const userID = interaction.user.id ?? "Unknown";
-
-        const errorLog = new ErrorEmbed(
-          `Command: \`${commandName}\`\nOptions: \`${commandOptions}\`\nUser ID: \`${userID}\`\nUser: \`${username}\`\n\`\`\`${errorStack}\`\`\``,
-        );
-        interaction.client.channels.cache.get(config.discord.channels.loggingChannel).send({
-          content: `<@&${config.discord.commands.notifyRole}>`,
-          embeds: [errorLog],
-        });
+          const errorLog = new ErrorEmbed(
+            `Command: \`${commandName}\`\nOptions: \`${commandOptions}\`\nUser ID: \`${userID}\`\nUser: \`${username}\`\n\`\`\`${errorStack}\`\`\``,
+          );
+          interaction.client.channels.cache.get(config.discord.channels.loggingChannel).send({
+            content: `<@&${config.discord.commands.notifyRole}>`,
+            embeds: [errorLog],
+          });
+        }
+      }
+      catch(e){
+        console.log("Failed to respond to interaction and wasn't able to send an error. Probably error with bot permissions.")
       }
     }
   },

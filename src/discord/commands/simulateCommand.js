@@ -46,6 +46,6 @@ module.exports = {
 
     const commandMessage = new EmbedBuilder().setColor(2067276).setTitle("Success");
 
-    await interaction.followUp({ embeds: [commandMessage], ephemeral: true });
+    await interaction.followUp({ embeds: [commandMessage] });
   },
 };
