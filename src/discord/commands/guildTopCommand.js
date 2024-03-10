@@ -2,11 +2,11 @@ const { EmbedBuilder } = require("discord.js");
 const config = require("../../../config.js");
 
 module.exports = {
-  name: "guildtop",
+  name: `${config.minecraft.bot.guild_prefix}` + "guildtop",
   description: "Top 10 members with the most guild experience.",
   options: [
     {
-      name: `${config.minecraft.bot.guild_prefix}` + "time",
+      name: "time",
       description: "Days Ago",
       type: 3,
       required: false,
