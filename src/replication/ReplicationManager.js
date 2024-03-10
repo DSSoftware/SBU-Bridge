@@ -145,7 +145,7 @@ class ReplicationManager extends CommunicationBridge {
             channel.send(links);
           }
           catch(e){
-            console.log("Malformed URL, ignore this.");
+            // Failed to embed links, noone cares about this, right?
           }
         }
 
