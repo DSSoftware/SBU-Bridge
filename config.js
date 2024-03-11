@@ -50,7 +50,7 @@ module.exports = {
       }
     },
     "skyblockEventsNotifications": {
-      "enabled": true,
+      "enabled": process.env.events_notifications == "true",
       "notifiers": {
         "BANK_INTEREST": true,
         "DARK_AUCTION": true,
@@ -95,10 +95,10 @@ module.exports = {
       }
     },
     "hypixelUpdates": {
-      "enabled": false,
-      "hypixelNews": false,
-      "statusUpdates": false,
-      "skyblockVersion": false
+      "enabled": process.env.hypixel_updates == "true",
+      "hypixelNews": true,
+      "statusUpdates": true,
+      "skyblockVersion": true
     }
   },
   "discord": {
