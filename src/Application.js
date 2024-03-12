@@ -3,6 +3,7 @@ const MinecraftManager = require("./minecraft/MinecraftManager.js");
 const webManager = require("./web/WebsiteManager.js");
 const ReplicationManager = require("./replication/ReplicationManager.js");
 const config = require("../config.js");
+const axios = require("axios");
 
 class Application {
   async register() {
@@ -31,6 +32,33 @@ class Application {
     if (config.discord.replication.enabled) {
       this.replication.connect();
     }
+
+
+    function sendStatus(){
+      function isBotOnline() {
+        if (bot === undefined || bot._client.chat === undefined) {
+          return 0;
+        }
+      
+        return 1;
+      }
+
+      let botConnected = isBotOnline();
+
+      let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}`;
+
+      axios
+      .get(statusURL)
+      .then(function (response) {
+        // Successfully sent bot status.
+      })
+      .catch(function (error) {
+        // Failed to send bot status...
+      });
+    }
+    
+    sendStatus();
+    setInterval(sendStatus, 30000);
   }
 }
 
