@@ -168,8 +168,8 @@ module.exports = {
     }
   },
   "web": {
-    "enabled": false,
-    "port": 1439,
+    "enabled": true,
+    "port": process.env.assigned_port,
     "endpoints": {
       "invite": true,
       "kick": true
