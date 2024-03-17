@@ -102,7 +102,7 @@ class EndpointHandler {
             masteries_failed += 1;
           }
 
-          if(masteries_obtained >= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
+          if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
             masteries_passed = true;
           }
 
