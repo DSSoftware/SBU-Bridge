@@ -38,8 +38,8 @@ class EndpointHandler {
         let masteries_failed = 0;
         let masteries_passed = false;
 
-        player = await hypixel.getPlayer(uuid);
-        profile = await getLatestProfile(uuid);
+        let player = await hypixel.getPlayer(uuid);
+        let profile = await getLatestProfile(uuid);
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
         const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
