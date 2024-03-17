@@ -86,6 +86,7 @@ class StateHandler extends eventHandler {
         let passed_requirements = true;
         let masteries_failed = 0;
         let masteries_passed = false;
+        let meetRequirements = false;
 
         const skykings_scammer = await Skykings.lookupUUID(uuid);
         const blacklisted = await Blacklist.checkBlacklist(uuid);
