@@ -15,6 +15,10 @@ const Blacklist = require("../../../API/utils/blacklist");
 const scfBlacklist = require("../../../API/utils/scfBlacklist");
 const getDungeons = require("../../../API/stats/dungeons.js");
 
+const { getNetworth } = require("skyhelper-networth");
+const getSkills = require("../../../API/stats/skills.js");
+const getSlayer = require("../../../API/stats/slayer.js");
+
 class StateHandler extends eventHandler {
   constructor(minecraft, command, discord) {
     super();
@@ -73,35 +77,94 @@ class StateHandler extends eventHandler {
       }
 
       if (config.minecraft.guildRequirements.enabled) {
-        let player, profile;
+        // Checking the requirements
+        let skill_requirements = false;
+        let skyblockLevel, catacombsLevel, calcNetworth, slayerXP, skillAverage;
+        let passed_requirements = true;
+        let masteries_failed = 0;
+        let masteries_passed = false;
+
         try {
-          player = await hypixel.getPlayer(uuid);
-          profile = await getLatestProfile(uuid);
+          let profile = await getLatestProfile(uuid);
+
+          skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
+          const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
+          catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
+
+          // MAIN REQS
+          if(skyblockLevel < config.minecraft.guildRequirements.requirements.skyblockLevel){
+            passed_requirements = false;
+          }
+          if(catacombsLevel < config.minecraft.guildRequirements.requirements.catacombsLevel){
+            passed_requirements = false;
+          }
+          // MAIN REQS
+          
+          if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
+            const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
+              onlyNetworth: true,
+              museumData: profile.museum,
+            });
+            calcNetworth = (networthCalculated.networth ?? 0);
+
+            const calculatedSkills = getSkills(profile.profile);
+
+            skillAverage = (
+              Object.keys(calculatedSkills)
+                .filter((skill) => !["runecrafting", "social"].includes(skill))
+                .map((skill) => calculatedSkills[skill].levelWithProgress || 0)
+                .reduce((a, b) => a + b, 0) /
+              (Object.keys(calculatedSkills).length - 2)
+            );
+
+            const calculatedSlayers = getSlayer(profile.profile);
+            slayerXP = 0;
+            Object.keys(calculatedSlayers).reduce(
+              (acc, slayer) => {
+                slayerXP += calculatedSlayers[slayer].xp ?? 0;
+              }
+            );
+    
+            // MASTERIES
+            if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
+              masteries_failed += 1;
+            }
+            if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
+              masteries_failed += 1;
+            }
+            if(calcNetworth < config.minecraft.guildRequirements.requirements.masteries.networth){
+              masteries_failed += 1;
+            }
+            if(skillAverage < config.minecraft.guildRequirements.requirements.masteries.skillAverage){
+              masteries_failed += 1;
+            }
+            if(slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
+              masteries_failed += 1;
+            }
+
+            if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
+              masteries_passed = true;
+            }
+            // MASTERIES
+          }
+          else{
+            masteries_passed = true;
+          }
+
+          skill_requirements = passed_requirements && masteries_passed;
         }
         catch (e) {
-          bot.chat(`/oc Could not obtain ${username}'s data. Please check manually!`);
+          bot.chat(
+            `/oc Couldn't check ${username}'s stats. Please, check manually.`,
+          );
           return;
         }
-        let meetRequirements = false;
-
-        const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-
-        const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
-        const catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
-
-        const skykings_scammer = await Skykings.lookupUUID(uuid);
-        const blacklisted = await Blacklist.checkBlacklist(uuid);
-        const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
-
-        let skill_requirements = true;
-
-        skill_requirements = skill_requirements && (skyblockLevel >= config.minecraft.guildRequirements.requirements.skyblockLevel);
-        skill_requirements = skill_requirements && (catacombsLevel >= config.minecraft.guildRequirements.requirements.catacombsLevel);
+        //
 
         const statsEmbed = new EmbedBuilder()
             .setColor(2067276)
             .setTitle(`${player.nickname} has requested to join the Guild!`)
-            .setDescription(`**Hypixel Network Level**\n${player.level}\n`)
+            .setDescription(`Info:`)
             .addFields(
               {
                 name: "Skyblock Level",
@@ -111,6 +174,21 @@ class StateHandler extends eventHandler {
               {
                 name: "Catacombs Level",
                 value: `\`${catacombsLevel.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "Networth",
+                value: `\`${calcNetworth.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "SA",
+                value: `\`${skillAverage.toLocaleString()}\``,
+                inline: true,
+              },
+              {
+                name: "Slayer XP",
+                value: `\`${slayerXP.toLocaleString()}\``,
                 inline: true,
               },
               {

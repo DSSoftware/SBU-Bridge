@@ -78,12 +78,6 @@ class EndpointHandler {
               slayerXP += calculatedSlayers[slayer].xp ?? 0;
             }
           );
-
-          console.log("LVL:", skyblockLevel, config.minecraft.guildRequirements.requirements.masteries.skyblockLevel);
-          console.log("CATA:", catacombsLevel, config.minecraft.guildRequirements.requirements.masteries.catacombsLevel);
-          console.log("NW:", networthCalculated.networth, config.minecraft.guildRequirements.requirements.masteries.networth);
-          console.log("SA:", skillAverage, config.minecraft.guildRequirements.requirements.masteries.skillAverage);
-          console.log("SLXP:", slayerXP, config.minecraft.guildRequirements.requirements.masteries.slayerEXP);
   
           // MASTERIES
           if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
@@ -105,8 +99,6 @@ class EndpointHandler {
           if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
             masteries_passed = true;
           }
-
-          console.log("MASTERIES:", masteries_failed);
           // MASTERIES
         }
         else{
@@ -119,7 +111,6 @@ class EndpointHandler {
         // Failed to lookup player data.
         console.log(e);
       }
-
       //
 
       if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true && skill_requirements === true) {
