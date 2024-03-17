@@ -166,7 +166,7 @@ class StateHandler extends eventHandler {
 
         const statsEmbed = new EmbedBuilder()
             .setColor(2067276)
-            .setTitle(`${player.nickname} has requested to join the Guild!`)
+            .setTitle(`${username} has requested to join the Guild!`)
             .setDescription(`Info:`)
             .addFields(
               {
@@ -215,7 +215,7 @@ class StateHandler extends eventHandler {
                 inline: true,
               },
             )
-            .setThumbnail(`https://www.mc-heads.net/avatar/${player.nickname}`)
+            .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
             .setFooter({
               text: `/help [command] for more information`,
               iconURL: config.minecraft.API.SCF.logo,
