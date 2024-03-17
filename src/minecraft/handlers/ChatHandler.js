@@ -89,7 +89,7 @@ class StateHandler extends eventHandler {
 
         const skykings_scammer = await Skykings.lookupUUID(uuid);
         const blacklisted = await Blacklist.checkBlacklist(uuid);
-        const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
+        const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
 
         try {
           let profile = await getLatestProfile(uuid);
