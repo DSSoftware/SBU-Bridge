@@ -8,6 +8,7 @@ const { getNetworth } = require("skyhelper-networth");
 const getDungeons = require("../../../API/stats/dungeons.js");
 const getSkills = require("../../../API/stats/skills.js");
 const getSlayer = require("../../../API/stats/slayer.js");
+const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
 
 class EndpointHandler {
   constructor(server) {
