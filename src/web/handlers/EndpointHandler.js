@@ -106,7 +106,7 @@ class EndpointHandler {
             masteries_passed = true;
           }
 
-          console.log("MASTERIES:", masteries_obtained);
+          console.log("MASTERIES:", masteries_failed);
           // MASTERIES
         }
         else{
