@@ -80,6 +80,7 @@ class StateHandler extends eventHandler {
         // Checking the requirements
         let skill_requirements = false;
         let skyblockLevel, catacombsLevel, calcNetworth, slayerXP, skillAverage;
+        calcNetworth, slayerXP, skillAverage = "N/A", "N/A", "N/A";
         let passed_requirements = true;
         let masteries_failed = 0;
         let masteries_passed = false;
@@ -101,6 +102,8 @@ class StateHandler extends eventHandler {
           // MAIN REQS
           
           if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
+            calcNetworth, slayerXP, skillAverage = 0, 0, 0;
+
             const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
               onlyNetworth: true,
               museumData: profile.museum,
