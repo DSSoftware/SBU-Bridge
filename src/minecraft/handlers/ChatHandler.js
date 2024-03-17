@@ -80,7 +80,9 @@ class StateHandler extends eventHandler {
         // Checking the requirements
         let skill_requirements = false;
         let skyblockLevel, catacombsLevel, calcNetworth, slayerXP, skillAverage;
-        calcNetworth, slayerXP, skillAverage = "N/A", "N/A", "N/A";
+        calcNetworth = "N/A";
+        slayerXP = "N/A";
+        skillAverage = "N/A";
         let passed_requirements = true;
         let masteries_failed = 0;
         let masteries_passed = false;
