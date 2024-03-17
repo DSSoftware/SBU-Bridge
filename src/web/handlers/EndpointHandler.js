@@ -55,7 +55,6 @@ class EndpointHandler {
         }
         // MAIN REQS
         
-        console.log(config.minecraft.guildRequirements.requirements.masteries);
         if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
           const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
             onlyNetworth: true,
@@ -73,7 +72,7 @@ class EndpointHandler {
           );
 
           const calculatedSlayers = getSlayer(profile.profile);
-          const slayerXP = 0;
+          let slayerXP = 0;
           Object.keys(calculatedSlayers).reduce(
             (acc, slayer) => {
               slayerXP += calculatedSlayers[slayer].xp ?? 0;
