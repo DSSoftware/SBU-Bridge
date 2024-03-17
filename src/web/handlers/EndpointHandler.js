@@ -35,7 +35,7 @@ class EndpointHandler {
 
       try {
         let passed_requirements = true;
-        let masteries_obtained = 0;
+        let masteries_failed = 0;
         let masteries_passed = false;
 
         player = await hypixel.getPlayer(uuid);
@@ -53,7 +53,8 @@ class EndpointHandler {
           passed_requirements = false;
         }
         // MAIN REQS
-
+        
+        console.log(config.minecraft.guildRequirements.requirements.masteries);
         if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
           const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
             onlyNetworth: true,
@@ -85,23 +86,23 @@ class EndpointHandler {
           console.log("SLXP:", slayerXP, config.minecraft.guildRequirements.requirements.masteries.slayerEXP);
   
           // MASTERIES
-          if(skyblockLevel >= config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
-            masteries_obtained += 1;
+          if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
+            masteries_failed += 1;
           }
-          if(catacombsLevel >= config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
-            masteries_obtained += 1;
+          if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
+            masteries_failed += 1;
           }
-          if((networthCalculated.networth ?? 0) >= config.minecraft.guildRequirements.requirements.masteries.networth){
-            masteries_obtained += 1;
+          if((networthCalculated.networth ?? 0) < config.minecraft.guildRequirements.requirements.masteries.networth){
+            masteries_failed += 1;
           }
-          if(skillAverage >= config.minecraft.guildRequirements.requirements.masteries.skillAverage){
-            masteries_obtained += 1;
+          if(skillAverage < config.minecraft.guildRequirements.requirements.masteries.skillAverage){
+            masteries_failed += 1;
           }
-          if(slayerXP >= config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
-            masteries_obtained += 1;
+          if(slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
+            masteries_failed += 1;
           }
 
-          if(masteries_obtained >= config.minecraft.guildRequirements.requirements.masteries.minimumRequired){
+          if(masteries_obtained >= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
             masteries_passed = true;
           }
 
@@ -116,6 +117,7 @@ class EndpointHandler {
       }
       catch (e) {
         // Failed to lookup player data.
+        console.log(e);
       }
 
       //

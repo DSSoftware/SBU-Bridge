@@ -48,7 +48,7 @@ module.exports = {
         "catacombsLevel": parseInt(process.env.req_cata) || 0,
         "masteries": {
           "masteriesEnabled": process.env.masteries_enabled,
-          "minimumRequired": parseInt(process.env.min_masteries) || 0,
+          "maximumFailed": parseInt(process.env.max_failed_masteries) || 0,
 
           "networth": parseInt(process.env.mastery_networth) || 0,
           "skyblockLevel": parseInt(process.env.mastery_sb_lvl) || 0,
