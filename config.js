@@ -44,9 +44,18 @@ module.exports = {
       "enabled": process.env.req_enabled == "true",
       "autoAccept": process.env.req_autoaccept == "true",
       "requirements": {
-        "skyblockLevel": process.env.req_sb_lvl,
-        "senitherWeight": process.env.req_weight,
-        "catacombsLevel": process.env.req_cata
+        "skyblockLevel": parseInt(process.env.req_sb_lvl) || 0,
+        "catacombsLevel": parseInt(process.env.req_cata) || 0,
+        "masteries": {
+          "masteriesEnabled": process.env.masteries_enabled,
+          "minimumRequired": parseInt(process.env.min_masteries) || 0,
+
+          "networth": parseInt(process.env.mastery_networth) || 0,
+          "skyblockLevel": parseInt(process.env.mastery_sb_lvl) || 0,
+          "skillAverage": parseInt(process.env.mastery_sa) || 0,
+          "slayerEXP": parseInt(process.env.mastery_slayers) || 0,
+          "catacombsLevel": parseInt(process.env.mastery_cata) || 0
+        }
       }
     },
     "skyblockEventsNotifications": {
