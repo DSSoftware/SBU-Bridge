@@ -141,7 +141,7 @@ class EndpointHandler {
       const blacklisted = await Blacklist.checkBlacklist(uuid);
       const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
 
-      if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true && skill_requirements === true) {
+      if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true) {
         bot.chat(`/guild invite ${username}`);
         success = true;
       }
