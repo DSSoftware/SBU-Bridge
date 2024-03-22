@@ -129,6 +129,34 @@ class EndpointHandler {
       });
     });
 
+    web.post("/" + guild + "/inviteForce", async (req, res) => {
+      if (config.web.endpoints.invite === false) return;
+      const username = req.body.username;
+      const uuid = req.body.uuid;
+      const token = req.body.token;
+
+      if (config.minecraft.API.SCF.key !== token) return;
+      let success = false;
+      const skykings_scammer = await Skykings.lookupUUID(uuid);
+      const blacklisted = await Blacklist.checkBlacklist(uuid);
+      const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
+
+      if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true && skill_requirements === true) {
+        bot.chat(`/guild invite ${username}`);
+        success = true;
+      }
+      if (!success) {
+        res.send({
+          success: success,
+          reason: "Player lookup failed OR another internal error occured",
+        });
+        return;
+      }
+      res.send({
+        success: success,
+      });
+    });
+
     web.post("/" + guild + "/kick", async (req, res) => {
       if (config.web.endpoints.kick === false) return;
       const username = req.body.username;
