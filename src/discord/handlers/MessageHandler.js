@@ -90,6 +90,10 @@ class MessageHandler {
       let sender_data = await this.getSenderData(message.author.id);
 
       if (sender_data?.data?.nick == undefined && !message.author.bot) {
+        if (message.channel.id == config.discord.channels.officerChannel) {
+          message.react("❌");
+          return;
+        }
         client.channels.cache.get(message.channel.id).send({
           content: `<@${message.author.id}>`,
           embeds: [
