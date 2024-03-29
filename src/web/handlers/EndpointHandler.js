@@ -61,11 +61,11 @@ class EndpointHandler {
         }
       };
 
-      try {
-        let passed_requirements = true;
-        let masteries_failed = 0;
-        let masteries_passed = false;
+      let passed_requirements = true;
+      let masteries_failed = 0;
+      let masteries_passed = false;
 
+      try {
         let profile = await getLatestProfile(uuid);
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
