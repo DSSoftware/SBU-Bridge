@@ -34,12 +34,38 @@ class EndpointHandler {
 
       let skill_requirements = false;
 
+      let masteries_data = {
+        "passed": 5,
+        "required": 5-config.minecraft.guildRequirements.requirements.masteries.maximumFailed,
+        "masteries": {
+          "skyblockLevel": {
+            "current": 0,
+            "required": config.minecraft.guildRequirements.requirements.masteries.skyblockLevel
+          },
+          "catacombsLevel": {
+            "current": 0,
+            "required": config.minecraft.guildRequirements.requirements.masteries.catacombsLevel
+          },
+          "networth": {
+            "current": 0,
+            "required": config.minecraft.guildRequirements.requirements.masteries.networth
+          },
+          "skillAverage": {
+            "current": 0,
+            "required": config.minecraft.guildRequirements.requirements.masteries.skillAverage
+          },
+          "slayerEXP": {
+            "current": 0,
+            "required": config.minecraft.guildRequirements.requirements.masteries.slayerEXP
+          }
+        }
+      };
+
       try {
         let passed_requirements = true;
         let masteries_failed = 0;
         let masteries_passed = false;
 
-        let player = await hypixel.getPlayer(uuid);
         let profile = await getLatestProfile(uuid);
 
         const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
@@ -80,8 +106,15 @@ class EndpointHandler {
           );
   
           // MASTERIES
+          masteries_data.masteries.skyblockLevel.current = skyblockLevel;
+          masteries_data.masteries.catacombsLevel.current = catacombsLevel;
+          masteries_data.masteries.networth.current = networthCalculated;
+          masteries_data.masteries.skillAverage.current = skillAverage;
+          masteries_data.masteries.slayerEXP.current = slayerEXP;
+
           if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
             masteries_failed += 1;
+            masteries_data.passed -= 1;
           }
           if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
             masteries_failed += 1;
@@ -121,11 +154,13 @@ class EndpointHandler {
         res.send({
           success: success,
           reason: "Player lookup failed OR another internal error occured",
+          masteries: masteries_data
         });
         return;
       }
       res.send({
         success: success,
+        masteries: masteries_data
       });
     });
 
