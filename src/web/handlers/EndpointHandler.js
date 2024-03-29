@@ -108,7 +108,7 @@ class EndpointHandler {
           // MASTERIES
           masteries_data.masteries.skyblockLevel.current = skyblockLevel;
           masteries_data.masteries.catacombsLevel.current = catacombsLevel;
-          masteries_data.masteries.networth.current = networthCalculated;
+          masteries_data.masteries.networth.current = networthCalculated.networth;
           masteries_data.masteries.skillAverage.current = skillAverage;
           masteries_data.masteries.slayerEXP.current = slayerXP;
 
