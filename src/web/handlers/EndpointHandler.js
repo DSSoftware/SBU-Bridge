@@ -110,7 +110,7 @@ class EndpointHandler {
           masteries_data.masteries.catacombsLevel.current = catacombsLevel;
           masteries_data.masteries.networth.current = networthCalculated;
           masteries_data.masteries.skillAverage.current = skillAverage;
-          masteries_data.masteries.slayerEXP.current = slayerEXP;
+          masteries_data.masteries.slayerEXP.current = slayerXP;
 
           if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
             masteries_failed += 1;
