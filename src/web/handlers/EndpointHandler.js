@@ -155,13 +155,17 @@ class EndpointHandler {
         res.send({
           success: success,
           reason: "Player lookup failed OR another internal error occured",
-          masteries: masteries_data
+          masteries: masteries_data,
+          banned: skykings_scammer === true || blacklisted !== true && scf_blacklisted !== true,
+          requirements: passed_requirements
         });
         return;
       }
       res.send({
         success: success,
-        masteries: masteries_data
+        masteries: masteries_data,
+        banned: skykings_scammer === true || blacklisted !== true && scf_blacklisted !== true,
+        requirements: passed_requirements
       });
     });
 
