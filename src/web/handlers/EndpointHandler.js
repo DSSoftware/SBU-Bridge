@@ -114,7 +114,6 @@ class EndpointHandler {
 
           if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
             masteries_failed += 1;
-            masteries_data.passed -= 1;
           }
           if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
             masteries_failed += 1;
@@ -128,6 +127,8 @@ class EndpointHandler {
           if(slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
             masteries_failed += 1;
           }
+
+          masteries_data.passed -= masteries_failed;
 
           if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
             masteries_passed = true;
