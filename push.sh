@@ -1,3 +1,5 @@
+#!/bin/bash
+
 pkill -f node 
 cd /nodeFiles/bridge 
 git pull 
