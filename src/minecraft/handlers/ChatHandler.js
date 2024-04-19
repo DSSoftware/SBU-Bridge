@@ -963,7 +963,7 @@ class StateHandler extends eventHandler {
       this.command.handle(match.groups.username, match.groups.message, command_channel);
     }
 
-    this.saveGuildMessage(match.groups.username, config.minecraft.guild.guildId);
+    this.saveGuildMessage(match.groups.username, config.minecraft.guild.guildId, message);
 
     if ((this.isDiscordMessage(match.groups.message) && match.groups.username === this.bot.username) === false) {
       const { chatType, rank, username, guildRank = "Member", message } = match.groups;
@@ -985,7 +985,7 @@ class StateHandler extends eventHandler {
     }
   }
 
-  async saveGuildMessage(username, guild) {
+  async saveGuildMessage(username, guild, message=undefined) {
     let uuid;
     try {
       uuid = await getUUID(username);
@@ -993,9 +993,13 @@ class StateHandler extends eventHandler {
       return;
     }
 
+    if (uuid == undefined) {
+      return;
+    }
+
     let message_send = await Promise.all([
       axios.get(
-        `https://sky.dssoftware.ru/api.php?method=saveGuildMessage&uuid=${uuid}&source=minecraft&api=${config.minecraft.API.SCF.key}&nick=${username}&guild_id=${guild}`,
+        `https://sky.dssoftware.ru/api.php?method=saveGuildMessage&uuid=${uuid}&source=minecraft&api=${config.minecraft.API.SCF.key}&nick=${username}&guild_id=${guild}&content=${encodeURIComponent(message)}`,
       ),
     ]).catch((error) => { });
 
