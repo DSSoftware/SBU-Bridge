@@ -79,17 +79,33 @@ class MedalsCommand extends minecraftCommand {
 
       let hotm_exp = hotm_data?.experience;
       let hotm_level_data = await this.getHOTMLevel(hotm_exp);
-      console.log(hotm_level_data);
+      
+      let mithril_powder_spent = hotm_level_data?.powder_spent_mithril ?? 0;
+      let mithril_powder_available = hotm_level_data?.powder_mithril ?? 0;
+
+      let gemstone_powder_spent = hotm_level_data?.powder_spent_gemstone ?? 0;
+      let gemstone_powder_available = hotm_level_data?.powder_gemstone ?? 0;
+
+      let glacite_powder_spent = hotm_level_data?.powder_spent_glacite ?? 0;
+      let glacite_powder_available = hotm_level_data?.powder_glacite ?? 0;
 
       let Name = `§6${username}'s HOTM Stats:`;
       let Lore = [];
 
       Lore.push(`§f`);
 
-      Lore.push(`§7HOTM Level: §6${hotm_level_data?.level} §7(${hotm_exp} EXP)`);
+      Lore.push(`§7HOTM Level: §6§l${hotm_level_data?.level} §7(${hotm_exp} EXP)`);
       Lore.push(`§7Next Level: ${
-        hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6${hotm_level_data?.next_level} §7(${hotm_level_data?.xp_left} / ${hotm_level_data?.xp_to_next})`
+        hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6§l${hotm_level_data?.next_level} §7(${hotm_level_data?.xp_left} / ${hotm_level_data?.xp_to_next})`
       }`);
+
+      Lore.push(`§f`);
+
+      Lore.push(`§2Mithril §7Powder: §2${mithril_powder_spent + mithril_powder_available} §7Available: §2${mithril_powder_available}`);
+
+      Lore.push(`§dGemstone §7Powder: §d${gemstone_powder_spent + gemstone_powder_available} §dAvailable: §2${gemstone_powder_available}`);
+
+      Lore.push(`§bGlacite §7Powder: §b${glacite_powder_spent + glacite_powder_available} §7Available: §b${glacite_powder_available}`);
 
       Lore.push(`§f`);
 
