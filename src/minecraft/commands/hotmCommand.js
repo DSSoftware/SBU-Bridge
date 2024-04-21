@@ -95,7 +95,7 @@ class MedalsCommand extends minecraftCommand {
     return response;
   }
 
-  async getHOTMTree(layer, data){
+  async getHOTMTree(layer, data, hotm_lvl=0){
     let hotm_tree = HOTM.tree;
     let hotm_nodes = HOTM.nodes;
 
@@ -113,9 +113,14 @@ class MedalsCommand extends minecraftCommand {
 
       let symbol = hotm_node.nodeSymbol;
       let color = hotm_node.color;
-      let name = hotm_node.displayName;
 
-      let proper_node = `${symbol} §${color}${level}`;
+      if(layer > hotm){
+        color = "c";
+        symbol = "✖";
+      }
+      let name = `§${color}` + hotm_node.displayName;
+
+      let proper_node = `§${color}${symbol} §${color}${level}`;
       let pn_pars = (proper_node.match(/§/g) || []).length;
       proper_node = proper_node.padEnd(7+pn_pars, ' ');
       name = name.padEnd(7, ' ');
@@ -126,11 +131,8 @@ class MedalsCommand extends minecraftCommand {
 
     hotm_symbols = (hotm_symbols + " §8|").replace(/ /g,"§7 ");
     hotm_names = (hotm_names + " §8|").replace(/ /g,"§7 ");
-    
-    console.log(hotm_symbols);
-    console.log(hotm_names);
 
-    return [hotm_symbols, hotm_names];
+    return [`§8${"⎯".repeat(58)}`, hotm_symbols, hotm_names];
   }
 
   async onCommand(username, message, channel = "gc") {
@@ -183,6 +185,8 @@ class MedalsCommand extends minecraftCommand {
       Lore.push(...(await this.getHOTMTree(3, hotm_data)));
       Lore.push(...(await this.getHOTMTree(2, hotm_data)));
       Lore.push(...(await this.getHOTMTree(1, hotm_data)));
+
+      Lore.push(`§f`);
 
       const renderedItem = await renderLore(Name, Lore, true);
       const upload = await uploadImage(renderedItem);

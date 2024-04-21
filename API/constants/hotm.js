@@ -60,12 +60,12 @@ class Node {
   get nodeSymbol() {
     const nameColor = this.color;
     const symbol = this.status === "maxed" ? "●" : this.status === "unlocked" ? "○" : "○";
-    return `§${nameColor}${symbol}`;
+    return `${symbol}`;
   }
 
   get displayName() {
     const nameColor = this.color;
-    return `§${nameColor}${this.name}`;
+    return `${this.name}`;
   }
 
   get status() {
