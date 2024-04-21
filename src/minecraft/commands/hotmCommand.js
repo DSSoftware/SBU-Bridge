@@ -89,7 +89,7 @@ class MedalsCommand extends minecraftCommand {
 
     let runs = Math.min(jade_places, amber_places, topaz_places, sapphire_places, amethyst_places)
 
-    let response = `§aNu§6cle§eus §bRu§5ns: ${runs}`;
+    let response = `§aNu§6cle§eus §bRu§5ns§7: ${runs}`;
 
     return response;
   }
@@ -118,6 +118,7 @@ class MedalsCommand extends minecraftCommand {
       Lore.push(`§7Next Level: ${
         hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6§l${hotm_level_data?.next_level} §7(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)})`
       }`);
+      Lore.push(`§7Peak of the Mountain: §6§l${hotm_data?.nodes?.special_0 || "§c§l-"}`);
 
       Lore.push(`§f`);
 
