@@ -114,7 +114,7 @@ class MedalsCommand extends minecraftCommand {
       let symbol = hotm_node.nodeSymbol;
       let color = hotm_node.color;
 
-      if(layer > hotm){
+      if(layer > hotm_lvl){
         color = "c";
         symbol = "✖";
       }
@@ -175,16 +175,18 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§7Heart of the Mountain`);
 
-      Lore.push(...(await this.getHOTMTree(10, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(9, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(8, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(7, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(6, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(5, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(4, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(3, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(2, hotm_data)));
-      Lore.push(...(await this.getHOTMTree(1, hotm_data)));
+      let hotm_level = hotm_level_data?.level ?? 0;
+
+      Lore.push(...(await this.getHOTMTree(10, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(9, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(8, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(7, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(6, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(5, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(4, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(3, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(2, hotm_data, hotm_level)));
+      Lore.push(...(await this.getHOTMTree(1, hotm_data, hotm_level)));
 
       Lore.push(`§f`);
 
