@@ -37,7 +37,7 @@ class AccessoriesCommand extends minecraftCommand {
           ),
         ]).catch((error) => {});
   
-        top_info = top_data[0].data ?? {};
+        let top_info = top_data[0].data ?? {};
   
         if (top_info == undefined || top_info?.length == 0) {
           return this.send(
