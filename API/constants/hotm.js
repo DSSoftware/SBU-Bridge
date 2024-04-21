@@ -59,7 +59,7 @@ class Node {
 
   get nodeSymbol() {
     const nameColor = this.color;
-    const symbol = this.status === "maxed" ? "+" : this.status === "unlocked" ? "*" : "-";
+    const symbol = this.status === "maxed" ? "●" : this.status === "unlocked" ? "○" : "○";
     return `§${nameColor}${symbol}`;
   }
 
