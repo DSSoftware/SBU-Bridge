@@ -90,7 +90,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
         lore.push(`§7Ends in: §e${timeSince(auction.end)}`, `§7`, `§eClick to inspect`);
 
-        const renderedItem = await renderLore(`${auction.item_name}`, lore);
+        const renderedItem = await renderLore(`§7${auction.item_name}`, lore);
         const upload = await uploadImage(renderedItem);
 
         string += string === "" ? upload.data.link : " | " + upload.data.link;
