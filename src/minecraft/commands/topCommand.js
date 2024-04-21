@@ -2,6 +2,8 @@ const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
 const axios = require("axios");
 const config = require("../../../config.js");
+const { renderLore } = require("../../contracts/renderItem.js");
+const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 
 class AccessoriesCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -73,10 +75,8 @@ class AccessoriesCommand extends minecraftCommand {
 
         const renderedItem = await renderLore(Name, Lore);
         const upload = await uploadImage(renderedItem);
-  
-        this.send(
-          `/${channel} ${username}'s place: ${placement_info.data.place} | Messages sent: ${placement_info.data.count} ${display_flag}`,
-        );
+
+        this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top: ${upload.data.link}`);
         
         return;
       }
