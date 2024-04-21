@@ -116,7 +116,7 @@ class MedalsCommand extends minecraftCommand {
 
       if(layer > hotm_lvl){
         color = "c";
-        symbol = "✖";
+        symbol = "-";
       }
       let name = `§${color}` + hotm_node.displayName;
 
