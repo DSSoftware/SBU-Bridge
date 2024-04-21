@@ -47,7 +47,7 @@ class topCommand extends minecraftCommand {
           );
         }
 
-        let Name = `${config.minecraft.guild.guildName} Guild Top:`;
+        let Name = `§6${config.minecraft.guild.guildName} Guild Top:`;
         let Lore = [];
         let place = 0;
 
