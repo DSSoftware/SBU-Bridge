@@ -104,8 +104,8 @@ class MedalsCommand extends minecraftCommand {
 
     for(let node of hotm_tree?.[layer]){
       if(node == null){
-        hotm_symbols += "      ";
-        hotm_names += "      ";
+        hotm_symbols += "⠀⠀⠀⠀⠀⠀";
+        hotm_names += "⠀⠀⠀⠀⠀⠀";
         continue;
       }
       let level = data?.nodes?.[node] ?? 0;
