@@ -1,7 +1,7 @@
 const nodeNames = {
-  mining_speed_2: "MS II",
+  mining_speed_2: "MS2",
   powder_buff: "PB",
-  mining_fortune_2: "MF II",
+  mining_fortune_2: "MF2",
   vein_seeker: "VS",
   lonesome_miner: "LM",
   professional: "Prof",
@@ -21,7 +21,7 @@ const nodeNames = {
   precision_mining: "PM",
   random_event: "LotC",
   daily_powder: "DP",
-  fallen_star_bonus: "Cryst",
+  fallen_star_bonus: "Crys",
   mining_speed_boost: "MSB",
   titanium_insanium: "TI",
   mining_fortune: "MF",
