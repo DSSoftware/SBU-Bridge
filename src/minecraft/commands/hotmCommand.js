@@ -104,8 +104,8 @@ class MedalsCommand extends minecraftCommand {
 
     for(let node of hotm_tree?.[layer]){
       if(node == null){
-        hotm_symbols += " |     ";
-        hotm_names += " |     ";
+        hotm_symbols += " §8|     ";
+        hotm_names += " §8|     ";
         continue;
       }
       let level = data?.nodes?.[node] ?? 0;
@@ -117,11 +117,11 @@ class MedalsCommand extends minecraftCommand {
 
       let proper_node = `${symbol} §${color}${level}`;
       let pn_pars = (proper_node.match(/§/g) || []).length;
-      proper_node = proper_node.padEnd(6+pn_pars, ' ');
-      name = name.padEnd(6, ' ');
+      proper_node = proper_node.padEnd(7+pn_pars, ' ');
+      name = name.padEnd(7, ' ');
 
-      hotm_symbols += " | " +  proper_node;
-      hotm_names += " | " + name;
+      hotm_symbols += " §8| " +  proper_node;
+      hotm_names += " §8| " + name;
     }
 
     hotm_symbols = (hotm_symbols + " |").replace(/ /g,"§7 ");
