@@ -131,6 +131,8 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
+      console.log(Lore)
+
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
       this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
