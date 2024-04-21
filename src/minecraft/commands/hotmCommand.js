@@ -115,15 +115,15 @@ class MedalsCommand extends minecraftCommand {
       let name = hotm_node.displayName;
 
       let proper_node = `${symbol}-${level}`;
-      proper_node = proper_node.padStart(proper_node.length + Math.floor((5 - proper_node.length) / 2), ' ').padEnd(5, ' ');
-      name = name.padStart(name.length + Math.floor((5 - name.length) / 2), ' ').padEnd(5, ' ');
+      proper_node = proper_node.padEnd(5, ' ');
+      name = name.padEnd(5, ' ');
 
       hotm_symbols += proper_node + " ";
       hotm_names += name + " ";
     }
 
-    hotm_symbols = (hotm_symbols.trim().padStart(Math.max(hotm_symbols.length + Math.floor((41 - hotm_symbols.length) / 2), hotm_symbols.length), ' ').padEnd(41, ' ')).replace(/ /g,"§7 ");
-    hotm_names = (hotm_names.trim().padStart(Math.max(hotm_names.length + Math.floor((41 - hotm_names.length) / 2), hotm_names.length), ' ').padEnd(41, ' ')).replace(/ /g,"§7 ");
+    hotm_symbols = (hotm_symbols.trim()).replace(/ /g,"§7 ");
+    hotm_names = (hotm_names.trim()).replace(/ /g,"§7 ");
     
     console.log(hotm_symbols);
     console.log(hotm_names);
