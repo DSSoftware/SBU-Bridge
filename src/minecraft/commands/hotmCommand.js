@@ -8,9 +8,9 @@ class MedalsCommand extends minecraftCommand {
   constructor(minecraft) {
     super(minecraft);
 
-    this.name = "medals";
-    this.aliases = ["jacob", "jacobs", "farming"];
-    this.description = "Shows player's Jacob's Contest stats.";
+    this.name = "hotm";
+    this.aliases = ["heart", "mining"];
+    this.description = "Shows player's HOTM stats.";
     this.options = [
       {
         name: "username",
@@ -20,69 +20,16 @@ class MedalsCommand extends minecraftCommand {
     ];
   }
 
-  getCropMedals(crop_id, crop_name, unique_brackets, personal_bests) {
-    let color = "§8";
-    let brackets = "§c○§f○§6○§3○§b○";
-    let personal_best = "N/A";
-    let gold = 0;
-
-    let bronzes = unique_brackets?.bronze ?? [];
-    let silvers = unique_brackets?.silver ?? [];
-    let golds = unique_brackets?.gold ?? [];
-    let platinums = unique_brackets?.platinum ?? [];
-    let diamonds = unique_brackets?.diamond ?? [];
-
-    // BRONZE BRACKET CHECK
-    if (bronzes.includes(crop_id)) {
-      color = "§c";
-      brackets = "§c●§f○§6○§3○§b○";
-    }
-
-    // SILVER BRACKET CHECK
-    if (silvers.includes(crop_id)) {
-      color = "§f";
-      brackets = "§c●§f●§6○§3○§b○";
-    }
-
-    // GOLD BRACKET CHECK
-    if (golds.includes(crop_id)) {
-      color = "§6";
-      brackets = "§c●§f●§6●§3○§b○";
-      gold = 1;
-    }
-
-    // PLATINUM BRACKET CHECK
-    if (platinums.includes(crop_id)) {
-      color = "§3";
-      brackets = "§c●§f●§6●§3●§b○";
-      gold = 1;
-    }
-
-    // DIAMOND BRACKET CHECK
-    if (diamonds.includes(crop_id)) {
-      color = "§b";
-      brackets = "§c●§f●§6●§3●§b●";
-      gold = 1;
-    }
-
-    personal_best = personal_bests?.[crop_id] ?? "N/A";
-
-    let response = {
-      display: `§7${color}${crop_name}§7: ${brackets} §7(Best: ${personal_best})§7`,
-      gold: gold,
-    };
-    return response;
-  }
-
   async onCommand(username, message, channel = "gc") {
     try {
-      username = this.getArgs(message)[0] || username;
-
+      /*username = this.getArgs(message)[0] || username;
       const data = await getLatestProfile(username);
-
       username = formatUsername(username, data.profileData?.game_mode);
 
-      let jacob_data = data?.profile?.jacob2;
+      let hotm_data = data?.profile?.mining_core;
+
+      let hotm_level = 
+
       if (jacob_data == undefined) {
         throw "Player hasn't participated in any Jacob's Contests.";
       }
@@ -134,7 +81,7 @@ class MedalsCommand extends minecraftCommand {
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
-      this.send(`/${channel} ${username}'s Jacobs Contest stats: ${upload.data.link}.`);
+      this.send(`/${channel} ${username}'s Jacobs Contest stats: ${upload.data.link}.`);*/
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);

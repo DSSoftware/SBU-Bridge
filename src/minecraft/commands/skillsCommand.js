@@ -1,6 +1,7 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
 const getSkills = require("../../../API/stats/skills.js");
+const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 
 class SkillsCommand extends minecraftCommand {
@@ -24,6 +25,9 @@ class SkillsCommand extends minecraftCommand {
       username = this.getArgs(message)[0] || username;
 
       const data = await getLatestProfile(username);
+      const {
+        achievements: { achievements },
+      } = await hypixel.getPlayer(uuid);
 
       username = formatUsername(username, data.profileData.cute_name);
 
@@ -47,6 +51,15 @@ class SkillsCommand extends minecraftCommand {
               skill_cap = 50;
             } else {
               skill_cap = 50 + farming_info;
+            }
+          }
+
+          if (skill == "taming") {
+            let taming_cap = achievements?.skyblock_domesticator;
+            if (taming_cap == undefined) {
+              skill_cap = 50;
+            } else {
+              skill_cap = taming_cap;
             }
           }
 

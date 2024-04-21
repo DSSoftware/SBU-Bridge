@@ -48,9 +48,7 @@ class TrophyFishCommand extends minecraftCommand {
 
   async onCommand(username, message, channel = "gc") {
     try {
-      if (this.getArgs(message)[0] != "+") {
-        username = this.getArgs(message)[0] || username;
-      }
+      username = this.getArgs(message)[0] || username;
 
       const data = await getLatestProfile(username);
 

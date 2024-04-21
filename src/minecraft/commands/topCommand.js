@@ -30,6 +30,57 @@ class AccessoriesCommand extends minecraftCommand {
         return this.send(`/${channel} This command was disabled!`);
       }
 
+      if (this.getArgs(message)[0] == "weekly") {
+        let top_data = await Promise.all([
+          axios.get(
+            `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${config.minecraft.guild.guildId}`,
+          ),
+        ]).catch((error) => {});
+  
+        top_info = top_data[0].data ?? {};
+  
+        if (top_info == undefined || top_info?.length == 0) {
+          return this.send(
+            `/${channel} [ERROR] Somehow top has 0 players in it.`,
+          );
+        }
+
+        let Name = `${config.minecraft.guild.guildName} Guild Top:`;
+        let Lore = [];
+        let place = 0;
+
+        top_info.forEach((element) => {
+          place++;
+          let place_color = "§7";
+          if(place == 1){
+            place_color = "§6";
+          }
+          if(place == 2){
+            place_color = "§f";
+          }
+          if(place == 3){
+            place_color = "§c";
+          }
+          let info = `§7${place_color}${place}. ${element.nick} - ${element.count} Score§7`;
+
+          Lore.push(info);
+        });
+
+        Lore.push(`§f`);
+
+        Lore.unshift(`§f`);
+        Lore.unshift(`§7Players Logged: ${top_data?.[0]?.players ?? 0}.`);
+
+        const renderedItem = await renderLore(Name, Lore);
+        const upload = await uploadImage(renderedItem);
+  
+        this.send(
+          `/${channel} ${username}'s place: ${placement_info.data.place} | Messages sent: ${placement_info.data.count} ${display_flag}`,
+        );
+        
+        return;
+      }
+
       let overall_flag = 0;
       let display_flag = "(GUILD)";
       let passed_username = this.getArgs(message)[0];
