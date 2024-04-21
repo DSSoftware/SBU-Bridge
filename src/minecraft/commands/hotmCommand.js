@@ -117,9 +117,8 @@ class MedalsCommand extends minecraftCommand {
 
       let proper_node = `${symbol} §${color}${level}`;
       let pn_pars = (proper_node.match(/§/g) || []).length;
-      let name_pars = (name.match(/§/g) || []).length;
       proper_node = proper_node.padEnd(6+pn_pars, ' ');
-      name = name.padEnd(6+name_pars, ' ');
+      name = name.padEnd(6, ' ');
 
       hotm_symbols += " | " +  proper_node;
       hotm_names += " | " + name;
