@@ -121,13 +121,13 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
-      Lore.push(this.getPowderInfo("mithril", "Mithril", "§2", hotm_data));
-      Lore.push(this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data));
-      Lore.push(this.getPowderInfo("glacite", "Glacite", "§b", hotm_data));
+      Lore.push(await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data));
+      Lore.push(await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data));
+      Lore.push(await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data));
 
       Lore.push(`§f`);
 
-      Lore.push(this.getNucleusRuns(hotm_data));
+      Lore.push(await this.getNucleusRuns(hotm_data));
 
       Lore.push(`§f`);
 
