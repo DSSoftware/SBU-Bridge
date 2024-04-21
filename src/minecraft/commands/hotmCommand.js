@@ -132,7 +132,7 @@ class MedalsCommand extends minecraftCommand {
     hotm_symbols = (hotm_symbols + " §8|").replace(/ /g,"§7 ");
     hotm_names = (hotm_names + " §8|").replace(/ /g,"§7 ");
 
-    return [`§8${"⎯".repeat(80)}`, hotm_symbols, hotm_names];
+    return [` §8${"⎯".repeat(76)} `, hotm_symbols, hotm_names];
   }
 
   async onCommand(username, message, channel = "gc") {
