@@ -77,7 +77,8 @@ class MedalsCommand extends minecraftCommand {
       }
 
       let hotm_exp = hotm_data?.experience;
-      let hotm_level_data = this.getHOTMLevel(hotm_exp);
+      let hotm_level_data = await this.getHOTMLevel(hotm_exp);
+      console.log(hotm_level_data);
 
       let Name = `§6${username}'s HOTM Stats:`;
       let Lore = [];
