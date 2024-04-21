@@ -39,11 +39,11 @@ class topCommand extends minecraftCommand {
           ),
         ]).catch((error) => {});
   
-        let top_info = top_data[0].data ?? {};
+        let top_info = top_data?.[0]?.data ?? {};
 
         console.log(top_info);
   
-        if (top_info == undefined || top_info?.length == 0) {
+        if (top_info?.data == undefined || top_info?.data?.length == 0) {
           return this.send(
             `/${channel} [ERROR] Somehow top has 0 players in it.`,
           );
@@ -53,7 +53,7 @@ class topCommand extends minecraftCommand {
         let Lore = [];
         let place = 0;
 
-        top_info.forEach((element) => {
+        top_info?.data.forEach((element) => {
           place++;
           let place_color = "§7";
           if(place == 1){
@@ -73,7 +73,7 @@ class topCommand extends minecraftCommand {
         Lore.push(`§f`);
 
         Lore.unshift(`§f`);
-        Lore.unshift(`§7Players Logged: ${top_data?.[0]?.players ?? 0}.`);
+        Lore.unshift(`§7Players Logged: ${top_info?.players ?? 0}.`);
 
         const renderedItem = await renderLore(Name, Lore);
         const upload = await uploadImage(renderedItem);
