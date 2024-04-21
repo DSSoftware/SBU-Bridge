@@ -5,7 +5,7 @@ const config = require("../../../config.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 
-class AccessoriesCommand extends minecraftCommand {
+class topCommand extends minecraftCommand {
   constructor(minecraft) {
     super(minecraft);
 
@@ -40,6 +40,8 @@ class AccessoriesCommand extends minecraftCommand {
         ]).catch((error) => {});
   
         let top_info = top_data[0].data ?? {};
+
+        console.log(top_info);
   
         if (top_info == undefined || top_info?.length == 0) {
           return this.send(
@@ -122,4 +124,4 @@ class AccessoriesCommand extends minecraftCommand {
   }
 }
 
-module.exports = AccessoriesCommand;
+module.exports = topCommand;
