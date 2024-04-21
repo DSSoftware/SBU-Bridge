@@ -34,7 +34,7 @@ class MedalsCommand extends minecraftCommand {
       10: 400000,
     };
 
-    let left_exp = 0;
+    let left_exp = experience;
 
     let level = 0;
     let xp_remaining = 0;
