@@ -99,7 +99,7 @@ class MedalsCommand extends minecraftCommand {
     let hotm_tree = HOTM.tree;
     let hotm_nodes = HOTM.nodes;
 
-    for(node of hotm_tree?.[layer]){
+    for(let node of hotm_tree?.[layer]){
       let level = data?.nodes?.[node] ?? 0;
       let hotm_node = new (hotm_nodes[node])({level: level});
 
