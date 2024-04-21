@@ -104,8 +104,8 @@ class MedalsCommand extends minecraftCommand {
 
     for(let node of hotm_tree?.[layer]){
       if(node == null){
-        hotm_symbols += " §8|      ";
-        hotm_names += " §8|      ";
+        hotm_symbols += " §0|      ";
+        hotm_names += " §0|      ";
         continue;
       }
       let level = data?.nodes?.[node] ?? 0;
@@ -125,14 +125,14 @@ class MedalsCommand extends minecraftCommand {
       proper_node = proper_node.padEnd(7+pn_pars, ' ');
       name = name.padEnd(7, ' ');
 
-      hotm_symbols += " §8| " +  proper_node;
-      hotm_names += " §8| " + name;
+      hotm_symbols += " §0| " +  proper_node;
+      hotm_names += " §0| " + name;
     }
 
-    hotm_symbols = (hotm_symbols + " §8|").replace(/ /g,"§7 ");
-    hotm_names = (hotm_names + " §8|").replace(/ /g,"§7 ");
+    hotm_symbols = (hotm_symbols + " §0|").replace(/ /g,"§7 ");
+    hotm_names = (hotm_names + " §0|").replace(/ /g,"§7 ");
 
-    return [` §8${"⎯".repeat(76)} `, hotm_symbols, hotm_names];
+    return [` §0${"⎯".repeat(77)} `, hotm_symbols, hotm_names];
   }
 
   async onCommand(username, message, channel = "gc") {
