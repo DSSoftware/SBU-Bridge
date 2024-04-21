@@ -125,7 +125,8 @@ class MedalsCommand extends minecraftCommand {
     hotm_symbols = (hotm_symbols.trim().padStart(Math.max(hotm_symbols.length + Math.floor((41 - hotm_symbols.length) / 2), hotm_symbols.length), ' ').padEnd(41, ' ')).replace(" ", "§7 ");
     hotm_names = (hotm_names.trim().padStart(Math.max(hotm_names.length + Math.floor((41 - hotm_names.length) / 2), hotm_names.length), ' ').padEnd(41, ' ')).replace(" ", "§7 ");
     
-    console.log(hotm_symbols, hotm_names);
+    console.log(hotm_symbols);
+    console.log(hotm_names);
 
     return [hotm_symbols, hotm_names];
   }
