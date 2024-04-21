@@ -87,7 +87,7 @@ class MedalsCommand extends minecraftCommand {
     let sapphire_places = data?.crystals?.sapphire_crystal?.total_placed ?? 0;
     let amethyst_places = data?.crystals?.amethyst_crystal?.total_placed ?? 0;
 
-    let runs = Math.min([jade_places, amber_places, topaz_places, sapphire_places, amethyst_places])
+    let runs = Math.min(jade_places, amber_places, topaz_places, sapphire_places, amethyst_places)
 
     let response = `§aNu§6cle§eus §bRu§5ns: ${runs}`;
 
