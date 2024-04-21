@@ -112,9 +112,10 @@ class MedalsCommand extends minecraftCommand {
       let hotm_node = new (hotm_nodes[node])({level: level});
 
       let symbol = hotm_node.nodeSymbol;
+      let color = hotm_node.color;
       let name = hotm_node.displayName;
 
-      let proper_node = `${symbol}-${level}`;
+      let proper_node = `${symbol} ${color}${level}`;
       proper_node = proper_node.padEnd(5, ' ');
       name = name.padEnd(5, ' ');
 
@@ -183,7 +184,7 @@ class MedalsCommand extends minecraftCommand {
       Lore.push(...(await this.getHOTMTree(1, hotm_data)));
 
       const renderedItem = await renderLore(Name, Lore);
-      const upload = await uploadImage(renderedItem);
+      const upload = await uploadImage(renderedItem, true);
       this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
       /*
 

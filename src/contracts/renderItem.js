@@ -12,6 +12,9 @@ Canvas.registerFont("src/contracts/Fonts/minecraft-bold.otf", {
 Canvas.registerFont("src/contracts/Fonts/unifont.ttf", {
   family: "MinecraftUnicode",
 });
+Canvas.registerFont("src/contracts/Fonts/Monocraft.ttf", {
+  family: "Monocraft",
+});
 
 const RGBA_COLOR = {
   0: "rgba(0,0,0,1)",
@@ -32,10 +35,13 @@ const RGBA_COLOR = {
   f: "rgba(255,255,255,1)",
 };
 
-async function getCanvasWidthAndHeight(lore) {
+async function getCanvasWidthAndHeight(lore, monospace=false) {
   const canvas = Canvas.createCanvas(1, 1);
   const ctx = canvas.getContext("2d");
   ctx.font = "24px Minecraft";
+  if(monospace){
+    ctx.font = "24px Monocraft";
+  }
 
   let highestWidth = 0;
   if (!lore) return;
@@ -49,9 +55,9 @@ async function getCanvasWidthAndHeight(lore) {
   return { height: lore.length * 24 + 15, width: highestWidth + 20 };
 }
 
-async function renderLore(itemName, lore) {
+async function renderLore(itemName, lore, monospace=false) {
   if (itemName) lore.unshift(itemName);
-  const measurements = await getCanvasWidthAndHeight(lore);
+  const measurements = await getCanvasWidthAndHeight(lore, monospace);
   if (!measurements) return;
   const canvas = Canvas.createCanvas(measurements.width, measurements.height);
   const ctx = canvas.getContext("2d");
@@ -65,6 +71,10 @@ async function renderLore(itemName, lore) {
   ctx.shadowColor = "#131313";
   ctx.font = "24px Minecraft";
   ctx.fillStyle = "#ffffff";
+
+  if(monospace){
+    ctx.font = "24px Monocraft";
+  }
 
   // TEXT
   for (const [index, item] of Object.entries(lore)) {
@@ -81,6 +91,10 @@ async function renderLore(itemName, lore) {
         ctx.font = "24px MinecraftItalic, MinecraftUnicode";
       } else {
         ctx.font = "24px Minecraft, MinecraftUnicode";
+      }
+
+      if(monospace){
+        ctx.font = "24px Monocraft";
       }
 
       ctx.fillText(toRenderItem.substring(1), width, index * 24 + 29);
