@@ -60,12 +60,12 @@ class Node {
   get nodeSymbol() {
     const nameColor = this.color;
     const symbol = this.status === "maxed" ? "■" : this.status === "unlocked" ? "▨" : "□";
-    return `§${nameColor}§l${symbol}`;
+    return `§${nameColor}${symbol}`;
   }
 
   get displayName() {
     const nameColor = this.color;
-    return `§${nameColor}§l${this.name}`;
+    return `§${nameColor}${this.name}`;
   }
 
   get status() {
@@ -1289,15 +1289,15 @@ const nodeClasses = {
 };
 
 const HOTM_Tree = {
-  1: ["mining_speed"],
-  2: ["mining_speed_boost", "titanium_insanium", "mining_fortune", "forge_time", "pickaxe_toss"],
-  3: ["random_event", "daily_powder", "fallen_star_bonus"],
+  1: [null, null, null, "mining_speed", null, null, null],
+  2: [null, "mining_speed_boost", "titanium_insanium", "mining_fortune", "forge_time", "pickaxe_toss", null],
+  3: [null, "random_event", null, "daily_powder", null, "fallen_star_bonus", null],
   4: ["daily_effect", "mining_madness", "mining_experience", "efficient_miner", "experience_orbs", "front_loaded", "precision_mining"],
-  5: ["star_powder", "special_0", "goblin_killer"],
+  5: [null, "star_powder", null, "special_0", null, "goblin_killer", null],
   6: ["vein_seeker", "lonesome_miner", "professional", "mole", "fortunate", "great_explorer", "maniac_miner"],
-  7: ["mining_speed_2", "powder_buff", "mining_fortune_2"],
+  7: [null, "mining_speed_2", null, "powder_buff", null, "mining_fortune_2", null],
   8: ["keen_eye", "warm_hearted", "dust_collector", "daily_grind", "strong_arm", "no_stone_unturned", "mineshaft_mayhem"],
-  9: ["surveyor", "subzero_mining", "eager_adventurer"],
+  9: [null, "surveyor", null, "subzero_mining", null, "eager_adventurer", null],
   10: ["gemstone_infusion", "gifts_from_the_departed", "frozen_solid", "hungry_for_more", "excavator", "rags_of_riches", "hazardous_miner"],
 };
 

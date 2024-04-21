@@ -103,6 +103,11 @@ class MedalsCommand extends minecraftCommand {
     let hotm_names = "";
 
     for(let node of hotm_tree?.[layer]){
+      if(node == null){
+        hotm_symbols += "      ";
+        hotm_names += "      ";
+        continue;
+      }
       let level = data?.nodes?.[node] ?? 0;
       let hotm_node = new (hotm_nodes[node])({level: level});
 
@@ -117,8 +122,8 @@ class MedalsCommand extends minecraftCommand {
       hotm_names += name + " ";
     }
 
-    hotm_symbols = hotm_symbols.trim().padStart(Math.max(hotm_symbols.length + Math.floor((41 - hotm_symbols.length) / 2), hotm_symbols.length), ' ').padEnd(41, ' ');
-    hotm_names = hotm_names.trim().padStart(Math.max(hotm_names.length + Math.floor((41 - hotm_names.length) / 2), hotm_names.length), ' ').padEnd(41, ' ');
+    hotm_symbols = hotm_symbols.trim().padStart(Math.max(hotm_symbols.length + Math.floor((41 - hotm_symbols.length) / 2), hotm_symbols.length), '⠀').padEnd(41, '⠀').replace(" ", "⠀");
+    hotm_names = hotm_names.trim().padStart(Math.max(hotm_names.length + Math.floor((41 - hotm_names.length) / 2), hotm_names.length), '⠀').padEnd(41, '⠀').replace(" ", "⠀");
 
     return [hotm_symbols, hotm_names];
   }
