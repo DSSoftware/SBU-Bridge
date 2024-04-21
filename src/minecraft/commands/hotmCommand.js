@@ -122,8 +122,8 @@ class MedalsCommand extends minecraftCommand {
       hotm_names += name + " ";
     }
 
-    hotm_symbols = (hotm_symbols.trim()).replace(/ /g,"§7 ");
-    hotm_names = (hotm_names.trim()).replace(/ /g,"§7 ");
+    hotm_symbols = (hotm_symbols).replace(/ /g,"§7 ");
+    hotm_names = (hotm_names).replace(/ /g,"§7 ");
     
     console.log(hotm_symbols);
     console.log(hotm_names);
