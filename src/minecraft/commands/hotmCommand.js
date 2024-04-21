@@ -106,7 +106,7 @@ class MedalsCommand extends minecraftCommand {
       console.log(hotm_node);
     }
 
-    response = "§cWIP";
+    let response = "§cWIP";
 
     return response;
   }
@@ -119,7 +119,7 @@ class MedalsCommand extends minecraftCommand {
 
       let hotm_data = data?.profile?.mining_core;
 
-      if (hotm_data == undefined) {
+      if (hotm_data == undefined || (hotm_data?.nodes?.length ?? 0) == 0) {
         throw "Player has no HOTM data.";
       }
 
