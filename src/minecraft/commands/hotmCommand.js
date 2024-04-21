@@ -41,9 +41,9 @@ class MedalsCommand extends minecraftCommand {
     let xp_to_next = 0;
     let next_level = null;
 
-    Object.entries(HOTM_XP).forEach((level) => {
-      let hotm_level = level[0];
-      let hotm_exp = level[1];
+    for(let level_info of Object.entries(HOTM_XP)){
+      let hotm_level = level_info[0];
+      let hotm_exp = level_info[1];
 
       if(left_exp >= hotm_exp){
         left_exp -= hotm_exp;
@@ -53,8 +53,9 @@ class MedalsCommand extends minecraftCommand {
         xp_remaining = left_exp;
         next_level = hotm_level;
         xp_to_next = hotm_exp;
+        break;
       }
-    });
+    }
 
     return {
       level: level,
