@@ -40,8 +40,6 @@ class topCommand extends minecraftCommand {
         ]).catch((error) => {});
   
         let top_info = top_data?.[0]?.data ?? {};
-
-        console.log(top_info);
   
         if (top_info?.data == undefined || top_info?.data?.length == 0) {
           return this.send(
