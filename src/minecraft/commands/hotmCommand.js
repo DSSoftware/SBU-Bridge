@@ -1,5 +1,6 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const HOTM = require("../../../API/constants/hotm.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
@@ -94,6 +95,22 @@ class MedalsCommand extends minecraftCommand {
     return response;
   }
 
+  async getHOTMTree(layer, data){
+    let hotm_tree = HOTM.tree;
+    let hotm_nodes = HOTM.nodes;
+
+    for(node of hotm_tree?.[layer]){
+      let level = data?.nodes?.[node] ?? 0;
+      let hotm_node = new (hotm_nodes[node])({level: level});
+
+      console.log(hotm_node);
+    }
+
+    response = "§cWIP";
+
+    return response;
+  }
+
   async onCommand(username, message, channel = "gc") {
     try {
       username = this.getArgs(message)[0] || username;
@@ -118,7 +135,7 @@ class MedalsCommand extends minecraftCommand {
       Lore.push(`§7Next Level: ${
         hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6§l${hotm_level_data?.next_level} §7(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)})`
       }`);
-      Lore.push(`§7Peak of the Mountain: §6§l${hotm_data?.nodes?.special_0 || "§c§l-"}`);
+      Lore.push(`§7Peak of the Mountain: §5§l${hotm_data?.nodes?.special_0 || "§c§l-"}`);
 
       Lore.push(`§f`);
 
@@ -132,7 +149,18 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
-      console.log(Lore)
+      Lore.push(`§7Heart of the Mountain`);
+
+      Lore.push(await this.getHOTMTree(10, hotm_data));
+      Lore.push(await this.getHOTMTree(9, hotm_data));
+      Lore.push(await this.getHOTMTree(8, hotm_data));
+      Lore.push(await this.getHOTMTree(7, hotm_data));
+      Lore.push(await this.getHOTMTree(6, hotm_data));
+      Lore.push(await this.getHOTMTree(5, hotm_data));
+      Lore.push(await this.getHOTMTree(4, hotm_data));
+      Lore.push(await this.getHOTMTree(3, hotm_data));
+      Lore.push(await this.getHOTMTree(2, hotm_data));
+      Lore.push(await this.getHOTMTree(1, hotm_data));
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
