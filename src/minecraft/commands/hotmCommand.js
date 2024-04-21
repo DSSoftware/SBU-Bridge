@@ -86,9 +86,9 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
-      Lore.push(`§7HOTM Level: ${hotm_level_data?.level} (${hotm_exp} EXP)`);
+      Lore.push(`§7HOTM Level: §6${hotm_level_data?.level} §7(${hotm_exp} EXP)`);
       Lore.push(`§7Next Level: ${
-        hotm_level_data?.next_level == null ? "§a§lMAXED" : `${hotm_level_data?.next_level} (${hotm_level_data?.next_level.xp_left} / ${hotm_level_data?.next_level.xp_to_next})`
+        hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6${hotm_level_data?.next_level} §7(${hotm_level_data?.xp_left} / ${hotm_level_data?.xp_to_next})`
       }`);
 
       Lore.push(`§f`);
