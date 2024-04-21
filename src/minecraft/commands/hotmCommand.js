@@ -4,6 +4,10 @@ const { formatUsername } = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 
+function formatNumber(x){
+  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+
 class MedalsCommand extends minecraftCommand {
   constructor(minecraft) {
     super(minecraft);
@@ -101,11 +105,11 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
-      Lore.push(`§2Mithril §7Powder: §2${mithril_powder_spent + mithril_powder_available} §7Available: §2${mithril_powder_available}`);
+      Lore.push(`§2Mithril §7Powder: §2${formatNumber(mithril_powder_spent + mithril_powder_available)} §7Available: §2${formatNumber(mithril_powder_available)}`);
 
-      Lore.push(`§dGemstone §7Powder: §d${gemstone_powder_spent + gemstone_powder_available} §7Available: §d${gemstone_powder_available}`);
+      Lore.push(`§dGemstone §7Powder: §d${formatNumber(gemstone_powder_spent + gemstone_powder_available)} §7Available: §d${formatNumber(gemstone_powder_available)}`);
 
-      Lore.push(`§bGlacite §7Powder: §b${glacite_powder_spent + glacite_powder_available} §7Available: §b${glacite_powder_available}`);
+      Lore.push(`§bGlacite §7Powder: §b${formatNumber(glacite_powder_spent + glacite_powder_available)} §7Available: §b${formatNumber(glacite_powder_available)}`);
 
       Lore.push(`§f`);
 
