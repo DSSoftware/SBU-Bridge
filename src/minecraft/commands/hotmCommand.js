@@ -69,6 +69,31 @@ class MedalsCommand extends minecraftCommand {
     };
   }
 
+  async getPowderInfo(type, display, color, data){
+    let powder_spent = data?.[`powder_spent_${type}`] ?? 0;
+    let powder_available = data?.[`powder_${type}`] ?? 0;
+
+    let total_powder = powder_spent + powder_available;
+
+    let response = `${color}${display} §7Powder: ${color}${formatNumber(total_powder)} §7Available: ${color}${formatNumber(powder_available)}`;
+
+    return response;
+  }
+
+  async getNucleusRuns(data){
+    let jade_places = data?.crystals?.jade_crystal?.total_placed ?? 0;
+    let amber_places = data?.crystals?.amber_crystal?.total_placed ?? 0;
+    let topaz_places = data?.crystals?.topaz_crystal?.total_placed ?? 0;
+    let sapphire_places = data?.crystals?.sapphire_crystal?.total_placed ?? 0;
+    let amethyst_places = data?.crystals?.amethyst_crystal?.total_placed ?? 0;
+
+    let runs = Math.min([jade_places, amber_places, topaz_places, sapphire_places, amethyst_places])
+
+    let response = `§aNu§6cle§eus §bRu§5ns: ${runs}`;
+
+    return response;
+  }
+
   async onCommand(username, message, channel = "gc") {
     try {
       username = this.getArgs(message)[0] || username;
@@ -82,16 +107,7 @@ class MedalsCommand extends minecraftCommand {
       }
 
       let hotm_exp = hotm_data?.experience;
-      let hotm_level_data = await this.getHOTMLevel(hotm_exp);
-      
-      let mithril_powder_spent = hotm_data?.powder_spent_mithril ?? 0;
-      let mithril_powder_available = hotm_data?.powder_mithril ?? 0;
-
-      let gemstone_powder_spent = hotm_data?.powder_spent_gemstone ?? 0;
-      let gemstone_powder_available = hotm_data?.powder_gemstone ?? 0;
-
-      let glacite_powder_spent = hotm_data?.powder_spent_glacite ?? 0;
-      let glacite_powder_available = hotm_data?.powder_glacite ?? 0;
+      let hotm_level_data = await this.getHOTMLevel(hotm_exp);      
 
       let Name = `§6${username}'s HOTM Stats:`;
       let Lore = [];
@@ -105,11 +121,13 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§f`);
 
-      Lore.push(`§2Mithril §7Powder: §2${formatNumber(mithril_powder_spent + mithril_powder_available)} §7Available: §2${formatNumber(mithril_powder_available)}`);
+      Lore.push(this.getPowderInfo("mithril", "Mithril", "§2", hotm_data));
+      Lore.push(this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data));
+      Lore.push(this.getPowderInfo("glacite", "Glacite", "§b", hotm_data));
 
-      Lore.push(`§dGemstone §7Powder: §d${formatNumber(gemstone_powder_spent + gemstone_powder_available)} §7Available: §d${formatNumber(gemstone_powder_available)}`);
+      Lore.push(`§f`);
 
-      Lore.push(`§bGlacite §7Powder: §b${formatNumber(glacite_powder_spent + glacite_powder_available)} §7Available: §b${formatNumber(glacite_powder_available)}`);
+      Lore.push(this.getNucleusRuns(hotm_data));
 
       Lore.push(`§f`);
 
