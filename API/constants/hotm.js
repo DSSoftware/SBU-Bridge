@@ -1,50 +1,50 @@
 const nodeNames = {
-  mining_speed_2: "Mining Speed II",
-  powder_buff: "Powder Buff",
-  mining_fortune_2: "Mining Fortune II",
-  vein_seeker: "Vein Seeker",
-  lonesome_miner: "Lonesome Miner",
-  professional: "Professional",
+  mining_speed_2: "MS II",
+  powder_buff: "PB",
+  mining_fortune_2: "MF II",
+  vein_seeker: "VS",
+  lonesome_miner: "LM",
+  professional: "Prof",
   mole: "Mole",
-  fortunate: "Fortunate",
-  great_explorer: "Great Explorer",
-  maniac_miner: "Maniac Miner",
-  goblin_killer: "Goblin Killer",
-  special_0: "Peak of the Mountain",
-  star_powder: "Star Powder",
-  daily_effect: "Sky Mall",
-  mining_madness: "Mining Madness",
-  mining_experience: "Seasoned Mineman",
-  efficient_miner: "Efficient Miner",
-  experience_orbs: "Orbiter",
-  front_loaded: "Front Loaded",
-  precision_mining: "Precision Mining",
-  random_event: "Luck of the Cave",
-  daily_powder: "Daily Powder",
-  fallen_star_bonus: "Crystallized",
-  mining_speed_boost: "Mining Speed Boost",
-  titanium_insanium: "Titanium Insanium",
-  mining_fortune: "Mining Fortune",
-  forge_time: "Quick Forge",
-  pickaxe_toss: "Pickobulus",
-  mining_speed: "Mining Speed",
-  gemstone_infusion: "Gemstone Infusion",
-  gifts_from_the_departed: "Gifts from the Departed",
-  frozen_solid: "Frozen Solid",
-  hungry_for_more: "Dead Man's Chest",
-  excavator: "Excavator",
-  rags_of_riches: "Rags of Riches",
-  hazardous_miner: "Hazardous Miner",
-  surveyor: "Surveyor",
-  subzero_mining: "SubZero Mining",
-  eager_adventurer: "Eager Adventurer",
-  keen_eye: "Keen Eye",
-  warm_hearted: "Warm Hearted",
-  dust_collector: "Dust Collector",
-  daily_grind: "Daily Grind",
-  strong_arm: "Strong Arm",
-  no_stone_unturned: "No Stone Unturned",
-  mineshaft_mayhem: "Mineshaft Mayhem",
+  fortunate: "Fort",
+  great_explorer: "GE",
+  maniac_miner: "MM",
+  goblin_killer: "GK",
+  special_0: "POTM",
+  star_powder: "SP",
+  daily_effect: "SM",
+  mining_madness: "MM",
+  mining_experience: "SM",
+  efficient_miner: "EM",
+  experience_orbs: "Orb",
+  front_loaded: "FL",
+  precision_mining: "PM",
+  random_event: "LotC",
+  daily_powder: "DP",
+  fallen_star_bonus: "Cryst",
+  mining_speed_boost: "MSB",
+  titanium_insanium: "TI",
+  mining_fortune: "MF",
+  forge_time: "QF",
+  pickaxe_toss: "Pick",
+  mining_speed: "MS",
+  gemstone_infusion: "GI",
+  gifts_from_the_departed: "GftD",
+  frozen_solid: "FS",
+  hungry_for_more: "DMC",
+  excavator: "Exc",
+  rags_of_riches: "RoR",
+  hazardous_miner: "HM",
+  surveyor: "Surv",
+  subzero_mining: "SZM",
+  eager_adventurer: "EA",
+  keen_eye: "KE",
+  warm_hearted: "WH",
+  dust_collector: "DC",
+  daily_grind: "DG",
+  strong_arm: "SA",
+  no_stone_unturned: "NSU",
+  mineshaft_mayhem: "MM",
 };
 
 class Node {
@@ -53,8 +53,18 @@ class Node {
     this.level = data.level;
   }
 
+  get color() {
+    return this.status === "maxed" ? "a" : this.status === "unlocked" ? "e" : "7";
+  }
+
+  get nodeSymbol() {
+    const nameColor = this.color;
+    const symbol = this.status === "maxed" ? "■" : this.status === "unlocked" ? "▨" : "□";
+    return `§${nameColor}§l${symbol}`;
+  }
+
   get displayName() {
-    const nameColor = this.status === "maxed" ? "a" : this.status === "unlocked" ? "e" : "c";
+    const nameColor = this.color;
     return `§${nameColor}§l${this.name}`;
   }
 
