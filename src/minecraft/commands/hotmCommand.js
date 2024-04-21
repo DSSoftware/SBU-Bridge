@@ -80,14 +80,14 @@ class MedalsCommand extends minecraftCommand {
       let hotm_exp = hotm_data?.experience;
       let hotm_level_data = await this.getHOTMLevel(hotm_exp);
       
-      let mithril_powder_spent = hotm_level_data?.powder_spent_mithril ?? 0;
-      let mithril_powder_available = hotm_level_data?.powder_mithril ?? 0;
+      let mithril_powder_spent = hotm_data?.powder_spent_mithril ?? 0;
+      let mithril_powder_available = hotm_data?.powder_mithril ?? 0;
 
-      let gemstone_powder_spent = hotm_level_data?.powder_spent_gemstone ?? 0;
-      let gemstone_powder_available = hotm_level_data?.powder_gemstone ?? 0;
+      let gemstone_powder_spent = hotm_data?.powder_spent_gemstone ?? 0;
+      let gemstone_powder_available = hotm_data?.powder_gemstone ?? 0;
 
-      let glacite_powder_spent = hotm_level_data?.powder_spent_glacite ?? 0;
-      let glacite_powder_available = hotm_level_data?.powder_glacite ?? 0;
+      let glacite_powder_spent = hotm_data?.powder_spent_glacite ?? 0;
+      let glacite_powder_available = hotm_data?.powder_glacite ?? 0;
 
       let Name = `§6${username}'s HOTM Stats:`;
       let Lore = [];
@@ -103,7 +103,7 @@ class MedalsCommand extends minecraftCommand {
 
       Lore.push(`§2Mithril §7Powder: §2${mithril_powder_spent + mithril_powder_available} §7Available: §2${mithril_powder_available}`);
 
-      Lore.push(`§dGemstone §7Powder: §d${gemstone_powder_spent + gemstone_powder_available} §dAvailable: §2${gemstone_powder_available}`);
+      Lore.push(`§dGemstone §7Powder: §d${gemstone_powder_spent + gemstone_powder_available} §7Available: §d${gemstone_powder_available}`);
 
       Lore.push(`§bGlacite §7Powder: §b${glacite_powder_spent + glacite_powder_available} §7Available: §b${glacite_powder_available}`);
 
