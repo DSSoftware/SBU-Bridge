@@ -32,6 +32,8 @@ class SkillsCommand extends minecraftCommand {
         achievements: { achievements },
       } = await hypixel.getPlayer(uuid);
 
+      console.log(achievements);
+
       username = formatUsername(username, data.profileData.cute_name);
 
       const profile = getSkills(data.profile);
@@ -64,6 +66,7 @@ class SkillsCommand extends minecraftCommand {
             } else {
               skill_cap = taming_cap;
             }
+            console.log(taming_cap);
           }
 
           const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
