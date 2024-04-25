@@ -31,22 +31,12 @@ class SkillsCommand extends minecraftCommand {
       const hypixel_data = await hypixel.getPlayer(uuid);
       const achievements = hypixel_data?.achievements;
 
-      console.log(achievements?.skyblockDomesticator);
-
       username = formatUsername(username, data.profileData.cute_name);
 
       const profile = getSkills(data.profile);
 
       let sa_points = 0;
       let sa_skills = 0;
-
-      const skillAverage = (
-        Object.keys(profile)
-          .filter((skill) => !["runecrafting", "social"].includes(skill))
-          .map((skill) => profile[skill].levelWithProgress || 0)
-          .reduce((a, b) => a + b, 0) /
-        (Object.keys(profile).length - 2)
-      ).toFixed(2);
 
       const skillsFormatted = Object.keys(profile)
         .map((skill) => {
@@ -68,14 +58,23 @@ class SkillsCommand extends minecraftCommand {
             } else {
               skill_cap = taming_cap;
             }
-            console.log(taming_cap);
           }
 
           const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
+
+          sa_points += level;
+          sa_skills++;
+
           const skillName = skill[0].toUpperCase() + skill.slice(1);
           return `${skillName} ${level}`;
         })
         .join(" | ");
+
+      let skillAverage = "N/A";
+
+      if(sa_skills != 0){
+        skillAverage = (sa_points / sa_skills).toFixed(2);
+      }
 
       this.send(`/${channel} ${username}'s Skill Average: ${skillAverage ?? 0} (${skillsFormatted})`);
     } catch (error) {
