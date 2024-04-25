@@ -17,7 +17,9 @@ module.exports = {
     "guild": {
       "guildExp": 50000,
       "guildId": process.env.guild_id,
-      "guildName": process.env.guild_name
+      "guildName": process.env.guild_name,
+      "join_message_override": process.env.join_message_override === "true",
+      "join_message": process.env.join_message
     },
     "API": {
       "hypixelAPIkey": process.env.keys_hypixel,

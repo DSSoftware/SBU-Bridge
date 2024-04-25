@@ -375,9 +375,10 @@ class StateHandler extends eventHandler {
       }
 
       await delay(1000);
+      let invite_message = config.minecraft.guild.join_message_override ? config.minecraft.guild.join_message : messages.guildJoinMessage;
 
       bot.chat(
-        `/gc ${replaceVariables(messages.guildJoinMessage, {
+        `/gc ${replaceVariables(invite_message, {
           prefix: config.minecraft.bot.prefix,
         })}`,
       );
