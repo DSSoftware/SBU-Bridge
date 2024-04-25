@@ -37,6 +37,9 @@ class SkillsCommand extends minecraftCommand {
 
       const profile = getSkills(data.profile);
 
+      let sa_points = 0;
+      let sa_skills = 0;
+
       const skillAverage = (
         Object.keys(profile)
           .filter((skill) => !["runecrafting", "social"].includes(skill))
