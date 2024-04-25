@@ -29,9 +29,9 @@ class SkillsCommand extends minecraftCommand {
 
       const data = await getLatestProfile(uuid);
       const hypixel_data = await hypixel.getPlayer(uuid);
-      const achievements = undefined;
+      const achievements = hypixel_data?.achievements;
 
-      console.log(hypixel_data);
+      console.log(achievements?.skyblockDomesticator);
 
       username = formatUsername(username, data.profileData.cute_name);
 
@@ -59,7 +59,7 @@ class SkillsCommand extends minecraftCommand {
           }
 
           if (skill == "taming") {
-            let taming_cap = achievements?.skyblock_domesticator;
+            let taming_cap = achievements?.skyblockDomesticator;
             if (taming_cap == undefined) {
               skill_cap = 50;
             } else {
