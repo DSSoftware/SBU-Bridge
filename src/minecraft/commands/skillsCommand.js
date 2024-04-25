@@ -28,11 +28,10 @@ class SkillsCommand extends minecraftCommand {
       const uuid = await getUUID(username);
 
       const data = await getLatestProfile(uuid);
-      const {
-        achievements: { achievements },
-      } = await hypixel.getPlayer(uuid);
+      const hypixel_data = await hypixel.getPlayer(uuid);
+      const achievements = undefined;
 
-      console.log(achievements);
+      console.log(hypixel_data);
 
       username = formatUsername(username, data.profileData.cute_name);
 
