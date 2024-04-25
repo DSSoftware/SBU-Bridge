@@ -1,6 +1,7 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
 const getSkills = require("../../../API/stats/skills.js");
+const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 
