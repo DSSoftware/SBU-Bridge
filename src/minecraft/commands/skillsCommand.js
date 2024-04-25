@@ -24,7 +24,9 @@ class SkillsCommand extends minecraftCommand {
     try {
       username = this.getArgs(message)[0] || username;
 
-      const data = await getLatestProfile(username);
+      const uuid = await getUUID(username);
+
+      const data = await getLatestProfile(uuid);
       const {
         achievements: { achievements },
       } = await hypixel.getPlayer(uuid);
