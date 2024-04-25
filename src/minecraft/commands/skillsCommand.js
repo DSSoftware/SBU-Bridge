@@ -62,8 +62,10 @@ class SkillsCommand extends minecraftCommand {
 
           const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
 
-          sa_points += level;
-          sa_skills++;
+          if(skill != "runecrafting" && skill != "social"){
+            sa_points += level;
+            sa_skills++;
+          }
 
           const skillName = skill[0].toUpperCase() + skill.slice(1);
           return `${skillName} ${level}`;
