@@ -61,9 +61,12 @@ class topCommand extends minecraftCommand {
       lb_info = lb_info[0].data ?? {};
 
       position = lb_info?.misc?.farmingweight ?? "N/A";
+      if(position == -1){
+        position = "N/A";
+      }
 
       this.send(
-        `/${channel} ${username}'s Farming Weight: ${weight}. Farming leaderboard position: ${position}.`,
+        `/${channel} ${username}'s Farming Weight: ${weight}. Farming weight leaderboard position: ${position}.`,
       );
     } catch (error) {
       console.log(error);
