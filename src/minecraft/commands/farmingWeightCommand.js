@@ -43,7 +43,7 @@ class topCommand extends minecraftCommand {
 
       for(let profile of (weight_info?.profiles ?? [])){
         if(profile?.profileId == selected_profile){
-          weight = (profile?.totalWeight ?? 0).toString().toFixed(2);
+          weight = (profile?.totalWeight ?? 0).toFixed(2);
         }
       }
 
