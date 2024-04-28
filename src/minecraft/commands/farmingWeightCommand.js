@@ -9,18 +9,13 @@ class topCommand extends minecraftCommand {
   constructor(minecraft) {
     super(minecraft);
 
-    this.name = "top";
-    this.aliases = [];
-    this.description = "Sends your placement in messages sent leaderboard.";
+    this.name = "fweight";
+    this.aliases = ["fw"];
+    this.description = "Sends your farming weight.";
     this.options = [
       {
         name: "username",
         description: "Minecraft username",
-        required: false,
-      },
-      {
-        name: "overall",
-        description: "Overall flag, set to 'overall' to see overall ranking.",
         required: false,
       },
     ];
