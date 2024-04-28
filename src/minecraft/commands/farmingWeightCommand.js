@@ -10,7 +10,7 @@ class topCommand extends minecraftCommand {
     super(minecraft);
 
     this.name = "fweight";
-    this.aliases = ["fw"];
+    this.aliases = ["fw", "farmingweight"];
     this.description = "Sends your farming weight.";
     this.options = [
       {
