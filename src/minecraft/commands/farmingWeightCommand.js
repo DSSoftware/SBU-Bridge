@@ -60,8 +60,11 @@ class topCommand extends minecraftCommand {
       }
 
       weight = weight.toFixed(2);
-      if(position == -1){
+      if(position == -1 || position == "N/A"){
         position = "N/A";
+      }
+      else{
+        position = `#${position}`;
       }
 
       this.send(
