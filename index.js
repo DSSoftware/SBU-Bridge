@@ -122,6 +122,31 @@ if (cluster.isPrimary) {
       }
     }
 
+    if (code == 124) {
+      var params = {
+        content: `<@&${config.discord.commands.notifyRole}>`,
+        embeds: [
+          {
+            title: "Bot Rebooted",
+            fields: [
+              {
+                name: "Exception Data",
+                value: `Bot failed to connect to connect to Hypixel, so it rebooted.`,
+              },
+            ],
+          },
+        ],
+      };
+
+      fetch(webhook_url, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(params),
+      });
+    }
+
     if (code == 5) {
       Logger.warnMessage("The bot is deploying the new version...");
       process.exit();

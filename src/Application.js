@@ -33,6 +33,7 @@ class Application {
       this.replication.connect();
     }
 
+    let fail_checks = 0;
 
     function sendStatus(){
       function isBotOnline() {
@@ -45,6 +46,13 @@ class Application {
 
       let botConnected = isBotOnline();
 
+      if(botConnected == 0){
+        fail_checks++;
+      }
+      else{
+        fail_checks = 0;
+      }
+
       let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}`;
 
       axios
@@ -55,6 +63,10 @@ class Application {
       .catch(function (error) {
         // Failed to send bot status...
       });
+
+      if(fail_checks >= 4){
+        process.exit(124);
+      }
     }
     
     sendStatus();
