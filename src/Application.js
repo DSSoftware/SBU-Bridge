@@ -49,7 +49,7 @@ class Application {
 
       if(botConnected == 0){
         fail_checks++;
-        Logger.warnMessage(`Bot isn't connected to Hypixel. Error ${fail_checks}/4.`);
+        Logger.warnMessage(`Bot isn't connected to Hypixel. Error ${fail_checks}/5.`);
       }
       else{
         if(fail_checks != 0){
@@ -69,8 +69,8 @@ class Application {
         // Failed to send bot status...
       });
 
-      if(fail_checks >= 4){
-        Logger.errorMessage(`Bot will reboot, as it failed the max amount of failchecks (4/4).`);
+      if(fail_checks >= 5){
+        Logger.errorMessage(`Bot will reboot, as it failed the max amount of failchecks (5/5).`);
         process.exit(124);
       }
     }
