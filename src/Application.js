@@ -2,6 +2,7 @@ const DiscordManager = require("./discord/DiscordManager.js");
 const MinecraftManager = require("./minecraft/MinecraftManager.js");
 const webManager = require("./web/WebsiteManager.js");
 const ReplicationManager = require("./replication/ReplicationManager.js");
+const Logger = require("./Logger.js");
 const config = require("../config.js");
 const axios = require("axios");
 
@@ -48,8 +49,12 @@ class Application {
 
       if(botConnected == 0){
         fail_checks++;
+        Logger.warnMessage(`Bot isn't connected to Hypixel. Error ${fail_checks}/4.`);
       }
       else{
+        if(fail_checks != 0){
+          Logger.warnMessage(`Reset failchecks.`);
+        }
         fail_checks = 0;
       }
 
@@ -65,6 +70,7 @@ class Application {
       });
 
       if(fail_checks >= 4){
+        Logger.errorMessage(`Bot will reboot, as it failed the max amount of failchecks (4/4).`);
         process.exit(124);
       }
     }
