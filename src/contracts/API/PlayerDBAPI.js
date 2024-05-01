@@ -5,6 +5,7 @@ const cache = new Map();
 
 async function getUUID(username, full = false) {
   try {
+    console.log(cache);
     if (cache.has(username)) {
       const data = cache.get(username.toLowerCase());
 
