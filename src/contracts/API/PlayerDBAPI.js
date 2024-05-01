@@ -6,13 +6,13 @@ const cache = new Map();
 async function getUUID(username, full = false) {
   try {
     if (cache.has(username)) {
-      const data = cache.get(username);
+      const data = cache.get(username.toLowerCase());
 
       if (data.last_save + 43200000 > Date.now()) {
         if (full) {
           return {
             uuid: data.id,
-            username: username,
+            username: data.name,
           };
         }
 
@@ -44,17 +44,22 @@ async function getUUID(username, full = false) {
       ign = data.name;
     }
 
+    if(uuid == null || ign == null){
+      throw "Invalid username.";
+    }
+
     let correct_uuid = uuid.replace(/-/g, "");
 
-    cache.set(data.name, {
+    cache.set(ign.toLowerCase(), {
       last_save: Date.now(),
       id: correct_uuid,
+      name: ign
     });
 
     if (full) {
       return {
         uuid: correct_uuid,
-        username: data.name,
+        username: ign,
       };
     }
     return correct_uuid;
