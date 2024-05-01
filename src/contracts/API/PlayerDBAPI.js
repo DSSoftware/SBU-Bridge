@@ -1,4 +1,5 @@
 const axios = require("axios");
+const config = require("../../../config");
 
 const cache = new Map();
 
@@ -19,13 +20,31 @@ async function getUUID(username, full = false) {
       }
     }
 
-    const { data } = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+    let uuid = null;
+    let ign = null;
 
-    if (data.errorMessage || data.id === undefined) {
-      throw data.errorMessage ?? "Invalid username.";
+    if(config.minecraft.API.mojang_resolver){
+      const { data } = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+
+      if (data.errorMessage || data.id === undefined) {
+        throw data.errorMessage ?? "Invalid username.";
+      }
+
+      uuid = data.id;
+      ign = data.name;
+    }
+    else{
+      const { data } = await axios.get(`https://api.minetools.eu/uuid/${username}`);
+
+      if (data.status == "ERR" || data.id === undefined) {
+        throw data.errorMessage ?? "Invalid username.";
+      }
+
+      uuid = data.id;
+      ign = data.name;
     }
 
-    let correct_uuid = data.id.replace(/-/g, "");
+    let correct_uuid = uuid.replace(/-/g, "");
 
     cache.set(data.name, {
       last_save: Date.now(),
