@@ -35,6 +35,7 @@ class StateHandler extends eventHandler {
   async onMessage(event) {
     const message = event.toString();
     const colouredMessage = event.toMotd();
+    console.log(colouredMessage);
 
     // NOTE: fixes "100/100❤     100/100✎ Mana" spam in the debug channel
     if (message.includes("✎ Mana") && message.includes("❤") && message.includes("/")) {
