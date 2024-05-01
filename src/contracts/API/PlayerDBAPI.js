@@ -19,7 +19,7 @@ async function getUUID(username, full = false) {
       }
     }
 
-    const { data } = await axios.get(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+    const { data } = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
 
     if (data.errorMessage || data.id === undefined) {
       throw data.errorMessage ?? "Invalid username.";
@@ -50,6 +50,9 @@ async function getUUID(username, full = false) {
     }
     if (err == 400) {
       throw "Malformed username.";
+    }
+    if (err == 429) {
+      throw "Too many requests.";
     }
     throw `Code: ${err}`;
   }

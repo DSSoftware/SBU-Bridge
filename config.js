@@ -26,11 +26,6 @@ module.exports = {
       "imgurAPIkey": process.env.keys_imgur,
       "skykingsAPIkey": process.env.keys_skykings,
 
-      "resolvers": {
-        "IGN_to_UUID": "https://api.mojang.com/users/profiles/minecraft",
-        "UUID_to_IGN": "https://sessionserver.mojang.com/session/minecraft/profile"
-      },
-
       "banlist": {
         "enabled": process.env.banlist_enabled == "true",
         "URL": process.env.banlist_url,
