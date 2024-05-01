@@ -65,7 +65,7 @@ async function getUUID(username, full = false) {
     return correct_uuid;
   } catch (error) {
     console.log(error);
-    const err = error.response.status;
+    const err = error?.response?.status ?? "Unexpected Error";
     if (err == 404) {
       throw "Invalid username.";
     }
