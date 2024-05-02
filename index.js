@@ -131,7 +131,7 @@ if (cluster.isPrimary) {
             fields: [
               {
                 name: "Exception Data",
-                value: `Bot failed to connect to connect to Hypixel, so it rebooted.`,
+                value: `Bot failed to connect to Hypixel, so it rebooted.`,
               },
             ],
           },
