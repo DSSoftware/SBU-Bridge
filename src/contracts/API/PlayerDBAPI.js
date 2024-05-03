@@ -5,7 +5,7 @@ const cache = new Map();
 
 async function getUUID(username, full = false) {
   try {
-    if (cache.has(username)) {
+    if (cache.has(username.toLowerCase())) {
       const data = cache.get(username.toLowerCase());
 
       if (data.last_save + 43200000 > Date.now()) {
