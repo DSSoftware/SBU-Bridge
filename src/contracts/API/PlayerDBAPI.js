@@ -8,7 +8,7 @@ async function getUUID(username, full = false) {
     if (cache.has(username.toLowerCase())) {
       const data = cache.get(username.toLowerCase());
 
-      if (data.last_save + 43200000 > Date.now()) {
+      if (data.last_save + 0 > Date.now()) {
         if (full) {
           return {
             uuid: data.id,
