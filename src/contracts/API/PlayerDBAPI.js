@@ -34,10 +34,10 @@ async function getUUID(username, full = false) {
       ign = data.name;
     }
     else{
-      const { data } = await axios.get(`https://api.minetools.eu/uuid/${username}`);
+      const { data } = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
 
-      if (data.status == "ERR" || data.id === undefined) {
-        throw data.errorMessage ?? "Invalid username.";
+      if (data.success == false || data.id === null) {
+        throw "Invalid username.";
       }
 
       uuid = data.id;
