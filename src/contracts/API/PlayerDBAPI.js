@@ -1,23 +1,27 @@
 const axios = require("axios");
 const config = require("../../../config");
+const Logger = require("../../Logger");
 
 const cache = new Map();
+
+setInterval(()=>{
+  Logger.infoMessage(`Cleared up UUID Cache (Entries: ${cache?.size ?? 0})`);
+  cache.clear();
+}, 30*60*1000)
 
 async function getUUID(username, full = false) {
   try {
     if (cache.has(username.toLowerCase())) {
       const data = cache.get(username.toLowerCase());
 
-      if (data.last_save + 0 > Date.now()) {
-        if (full) {
-          return {
-            uuid: data.id,
-            username: data.name,
-          };
-        }
-
-        return data.id;
+      if (full) {
+        return {
+          uuid: data.id,
+          username: data.name,
+        };
       }
+
+      return data.id;
     }
 
     let uuid = null;

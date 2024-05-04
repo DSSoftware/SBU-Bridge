@@ -1,5 +1,9 @@
 const chalk = require("chalk");
 
+async function infoMessage(message) {
+  return console.log(chalk.inverse(`[${await getCurrentTime()}] Info >`) + " " + message);
+}
+
 async function discordMessage(message) {
   return console.log(chalk.bgMagenta.black(`[${await getCurrentTime()}] Discord >`) + " " + chalk.magenta(message));
 }
@@ -45,4 +49,5 @@ module.exports = {
   errorMessage,
   broadcastMessage,
   getCurrentTime,
+  infoMessage
 };
