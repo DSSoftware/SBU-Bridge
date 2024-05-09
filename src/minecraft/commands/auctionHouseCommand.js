@@ -48,6 +48,10 @@ class AuctionHouseCommand extends minecraftCommand {
 
       let auctions_len = 0;
 
+      if (activeAuctions.length === 0) {
+        return this.send(`/${channel} This player has no active auctions.`);
+      }
+
       for (const auction of activeAuctions) {
         if (auctions_len >= 4) {
           string += ` (4 out of ${activeAuctions.length})`;
