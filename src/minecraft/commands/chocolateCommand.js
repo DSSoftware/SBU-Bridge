@@ -150,7 +150,7 @@ class topCommand extends minecraftCommand {
       let prestige = easter_stats?.chocolate_level ?? 0;    
       
       let barn_capacity = easter_stats?.rabbit_barn_capacity_level ?? 0;
-      let click_upgrades = 1 + easter_stats?.click_upgrades ?? 0;
+      let click_upgrades = 1 + (easter_stats?.click_upgrades ?? 0);
       let time_tower = easter_stats?.time_tower?.level ?? 0;
       let shrine = easter_stats?.rabbit_rarity_upgrades ?? 0;
       let coach = 0;
@@ -169,11 +169,11 @@ class topCommand extends minecraftCommand {
       Lore.push(...prepareRabbits(rabbits));
       Lore.push(`§f`);
       Lore.push(`§7Employees:`);
-      Lore.push(`§7Rabbit Bro: [§a${employees?.rabbit_bro}§7]`);
-      Lore.push(`§7Rabbit Cousin: [§9${employees?.rabbit_cousin}§7]`);
-      Lore.push(`§7Rabbit Sis: [§5${employees?.rabbit_sis}§7]`);
-      Lore.push(`§7Rabbit Father: [§6${employees?.rabbit_father}§7]`);
-      Lore.push(`§7Rabbit Grandma: [§d${employees?.rabbit_grandma}§7]`);
+      Lore.push(`§7Rabbit Bro: [§a${employees?.rabbit_bro ?? 0}§7]`);
+      Lore.push(`§7Rabbit Cousin: [§9${employees?.rabbit_cousin ?? 0}§7]`);
+      Lore.push(`§7Rabbit Sis: [§5${employees?.rabbit_sis ?? 0}§7]`);
+      Lore.push(`§7Rabbit Father: [§6${employees?.rabbit_father ?? 0}§7]`);
+      Lore.push(`§7Rabbit Grandma: [§d${employees?.rabbit_grandma ?? 0}§7]`);
       Lore.push(`§f`);
       Lore.push(`§7Upgrades:`);
       Lore.push(`§aRabbit Barn ${barn_capacity}`);
