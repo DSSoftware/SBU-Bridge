@@ -83,8 +83,8 @@ function prepareRabbits(rabbits){
     total_color = 'a';
   }
 
-  lines.unshift(`§${total_color}Total §7Rabbits: §${total_color}${rabbits_counter}/§a${total_counter}`);
-  lines.unshift(`§7Eggs found: §6${rabbits_total}§7 (Unique: §a${rabbits_caught} | Dupe: §c${rabbits_total-rabbits_caught})`);
+  lines.unshift(`§${total_color}§lTOTAL §7Rabbits: §${total_color}${rabbits_counter}§7/§a${total_counter}`);
+  lines.unshift(`§7Eggs found: §6${rabbits_total}§7 (Unique: §a${rabbits_caught}§7 | Dupe: §c${rabbits_total-rabbits_caught}§7)`);
 
   return lines;
 }
