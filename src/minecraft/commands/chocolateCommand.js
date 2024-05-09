@@ -49,7 +49,7 @@ function prepareRabbits(rabbits){
     let rabbit = rabbit_data[0];
     let rabbit_counter = rabbit_data[1];
 
-    rabbits_caught += min(rabbit_counter, 1);
+    rabbits_caught += Math.min(rabbit_counter, 1);
     rabbits_total += rabbit_counter;
 
     let rarity = rabbits_handler.getRabbitRarity(rabbit);
