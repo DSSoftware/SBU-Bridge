@@ -160,27 +160,17 @@ class topCommand extends minecraftCommand {
 
       Lore.push(`§f`);
       Lore.push(`§7Prestige: ${convertPrestige(prestige)}`);
-      Lore.push(`§f`);
       Lore.push(`§7Current Chocolate: §6${formatNumber(chocolate)}`);
       Lore.push(`§7This Prestige: §6${formatNumber(chocolate_since_prestige)}`);
       Lore.push(`§7Total Chocolate: §6${formatNumber(total_chocolate)}`);
       Lore.push(`§f`);
       Lore.push(`§7Rabbits:`);
       Lore.push(...prepareRabbits(rabbits));
-      Lore.push(`§f`);
       Lore.push(`§7Employees:`);
-      Lore.push(`§7Rabbit Bro: [§a${employees?.rabbit_bro}§7]`);
-      Lore.push(`§7Rabbit Cousin: [§9${employees?.rabbit_cousin}§7]`);
-      Lore.push(`§7Rabbit Sis: [§5${employees?.rabbit_sis}§7]`);
-      Lore.push(`§7Rabbit Father: [§6${employees?.rabbit_father}§7]`);
-      Lore.push(`§7Rabbit Grandma: [§d${employees?.rabbit_grandma}§7]`);
-      Lore.push(`§f`);
+      Lore.push(`§7Bro [§a${employees?.rabbit_bro}§7] | Cousin [§9${employees?.rabbit_cousin}§7] | Sis [§5${employees?.rabbit_sis}§7] | Father [§6${employees?.rabbit_father}§7] | Grandma [§d${employees?.rabbit_grandma}§7]`);
       Lore.push(`§7Upgrades:`);
       Lore.push(`§aRabbit Barn ${barn_capacity}`);
-      Lore.push(`§dHand-Baked Chocolate ${click_upgrades}`);
-      Lore.push(`§dTime Tower: ${time_tower}`);
-      Lore.push(`§dRabbit Shrine: ${shrine}`);
-      Lore.push(`§dCoach Jackrabbit: ${coach}`);
+      Lore.push(`§dHand-Baked Chocolate ${click_upgrades} | §dTower ${time_tower} | §dShrine ${shrine} | §dCoach ${coach}`);
       Lore.push(`§f`);
 
       const renderedItem = await renderLore(Name, Lore);
