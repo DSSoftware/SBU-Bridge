@@ -20,8 +20,6 @@ function convertPrestige(prestige){
   return response;
 }
 
-
-
 function prepareRabbits(rabbits){
   delete rabbits?.collected_eggs;
 
@@ -44,7 +42,16 @@ function prepareRabbits(rabbits){
     "MYTHIC": 0
   };
 
-  for(let rabbit of rabbits){
+  let rabbits_caught = 0;
+  let rabbits_total = 0;
+
+  for(let rabbit_data of Object.entries(rabbits)){
+    let rabbit = rabbit_data[0];
+    let rabbit_counter = rabbit_data[1];
+
+    rabbits_caught += min(rabbit_counter, 1);
+    rabbits_total += rabbit_counter;
+
     let rarity = rabbits_handler.getRabbitRarity(rabbit);
     rarities[rarity] = (rarities[rarity] ?? 0) + 1;
   }
@@ -76,6 +83,7 @@ function prepareRabbits(rabbits){
     total_color = 'a';
   }
 
+  lines.unshift(`§7Eggs found: §6${rabbits_total}§7 (Unique: §a${rabbits_caught} | Dupe: §c${rabbits_total-rabbits_caught})`);
   lines.unshift(`§${total_color}Total §7Rabbits: §${total_color}${rabbits_counter}/§a${total_counter}`);
 
   return lines;
