@@ -29,7 +29,7 @@ class topCommand extends minecraftCommand {
       let player_profile = `https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${player_uuid}`;
 
       let player_data = await Promise.all([
-        axios.get(player_data)
+        axios.get(player_profile)
       ]).catch((error) => {
         throw "Player has no SkyBlock profiles."
       });
