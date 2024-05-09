@@ -173,6 +173,8 @@ class topCommand extends minecraftCommand {
       Lore.push(`§dHand-Baked Chocolate ${click_upgrades} | §dTower ${time_tower} | §dShrine ${shrine} | §dCoach ${coach}`);
       Lore.push(`§f`);
 
+      console.log(Lore);
+
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
       this.send(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
