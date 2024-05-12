@@ -24,7 +24,7 @@ class CalculateCommand extends minecraftCommand {
             data.shift();
             let task = data.join(' ');
 
-            console.log(data);
+            console.log(task);
 
             const answer = mathjs.evaluate(task ?? "").toString();
 
