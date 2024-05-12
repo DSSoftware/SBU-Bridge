@@ -22,9 +22,15 @@ class CalculateCommand extends minecraftCommand {
         try {
             let data = message.toString().split(" ", 2);
 
+            console.log(data);
+
             const answer = mathjs.evaluate(data[1] ?? "").toString();
 
-            console.log(`/${channel} ${username}, the answer is '${answer}'`);
+            if(parseInt(answer) == NaN){
+                throw "Wrong response";
+            }
+
+            this.send(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
             this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
