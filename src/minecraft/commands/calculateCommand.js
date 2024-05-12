@@ -20,11 +20,16 @@ class CalculateCommand extends minecraftCommand {
 
     onCommand(username, message, channel = "gc") {
         try {
-            let data = message.toString().split(" ", 2);
+            let data = message.toString().split(" ");
+            data.shift();
+            let task = data.join(' ');
 
             console.log(data);
 
-            const answer = mathjs.evaluate(data[1] ?? "").toString();
+            const answer = mathjs.evaluate(task ?? "").toString();
+
+            console.log(answer);
+            console.log(parseInt(answer));
 
             if(parseInt(answer) == NaN){
                 throw "Wrong response";
