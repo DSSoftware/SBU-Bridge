@@ -24,18 +24,15 @@ class CalculateCommand extends minecraftCommand {
             data.shift();
             let task = data.join(' ');
 
-            console.log(task);
 
             const answer = mathjs.evaluate(task ?? "").toString();
 
-            console.log(answer);
-            console.log(parseInt(answer));
-
-            if(parseInt(answer) == NaN){
-                throw "Wrong response";
+            if(parseFloat(answer) != NaN){
+                this.send(`/${channel} ${username}, the answer is '${parseFloat(answer)}'`);
             }
-
-            this.send(`/${channel} ${username}, the answer is '${answer}'`);
+            else{
+                this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
+            }            
         } catch (error) {
             this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
