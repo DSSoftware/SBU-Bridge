@@ -24,7 +24,7 @@ class CalculateCommand extends minecraftCommand {
 
             const answer = mathjs.evaluate(data[1] ?? "").toString();
 
-            this.send(`/${channel} ${username}, the answer is '${answer}'`);
+            console.log(`/${channel} ${username}, the answer is '${answer}'`);
         } catch (error) {
             this.send(`/${channel} [ERROR] The expression cannot be evaluated.`);
         }
