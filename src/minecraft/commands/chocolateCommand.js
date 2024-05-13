@@ -185,7 +185,8 @@ class topCommand extends minecraftCommand {
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
-      this.send(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
+      
+      console.log(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);
