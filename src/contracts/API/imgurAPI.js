@@ -6,6 +6,7 @@ const imgurClient = new ImgurClient({
 });
 
 async function uploadImage(image) {
+  throw "Imgur uploads are temporary disabled.";
   const response = await imgurClient.upload({
     image: image,
   });
