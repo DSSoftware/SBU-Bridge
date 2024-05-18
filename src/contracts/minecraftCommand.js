@@ -16,16 +16,16 @@ class minecraftCommand {
   }
 
   async sendDiscordFollowup(channel, content){
-    let channel = config.discord.channels.officerChannel;
+    let followup_channel = config.discord.channels.officerChannel;
     let replica_channel = config.discord.replication.channels.officer;
 
     if(channel == "gc"){
-      channel = config.discord.channels.guildChatChannel;
+      followup_channel = config.discord.channels.guildChatChannel;
       replica_channel = config.discord.replication.channels.guild;
     }
 
     try{
-      await client.channels.cache.get(channel).send(content);
+      await client.channels.cache.get(followup_channel).send(content);
     }
     catch(e){
       console.log(e);
