@@ -153,7 +153,7 @@ class topCommand extends minecraftCommand {
       let click_upgrades = 1 + (easter_stats?.click_upgrades ?? 0);
       let time_tower = easter_stats?.time_tower?.level ?? 0;
       let shrine = easter_stats?.rabbit_rarity_upgrades ?? 0;
-      let coach = 0;
+      let coach = easter_stats?.chocolate_multiplier_upgrades ?? 0;
 
       let Name = `§6${username}'s Chocolate Factory:`;
       let Lore = [];
