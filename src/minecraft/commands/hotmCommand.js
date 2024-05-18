@@ -70,13 +70,17 @@ class MedalsCommand extends minecraftCommand {
     };
   }
 
-  async getPowderInfo(type, display, color, data){
+  async getPowderInfo(type, display, color, data, just_powder=false){
     let powder_spent = data?.[`powder_spent_${type}`] ?? 0;
     let powder_available = data?.[`powder_${type}`] ?? 0;
 
     let total_powder = powder_spent + powder_available;
 
     let response = `${color}${display} §7Powder: ${color}${formatNumber(total_powder)} §7Available: ${color}${formatNumber(powder_available)}`;
+
+    if(just_powder){
+      return formatNumber(powder_available);
+    }
 
     return response;
   }
@@ -192,53 +196,20 @@ class MedalsCommand extends minecraftCommand {
 
       const renderedItem = await renderLore(Name, Lore, true);
       const upload = await uploadImage(renderedItem);
-      this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
-      /*
 
+      if(!config.minecraft.commands.integrate_images){
+
+        let mithril_powder = await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data, true);
+        let gemstone_powder = await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data, true);
+        let glacite_powder = await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data, true);
+
+        this.send(`/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite`);
+
+        this.sendDiscordFollowup(channel, upload.data.link);
+        return;
+      }
       
-
-      let medals_inv = jacob_data?.medals_inv ?? {};
-      let unique_brackets = jacob_data?.unique_brackets ?? {};
-      let contests = jacob_data?.contests ?? {};
-      let personal_bests = jacob_data?.personal_bests ?? {};
-      let golds = 0;
-
-      console.log(medals_inv, unique_brackets, Object.entries(contests).length, personal_bests);
-
-      let crops = {
-        WHEAT: "Wheat",
-        CARROT_ITEM: "Carrot",
-        POTATO_ITEM: "Potato",
-        PUMPKIN: "Pumpkin",
-        MELON: "Melon",
-        MUSHROOM_COLLECTION: "Mushroom",
-        CACTUS: "Cactus",
-        SUGAR_CANE: "Sugar Cane",
-        NETHER_STALK: "Nether Wart",
-        "INK_SACK:3": "Cocoa Beans",
-      };
-
-      Object.entries(crops).forEach((element) => {
-        let crop_id = element[0];
-        let crop_name = element[1];
-
-        let crop_data = this.getCropMedals(crop_id, crop_name, unique_brackets, personal_bests);
-        golds += crop_data.gold;
-
-        Lore.push(crop_data.display);
-      });
-
-      Lore.push(`§f`);
-
-      Lore.unshift(`§f`);
-      Lore.unshift(
-        `§7Medals inventory: §c${medals_inv.bronze ?? 0}§7 | §f${medals_inv.silver ?? 0}§7 | §6${medals_inv.gold ?? 0}§7.`,
-      );
-      Lore.unshift(`§f`);
-      Lore.unshift(`§7Unique golds: §6${golds}§7/10.`);
-      Lore.unshift(`§7Participated in §6${Object.entries(contests).length}§7 contests.`);
-      Lore.unshift(`§f`);
-      */
+      this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);
