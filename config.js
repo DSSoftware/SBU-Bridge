@@ -17,7 +17,7 @@ module.exports = {
         true (integrated)   = send image link in the minecraft message
         false (discrete)    = replace image with text where possible
       */
-      "integrate_images": false
+      "integrate_images": true
     },
     "guild": {
       "guildExp": 50000,
