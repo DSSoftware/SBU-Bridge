@@ -101,6 +101,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
         if (auctions_len == 4) {
           string += ` (4 out of ${activeAuctions.length})`;
+          auctions_len += 1;
           continue;
         }
         if (auctions_len < 4) {
