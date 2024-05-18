@@ -16,7 +16,7 @@ class FoxCommand extends minecraftCommand {
   async onCommand(username, message, channel = "gc") {
     try {
       if(!config.minecraft.commands.integrate_images){
-        this.send(`Blame Hypixel for banning cute fox images :sob:`);
+        this.send(`/${channel} Blame Hypixel for banning cute fox images :sob:`);
         return;
       }
       const { data } = await axios.get("https://randomfox.ca/floof/");
