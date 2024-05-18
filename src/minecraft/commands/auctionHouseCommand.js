@@ -30,7 +30,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
       let string = "";
 
-      const uuid = await get(username);
+      const uuid = await getUUID(username);
 
       const { hypixelAPIkey } = config.minecraft.API;
       const [auctionResponse, playerResponse] = await Promise.all([
