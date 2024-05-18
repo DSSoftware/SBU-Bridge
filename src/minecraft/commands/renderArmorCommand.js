@@ -1,5 +1,6 @@
 const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const config = require("../../../config.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 const { renderLore } = require("../../contracts/renderItem.js");
@@ -42,6 +43,8 @@ class ArmorCommand extends minecraftCommand {
       }
 
       let response = "";
+      let images = "";
+      let armor_pieces = "";
       for (const piece of Object.values(inventoryData)) {
         if (piece?.tag?.display?.Name === undefined || piece?.tag?.display?.Lore === undefined) {
           continue;
@@ -55,8 +58,17 @@ class ArmorCommand extends minecraftCommand {
         const upload = await uploadImage(renderedItem);
 
         const link = upload.data.link;
+        images += `\n${link}`;
+        armor_pieces += `[${Name}] `;
 
         response += response.split(" | ").length == 4 ? link : `${link} | `;
+      }
+
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username}'s Armor: ${armor_pieces}'`);
+
+        this.sendDiscordFollowup(channel, images);
+        return;
       }
 
       this.send(`/${channel} ${username}'s Armor: ${response}`);
