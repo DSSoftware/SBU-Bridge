@@ -47,16 +47,15 @@ class AuctionHouseCommand extends minecraftCommand {
       const activeAuctions = auctions.filter((auction) => auction.end >= Date.now());
 
       let auctions_len = 0;
+      let price = 0;
 
       if (activeAuctions.length === 0) {
         return this.send(`/${channel} This player has no active auctions.`);
       }
 
       for (const auction of activeAuctions) {
-        if (auctions_len >= 4) {
-          string += ` (4 out of ${activeAuctions.length})`;
-          break;
-        }
+        let item_price = 0;
+        
         const lore = auction.item_lore.split("\n");
 
         lore.push("§8§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", `§7Seller: ${getRank(player)} ${player.displayname}`);
@@ -78,6 +77,7 @@ class AuctionHouseCommand extends minecraftCommand {
             }
 
             const { amount } = auction.bids[auction.bids.length - 1];
+            item_price = amount ?? 0;
             const bidOrBids = auction.bids.length === 1 ? "bids" : "bid";
 
             lore.push(
@@ -90,15 +90,29 @@ class AuctionHouseCommand extends minecraftCommand {
           }
         } else {
           lore.push(`§7Buy it now: §6${auction.starting_bid.toLocaleString()} coins`, `§7`);
+          item_price = auction.starting_bid ?? 0;
         }
 
         lore.push(`§7Ends in: §e${timeSince(auction.end)}`, `§7`, `§eClick to inspect`);
 
-        const renderedItem = await renderLore(`§7${auction.item_name}`, lore);
-        const upload = await uploadImage(renderedItem);
+        if (auctions_len == 4) {
+          string += ` (4 out of ${activeAuctions.length})`;
+          continue;
+        }
+        if (auctions_len < 4) {
+          const renderedItem = await renderLore(`§7${auction.item_name}`, lore);
+          const upload = await uploadImage(renderedItem);
 
-        string += string === "" ? upload.data.link : " | " + upload.data.link;
-        auctions_len++;
+          string += string === "" ? upload.data.link : " | " + upload.data.link;
+          auctions_len++;
+        }
+        
+        price += item_price;
+      }
+
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username} has ${auctions_len} auctions totalling ${price}.`);
+        return;
       }
 
       this.send(`/${channel} ${`${username}'s Active Auctions: ${string}`}`);

@@ -12,7 +12,12 @@ module.exports = {
     },
     "commands": {
       "normal": true,
-      "soopy": process.env.soopy == "true"
+      "soopy": process.env.soopy == "true",
+      /*
+        true (integrated)   = send image link in the minecraft message
+        false (discrete)    = replace image with text where possible
+      */
+      "integrate_images": false
     },
     "guild": {
       "guildExp": 50000,
