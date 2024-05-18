@@ -80,7 +80,7 @@ class MedalsCommand extends minecraftCommand {
     let response = `${color}${display} §7Powder: ${color}${formatNumber(total_powder)} §7Available: ${color}${formatNumber(powder_available)}`;
 
     if(just_powder){
-      return formatNumber(powder_available);
+      return formatNumber(total_powder);
     }
 
     return response;
