@@ -101,7 +101,6 @@ class AuctionHouseCommand extends minecraftCommand {
 
         if (auctions_len == 4) {
           string += ` (4 out of ${activeAuctions.length})`;
-          auctions_len += 1;
           continue;
         }
         if (auctions_len < 4) {
@@ -111,8 +110,8 @@ class AuctionHouseCommand extends minecraftCommand {
           images += `\n${upload.data.link}`;
 
           string += string === "" ? upload.data.link : " | " + upload.data.link;
-          auctions_len++;
         }
+        auctions_len++;
         
         price += item_price;
       }
