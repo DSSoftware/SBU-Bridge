@@ -59,7 +59,7 @@ class ArmorCommand extends minecraftCommand {
 
         const link = upload.data.link;
         images += `\n${link}`;
-        armor_pieces += `[${Name}] `;
+        armor_pieces += `[${Name.slice(2)}] `;
 
         response += response.split(" | ").length == 4 ? link : `${link} | `;
       }
