@@ -54,7 +54,7 @@ class EquipmentCommand extends minecraftCommand {
         const link = upload.data.link;
 
         images += `\n${link}`;
-        armor_pieces += `[${Name.slice(2)}] `;
+        armor_pieces += `[${Name.replace(/§[0-9A-FK-OR]/ig,'')}] `;
 
         response += response.split(" | ").length == 4 ? link : `${link} | `;
       }
