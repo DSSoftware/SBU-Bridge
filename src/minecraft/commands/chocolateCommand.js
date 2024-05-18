@@ -186,6 +186,12 @@ class topCommand extends minecraftCommand {
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
       
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${nick} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)})`);
+        this.sendDiscordFollowup(channel, upload.data.link);
+        return;
+      }
+
       this.send(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
     } catch (error) {
       console.log(error);
