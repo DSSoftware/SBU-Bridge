@@ -30,7 +30,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
       let string = "";
 
-      const uuid = await getUUID(username);
+      const { uuid, nick } = await getUUID(username, true);
 
       const { hypixelAPIkey } = config.minecraft.API;
       const [auctionResponse, playerResponse] = await Promise.all([
@@ -112,11 +112,11 @@ class AuctionHouseCommand extends minecraftCommand {
       }
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}.`);
+        this.send(`/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}.`);
         return;
       }
 
-      this.send(`/${channel} ${`${username}'s Active Auctions: ${string}`}`);
+      this.send(`/${channel} ${`${nick}'s Active Auctions: ${string}`}`);
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);
