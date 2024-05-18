@@ -51,6 +51,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
       let auctions_len = 0;
       let price = 0;
+      let images = "";
 
       if (activeAuctions.length === 0) {
         return this.send(`/${channel} This player has no active auctions.`);
@@ -106,6 +107,8 @@ class AuctionHouseCommand extends minecraftCommand {
           const renderedItem = await renderLore(`§7${auction.item_name}`, lore);
           const upload = await uploadImage(renderedItem);
 
+          images += `\n${upload.data.link}`;
+
           string += string === "" ? upload.data.link : " | " + upload.data.link;
           auctions_len++;
         }
@@ -115,6 +118,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
       if(!config.minecraft.commands.integrate_images){
         this.send(`/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}.`);
+        this.sendDiscordFollowup(channel, images);
         return;
       }
 

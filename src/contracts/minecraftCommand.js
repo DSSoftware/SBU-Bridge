@@ -15,6 +15,30 @@ class minecraftCommand {
     return args;
   }
 
+  async sendDiscordFollowup(channel, content){
+    let channel = config.discord.channels.officerChannel;
+    let replica_channel = config.discord.replication.channels.officer;
+
+    if(channel == "gc"){
+      channel = config.discord.channels.guildChatChannel;
+      replica_channel = config.discord.replication.channels.guild;
+    }
+
+    try{
+      await client.channels.cache.get(channel).send(content);
+    }
+    catch(e){
+      console.log(e);
+    }
+
+    try{
+      await replication_client.channels.cache.get(replica_channel).send(content);
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
+
   send(message, n = 1) {
     if (bot === undefined && bot._client.chat === undefined) {
       return;
