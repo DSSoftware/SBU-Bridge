@@ -6,6 +6,7 @@ const getRank = require("../../../API/stats/rank.js");
 const axios = require("axios");
 const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
+const { formatNumber } = require("../../contracts/helperFunctions.js");
 
 class AuctionHouseCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -29,7 +30,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
       let string = "";
 
-      const uuid = await getUUID(username);
+      const uuid = await get(username);
 
       const { hypixelAPIkey } = config.minecraft.API;
       const [auctionResponse, playerResponse] = await Promise.all([
@@ -111,7 +112,7 @@ class AuctionHouseCommand extends minecraftCommand {
       }
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} has ${auctions_len} auctions totalling ${price}.`);
+        this.send(`/${channel} ${username} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}.`);
         return;
       }
 
