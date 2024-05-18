@@ -198,7 +198,6 @@ class MedalsCommand extends minecraftCommand {
       const upload = await uploadImage(renderedItem);
 
       if(!config.minecraft.commands.integrate_images){
-
         let mithril_powder = await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data, true);
         let gemstone_powder = await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data, true);
         let glacite_powder = await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data, true);
