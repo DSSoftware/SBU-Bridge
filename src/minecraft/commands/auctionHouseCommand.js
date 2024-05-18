@@ -101,7 +101,6 @@ class AuctionHouseCommand extends minecraftCommand {
 
         if (auctions_len == 4) {
           string += ` (4 out of ${activeAuctions.length})`;
-          continue;
         }
         if (auctions_len < 4) {
           const renderedItem = await renderLore(`§7${auction.item_name}`, lore);
