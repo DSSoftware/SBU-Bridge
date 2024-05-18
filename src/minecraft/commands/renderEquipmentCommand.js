@@ -1,6 +1,7 @@
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
+const config = require("../../../config.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 
@@ -37,7 +38,7 @@ class EquipmentCommand extends minecraftCommand {
       let response = "";
       let images = "";
       let armor_pieces = "";
-      
+
       for (const piece of Object.values(inventoryData)) {
         if (piece?.tag?.display?.Name === undefined || piece?.tag?.display?.Lore === undefined) {
           continue;
