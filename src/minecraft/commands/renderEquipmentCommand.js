@@ -35,6 +35,9 @@ class EquipmentCommand extends minecraftCommand {
       const { i: inventoryData } = await decodeData(Buffer.from(profile.profile.equippment_contents.data, "base64"));
 
       let response = "";
+      let images = "";
+      let armor_pieces = "";
+      
       for (const piece of Object.values(inventoryData)) {
         if (piece?.tag?.display?.Name === undefined || piece?.tag?.display?.Lore === undefined) {
           continue;
@@ -49,7 +52,17 @@ class EquipmentCommand extends minecraftCommand {
 
         const link = upload.data.link;
 
+        images += `\n${link}`;
+        armor_pieces += `[${Name.slice(2)}] `;
+
         response += response.split(" | ").length == 4 ? link : `${link} | `;
+      }
+
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username}'s Equipment: ${armor_pieces}'`);
+
+        this.sendDiscordFollowup(channel, images);
+        return;
       }
 
       this.send(`/${channel} ${username}'s Equipment: ${response}`);
