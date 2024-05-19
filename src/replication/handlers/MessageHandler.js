@@ -150,6 +150,9 @@ class MessageHandler {
 
       if (images.length > 0) {
         for (const attachment of images) {
+          if(!config.minecraft.commands.integrate_images){
+            break;
+          }
           const imgurLink = await uploadImage(attachment);
 
           messageData.message = messageData.message.replace(attachment, imgurLink.data.link);

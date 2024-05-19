@@ -208,6 +208,13 @@ class TrophyFishCommand extends minecraftCommand {
 
       const upload = await uploadImage(renderedItem);
 
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username}'s Trophy Fish: ${diamonds}/18 DIAMOND | Total catches: ${total_fishes}. Full response in Discord.`);
+
+        this.sendDiscordFollowup(channel, upload.data.link);
+        return;
+      }
+
       this.send(`/${channel} ${username}'s Trophy Fish stats: ${upload.data.link}`);
     } catch (error) {
       console.log(error);

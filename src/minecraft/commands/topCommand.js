@@ -33,6 +33,9 @@ class topCommand extends minecraftCommand {
       }
 
       if (this.getArgs(message)[0] == "weekly") {
+        if(!config.minecraft.commands.integrate_images){
+          return this.send(`/${channel} This sub-command was disabled!`);
+        }
         let top_data = await Promise.all([
           axios.get(
             `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${config.minecraft.guild.guildId}`,

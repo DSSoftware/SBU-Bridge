@@ -65,7 +65,7 @@ class ArmorCommand extends minecraftCommand {
       }
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username}'s Armor: ${armor_pieces}'`);
+        this.send(`/${channel} ${username}'s Armor: ${armor_pieces}. Full response in Discord.`);
 
         this.sendDiscordFollowup(channel, images);
         return;

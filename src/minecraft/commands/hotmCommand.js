@@ -203,7 +203,7 @@ class MedalsCommand extends minecraftCommand {
         let gemstone_powder = await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data, true);
         let glacite_powder = await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data, true);
 
-        this.send(`/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite`);
+        this.send(`/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite. Full response in Discord.`);
 
         this.sendDiscordFollowup(channel, upload.data.link);
         return;

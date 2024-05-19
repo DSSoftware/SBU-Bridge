@@ -116,7 +116,7 @@ class AuctionHouseCommand extends minecraftCommand {
       }
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}.`);
+        this.send(`/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}. Full response in Discord.`);
         this.sendDiscordFollowup(channel, images);
         return;
       }

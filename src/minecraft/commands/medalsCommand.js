@@ -134,6 +134,13 @@ class MedalsCommand extends minecraftCommand {
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
+
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length}. Full response in Discord.`);
+        this.sendDiscordFollowup(channel, upload.data.link);
+        return;
+      }
+
       this.send(`/${channel} ${username}'s Jacobs Contest stats: ${upload.data.link}.`);
     } catch (error) {
       console.log(error);

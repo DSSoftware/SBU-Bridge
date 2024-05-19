@@ -187,7 +187,7 @@ class topCommand extends minecraftCommand {
       const upload = await uploadImage(renderedItem);
       
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)})`);
+        this.send(`/${channel} ${username} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)}). Full response in Discord.`);
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }

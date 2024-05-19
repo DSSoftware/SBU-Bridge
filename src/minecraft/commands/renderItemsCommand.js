@@ -1,6 +1,7 @@
 const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
+const config = require("../../../config.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 
@@ -68,6 +69,15 @@ class RenderCommand extends minecraftCommand {
       const renderedItem = await renderLore(Name, Lore);
 
       const upload = await uploadImage(renderedItem);
+
+      let proper_name = Name.replace(/§[0-9A-FK-OR]/ig,'');
+
+      if(!config.minecraft.commands.integrate_images){
+        this.send(`/${channel} ${username} is holding [${proper_name}]. Full response in Discord.`);
+
+        this.sendDiscordFollowup(channel, upload.data.link);
+        return;
+      }
 
       this.send(`/${channel} ${username}'s item at slot ${itemNumber}: ${upload.data.link}`);
     } catch (error) {
