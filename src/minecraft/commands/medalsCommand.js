@@ -97,8 +97,6 @@ class MedalsCommand extends minecraftCommand {
       let personal_bests = jacob_data?.personal_bests ?? {};
       let golds = 0;
 
-      console.log(medals_inv, unique_brackets, Object.entries(contests).length, personal_bests);
-
       let crops = {
         WHEAT: "Wheat",
         CARROT_ITEM: "Carrot",
@@ -137,7 +135,7 @@ class MedalsCommand extends minecraftCommand {
       const upload = await uploadImage(renderedItem);
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length}. Full response in Discord.`);
+        this.send(`/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length} contests. Full response in Discord.`);
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
