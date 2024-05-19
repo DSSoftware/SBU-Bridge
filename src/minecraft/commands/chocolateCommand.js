@@ -20,6 +20,30 @@ function convertPrestige(prestige){
   return response;
 }
 
+function convertEmployeeLevel(level){
+  if(level <= 0){
+    return `§7[0] §7Unemployed`;
+  }
+  if(level > 0){
+    return `§7[${level}] §fIntern`;
+  }
+  if(level >= 10){
+    return `§7[${level}] §aEmployee`;
+  }
+  if(level >= 75){
+    return `§7[${level}] §9Assistant`;
+  }
+  if(level >= 125){
+    return `§7[${level}] §5Manager`;
+  }
+  if(level >= 125){
+    return `§7[${level}] §6Director`;
+  }
+
+  let response = prestiges?.[prestige] ?? "§7Unknown";
+  return response;
+}
+
 function prepareRabbits(rabbits){
   delete rabbits?.collected_eggs;
 
@@ -169,11 +193,11 @@ class topCommand extends minecraftCommand {
       Lore.push(...prepareRabbits(rabbits));
       Lore.push(`§f`);
       Lore.push(`§7Employees:`);
-      Lore.push(`§7Rabbit Bro: [§a${employees?.rabbit_bro ?? 0}§7]`);
-      Lore.push(`§7Rabbit Cousin: [§9${employees?.rabbit_cousin ?? 0}§7]`);
-      Lore.push(`§7Rabbit Sis: [§5${employees?.rabbit_sis ?? 0}§7]`);
-      Lore.push(`§7Rabbit Father: [§6${employees?.rabbit_father ?? 0}§7]`);
-      Lore.push(`§7Rabbit Grandma: [§d${employees?.rabbit_grandma ?? 0}§7]`);
+      Lore.push(`§7Rabbit Bro: ${convertEmployeeLevel(employees?.rabbit_bro ?? 0)}`);
+      Lore.push(`§7Rabbit Cousin: ${convertEmployeeLevel(employees?.rabbit_cousin ?? 0)}`);
+      Lore.push(`§7Rabbit Sis: ${convertEmployeeLevel(employees?.rabbit_sis ?? 0)}`);
+      Lore.push(`§7Rabbit Father: ${convertEmployeeLevel(employees?.rabbit_father ?? 0)}`);
+      Lore.push(`§7Rabbit Grandma: ${convertEmployeeLevel(employees?.rabbit_grandma ?? 0)}`);
       Lore.push(`§f`);
       Lore.push(`§7Upgrades:`);
       Lore.push(`§aRabbit Barn ${barn_capacity}`);
