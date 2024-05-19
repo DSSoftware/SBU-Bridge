@@ -46,7 +46,7 @@ class RenderCommand extends minecraftCommand {
       const upload = await uploadImage(renderedItem);
 
       if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username}'s pet is [Lvl ${pet.level}] ${pet.display_name}. Full response in Discord.`);
+        this.send(`/${channel} ${username}'s pet is [Lvl ${pet.level}] ${pet.tier} ${pet.display_name}. Full response in Discord.`);
 
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
