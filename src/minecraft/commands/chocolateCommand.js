@@ -21,27 +21,26 @@ function convertPrestige(prestige){
 }
 
 function convertEmployeeLevel(level){
-  if(level <= 0){
-    return `§7[0] §7Unemployed`;
-  }
-  if(level > 0){
-    return `§7[${level}] §fIntern`;
-  }
-  if(level >= 10){
-    return `§7[${level}] §aEmployee`;
-  }
-  if(level >= 75){
-    return `§7[${level}] §9Assistant`;
+  if(level >= 175){
+    return `§7[${level}] §6Director`;
   }
   if(level >= 125){
     return `§7[${level}] §5Manager`;
   }
-  if(level >= 125){
-    return `§7[${level}] §6Director`;
+  if(level >= 75){
+    return `§7[${level}] §9Assistant`;
+  }
+  if(level >= 10){
+    return `§7[${level}] §aEmployee`;
+  }
+  if(level > 0){
+    return `§7[${level}] §fIntern`;
+  }
+  if(level <= 0){
+    return `§7[0] §7Unemployed`;
   }
 
-  let response = prestiges?.[prestige] ?? "§7Unknown";
-  return response;
+  return "N/A";
 }
 
 function prepareRabbits(rabbits){
