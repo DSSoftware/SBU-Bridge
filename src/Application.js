@@ -5,6 +5,21 @@ const ReplicationManager = require("./replication/ReplicationManager.js");
 const Logger = require("./Logger.js");
 const config = require("../config.js");
 const axios = require("axios");
+const fs = require("fs").promises;
+
+const getGitId = async () => {
+  try{
+    const gitId = await fs.readFile('.git/HEAD', 'utf8');
+    if (gitId.indexOf(':') === -1) {
+      return gitId;
+    }
+    const refPath = '.git/' + gitId.substring(5).trim();
+    return await fs.readFile(refPath, 'utf8');
+  }
+  catch(e){
+    return "N/A";
+  }
+};
 
 class Application {
   async register() {
@@ -36,7 +51,7 @@ class Application {
 
     let fail_checks = 0;
 
-    function sendStatus(){
+    async function sendStatus(){
       function isBotOnline() {
         if (bot === undefined || bot._client.chat === undefined) {
           return 0;
@@ -46,6 +61,8 @@ class Application {
       }
 
       let botConnected = isBotOnline();
+
+      let commit_version = ((await getGitId()) ?? "N/A").slice(0, 7);
 
       if(botConnected == 0){
         fail_checks++;
@@ -58,7 +75,7 @@ class Application {
         fail_checks = 0;
       }
 
-      let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}`;
+      let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
 
       axios
       .get(statusURL)
