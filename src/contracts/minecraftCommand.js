@@ -72,7 +72,6 @@ class minecraftCommand {
 
     bot.once("message", listener);
     bot.chat(message);
-    console.log("[DEBUG] Sent sent message in minecraft chat:", message);
 
     setTimeout(() => {
       bot.removeListener("message", listener);
