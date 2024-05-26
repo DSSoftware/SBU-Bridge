@@ -129,7 +129,7 @@ class MessageHandler {
         chat = "Officer/InterDiscord";
       }
 
-      if(chat == "Officer/InterDiscord" && message.user.bot){
+      if(chat == "Officer/InterDiscord" && message.author.bot){
         let parts = content.split("@");
         let identifier = parts.shift();
         if(identifier == "[OFFICER]"){

@@ -112,9 +112,9 @@ class MessageHandler {
         return;
       }
 
-      const real_username = sender_data?.data?.nick ?? message.author.username;
+      let real_username = sender_data?.data?.nick ?? message.author.username;
 
-      const content = this.stripDiscordContent(message).trim();
+      let content = this.stripDiscordContent(message).trim();
       if (content.length === 0 && message?.attachments?.size == 0) {
         return;
       }
@@ -125,6 +125,18 @@ class MessageHandler {
       }
       if (message.channel.id == config.discord.replication.channels.officer) {
         chat = "Officer/Replication";
+      }
+
+      if(chat == "Officer/InterDiscord" && message.author.bot){
+        let parts = content.split("@");
+        let identifier = parts.shift();
+        if(identifier == "[OFFICER]"){
+          let player_nick = parts.pop();
+          let message = parts.join(" ");
+
+          content = message;
+          real_username = player_nick;
+        }
       }
 
       this.saveGuildMessage(real_username, sender_data?.data?.uuid, sender_data?.data?.guild_id ?? "");
