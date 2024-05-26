@@ -87,8 +87,6 @@ class MessageHandler {
         return;
       }
 
-      console.log(message);
-
       let sender_data = await this.getSenderData(message.author.id);
 
       if (sender_data?.data?.nick == undefined && !message.author.bot) {
@@ -129,10 +127,6 @@ class MessageHandler {
 
       if (message.channel.id == config.discord.channels.officerChannel) {
         chat = "Officer/InterDiscord";
-      }
-
-      if (chat != "Debug" && message.author.bot) {
-        return;
       }
 
       this.saveGuildMessage(real_username, sender_data?.data?.uuid, sender_data?.data?.guild_id ?? "");
