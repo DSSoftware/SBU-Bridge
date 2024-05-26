@@ -91,7 +91,7 @@ class MessageHandler {
 
       if (sender_data?.data?.nick == undefined && !message.author.bot) {
         if (message.channel.id == config.discord.channels.officerChannel) {
-          message.react("❌");
+          message.react("❌").catch(e => {});
           return;
         }
         client.channels.cache.get(message.channel.id).send({
@@ -109,7 +109,7 @@ class MessageHandler {
 
       const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
       if(isBridgeLocked){
-        message.react("❌");
+        message.react("❌").catch(e => {});
         return;
       }
 

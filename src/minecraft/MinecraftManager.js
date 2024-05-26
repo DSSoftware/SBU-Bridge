@@ -123,11 +123,11 @@ class MinecraftManager extends CommunicationBridge {
         setTimeout(() => {
           bot.removeListener("message", messageListener);
           if (successfullySent === true) {
-            discord.react("✅");
+            discord.react("✅").catch(e => {});
             return;
           }
 
-          discord.react("❌");
+          discord.react("❌").catch(e => {});
         }, 500);
       }
     }

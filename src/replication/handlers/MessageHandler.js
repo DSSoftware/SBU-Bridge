@@ -90,7 +90,7 @@ class MessageHandler {
 
       if (sender_data?.data?.nick == undefined && !message.author.bot) {
         if (message.channel.id == config.discord.replication.channels.officer) {
-          message.react("❌");
+          message.react("❌").catch(e => {});
           return;
         }
         replication_client.channels.cache.get(message.channel.id).send({
@@ -108,7 +108,7 @@ class MessageHandler {
 
       const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
       if(isBridgeLocked){
-        message.react("❌");
+        message.react("❌").catch(e => {});
         return;
       }
 
