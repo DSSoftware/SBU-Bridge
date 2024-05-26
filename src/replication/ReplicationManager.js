@@ -120,12 +120,12 @@ class ReplicationManager extends CommunicationBridge {
     }
 
     if(chat == "Officer"){
-      const message = channel.send({
+      const message_officer = channel.send({
         content: `[OFFICER]@${username}@${message}`
       });
 
       setTimeout(()=>{
-        message.delete();
+        message_officer.delete();
       }, 1000);
     }
 
