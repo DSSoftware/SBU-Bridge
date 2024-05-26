@@ -121,7 +121,7 @@ class ReplicationManager extends CommunicationBridge {
 
     if(chat == "Officer"){
       channel.send({
-        content: message
+        content: `[OFFICER]@${username}@${message}`
       });
     }
 
