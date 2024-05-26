@@ -133,7 +133,7 @@ class MessageHandler {
         let parts = content.split("@");
         let identifier = parts.shift();
         if(identifier == "[OFFICER]"){
-          let player_nick = parts.pop();
+          let player_nick = parts.shift();
           let message = parts.join(" ");
 
           content = message;
