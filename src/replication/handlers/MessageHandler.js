@@ -127,10 +127,6 @@ class MessageHandler {
         chat = "Officer/Replication";
       }
 
-      if (chat != "Debug" && message.author.bot) {
-        return;
-      }
-
       this.saveGuildMessage(real_username, sender_data?.data?.uuid, sender_data?.data?.guild_id ?? "");
 
       const messageData = {
