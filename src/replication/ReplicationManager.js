@@ -122,6 +122,7 @@ class ReplicationManager extends CommunicationBridge {
     switch (mode) {
       case "bot":
         await channel.send({
+          content: (channel == "Officer") ? message : "",
           embeds: [
             {
               description: message,
