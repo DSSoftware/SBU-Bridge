@@ -1,74 +1,72 @@
-const { EmbedBuilder } = require("discord.js");
-const config = require("../../../config.js");
+const { EmbedBuilder } = require('discord.js');
+const config = require('../../../config.js');
 
 module.exports = {
-  name: `${config.minecraft.bot.replication_prefix}` + "guildtop",
-  description: "Top 10 members with the most guild experience.",
-  options: [
-    {
-      name: "time",
-      description: "Days Ago",
-      type: 3,
-      required: false,
-    },
-  ],
-
-  execute: async (interaction) => {
-    const time = interaction.options.getString("time");
-
-    const cachedMessages = [];
-    const messages = new Promise((resolve, reject) => {
-      const listener = (message) => {
-        message = message.toString();
-        cachedMessages.push(message);
-
-        if (message.startsWith("10.") && message.endsWith("Guild Experience")) {
-          bot.removeListener("message", listener);
-          resolve(cachedMessages);
+    name: `${config.minecraft.bot.replication_prefix}` + 'guildtop',
+    description: 'Top 10 members with the most guild experience.',
+    options: [
+        {
+            name: 'time',
+            description: 'Days Ago',
+            type: 3,
+            required: false
         }
-      };
+    ],
 
-      bot.on("message", listener);
-      bot.chat(`/g top ${time || ""}`);
+    execute: async (interaction) => {
+        const time = interaction.options.getString('time');
 
-      setTimeout(() => {
-        bot.removeListener("message", listener);
-        reject("Command timed out. Please try again.");
-      }, 5000);
-    });
+        const cachedMessages = [];
+        const messages = new Promise((resolve, reject) => {
+            const listener = (message) => {
+                message = message.toString();
+                cachedMessages.push(message);
 
-    const message = await messages;
+                if (message.startsWith('10.') && message.endsWith('Guild Experience')) {
+                    bot.removeListener('message', listener);
+                    resolve(cachedMessages);
+                }
+            };
 
-    const trimmedMessages = message
-      .map((message) => message.trim())
-      .filter((message) => message.includes("."));
-    const description = trimmedMessages
-      .map((message) => {
-        const message_parts = message.split(" ");
+            bot.on('message', listener);
+            bot.chat(`/g top ${time || ''}`);
 
-        let position = message_parts[0];
-        let name = message_parts[1];
-        let guildExperience = message_parts[2];
+            setTimeout(() => {
+                bot.removeListener('message', listener);
+                reject('Command timed out. Please try again.');
+            }, 5000);
+        });
 
-        if (message_parts.length == 6) {
-          position = message_parts[0];
-          name = message_parts[2];
-          guildExperience = message_parts[3];
-        }
+        const message = await messages;
 
-        return `\`${position}\` **${name}** - \`${guildExperience}\` Guild Experience\n`;
-      })
-      .join("");
+        const trimmedMessages = message.map((message) => message.trim()).filter((message) => message.includes('.'));
+        const description = trimmedMessages
+            .map((message) => {
+                const message_parts = message.split(' ');
 
-    const embed = new EmbedBuilder()
-      .setColor("#2ECC71")
-      .setTitle("Top 10 Guild Members")
-      .setDescription(description)
-      .setFooter({
-        text: "/help [command] for more information",
-        iconURL: config.minecraft.API.SCF.logo,
-      });
+                let position = message_parts[0];
+                let name = message_parts[1];
+                let guildExperience = message_parts[2];
 
-    return await interaction.followUp({ embeds: [embed] });
-  },
+                if (message_parts.length == 6) {
+                    position = message_parts[0];
+                    name = message_parts[2];
+                    guildExperience = message_parts[3];
+                }
+
+                return `\`${position}\` **${name}** - \`${guildExperience}\` Guild Experience\n`;
+            })
+            .join('');
+
+        const embed = new EmbedBuilder()
+            .setColor('#2ECC71')
+            .setTitle('Top 10 Guild Members')
+            .setDescription(description)
+            .setFooter({
+                text: '/help [command] for more information',
+                iconURL: config.minecraft.API.SCF.logo
+            });
+
+        return await interaction.followUp({ embeds: [embed] });
+    }
 };

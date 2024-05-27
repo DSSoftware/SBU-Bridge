@@ -1,89 +1,84 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const helperFunctions = require("./helperFunctions.js");
-const config = require("../../config.js");
+const helperFunctions = require('./helperFunctions.js');
+const config = require('../../config.js');
 
 class minecraftCommand {
-  constructor(minecraft) {
-    this.minecraft = minecraft;
-  }
-
-  getArgs(message) {
-    const args = message.split(" ");
-
-    args.shift();
-
-    return args;
-  }
-
-  async sendDiscordFollowup(channel, content) {
-    let followup_channel = config.discord.channels.officerChannel;
-    let replica_channel = config.discord.replication.channels.officer;
-
-    if (channel == "gc") {
-      followup_channel = config.discord.channels.guildChatChannel;
-      replica_channel = config.discord.replication.channels.guild;
+    constructor(minecraft) {
+        this.minecraft = minecraft;
     }
 
-    try {
-      await client.channels.cache.get(followup_channel).send(content);
-    } catch (e) {
-      console.log(e);
+    getArgs(message) {
+        const args = message.split(' ');
+
+        args.shift();
+
+        return args;
     }
 
-    try {
-      await replication_client.channels.cache
-        .get(replica_channel)
-        .send(content);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+    async sendDiscordFollowup(channel, content) {
+        let followup_channel = config.discord.channels.officerChannel;
+        let replica_channel = config.discord.replication.channels.officer;
 
-  send(message, n = 1) {
-    if (bot === undefined && bot._client.chat === undefined) {
-      return;
-    }
-
-    const listener = async (msg) => {
-      if (
-        msg
-          .toString()
-          .includes("You are sending commands too fast! Please slow down.") &&
-        !msg.toString().includes(":")
-      ) {
-        bot.removeListener("message", listener);
-        return;
-      } else if (
-        msg.toString().includes("You cannot say the same message twice!") ===
-          true &&
-        msg.toString().includes(":") === false
-      ) {
-        bot.removeListener("message", listener);
-        n++;
-
-        if (n >= 3) {
-          return;
+        if (channel == 'gc') {
+            followup_channel = config.discord.channels.guildChatChannel;
+            replica_channel = config.discord.replication.channels.guild;
         }
 
-        await delay(250);
-        return this.send(
-          `${message} - ${helperFunctions.generateID(config.minecraft.bot.messageRepeatBypassLength)}`,
-          n + 1,
-        );
-      }
-    };
+        try {
+            await client.channels.cache.get(followup_channel).send(content);
+        } catch (e) {
+            console.log(e);
+        }
 
-    bot.once("message", listener);
-    bot.chat(message);
+        try {
+            await replication_client.channels.cache.get(replica_channel).send(content);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
-    setTimeout(() => {
-      bot.removeListener("message", listener);
-    }, 500);
-  }
+    send(message, n = 1) {
+        if (bot === undefined && bot._client.chat === undefined) {
+            return;
+        }
 
-  onCommand(player, message) {
-    throw new Error("Command onCommand method is not implemented yet!");
-  }
+        const listener = async (msg) => {
+            if (
+                msg.toString().includes('You are sending commands too fast! Please slow down.') &&
+                !msg.toString().includes(':')
+            ) {
+                bot.removeListener('message', listener);
+                return;
+            } else if (
+                msg.toString().includes('You cannot say the same message twice!') === true &&
+                msg.toString().includes(':') === false
+            ) {
+                bot.removeListener('message', listener);
+                n++;
+
+                if (n >= 3) {
+                    return;
+                }
+
+                await delay(250);
+                return this.send(
+                    `${message} - ${helperFunctions.generateID(config.minecraft.bot.messageRepeatBypassLength)}`,
+                    n + 1
+                );
+            }
+        };
+
+        bot.once('message', listener);
+        bot.chat(message);
+
+        setTimeout(() => {
+            bot.removeListener('message', listener);
+        }, 500);
+    }
+
+    onCommand(player, message) {
+        throw new Error('Command onCommand method is not implemented yet!');
+    }
 }
 
 module.exports = minecraftCommand;

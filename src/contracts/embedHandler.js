@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require("discord.js");
-const config = require("../../config.js");
+const { EmbedBuilder } = require('discord.js');
+const config = require('../../config.js');
 
 /**
  * Constructs a new instance of the class.
@@ -8,30 +8,30 @@ const config = require("../../config.js");
  * @param {string} description - The description of the embed.
  */
 class Embed extends EmbedBuilder {
-  constructor(color = 3447003, title, description, footer) {
-    super();
+    constructor(color = 3447003, title, description, footer) {
+        super();
 
-    this.setFooter({
-      text: `by @artemdev | /help [command] for more information`,
-      iconURL: config.minecraft.API.SCF.logo,
-    });
+        this.setFooter({
+            text: `by @artemdev | /help [command] for more information`,
+            iconURL: config.minecraft.API.SCF.logo
+        });
 
-    if (color) {
-      this.setColor(color);
+        if (color) {
+            this.setColor(color);
+        }
+
+        if (title) {
+            this.setAuthor({ name: title });
+        }
+
+        if (description) {
+            this.setDescription(description);
+        }
+
+        if (footer) {
+            this.setFooter(footer);
+        }
     }
-
-    if (title) {
-      this.setAuthor({ name: title });
-    }
-
-    if (description) {
-      this.setDescription(description);
-    }
-
-    if (footer) {
-      this.setFooter(footer);
-    }
-  }
 }
 
 /**
@@ -39,18 +39,18 @@ class Embed extends EmbedBuilder {
  * @extends {Embed}
  */
 class ErrorEmbed extends Embed {
-  /**
-   * Constructs a new ErrorEmbed instance.
-   * @param {string} description - The description of the error.
-   */
-  constructor(description) {
-    super();
+    /**
+     * Constructs a new ErrorEmbed instance.
+     * @param {string} description - The description of the error.
+     */
+    constructor(description) {
+        super();
 
-    this.setAuthor({ name: "An Error has occurred" });
-    this.setColor(15548997);
+        this.setAuthor({ name: 'An Error has occurred' });
+        this.setColor(15548997);
 
-    this.setDescription(description);
-  }
+        this.setDescription(description);
+    }
 }
 
 /**
@@ -58,22 +58,22 @@ class ErrorEmbed extends Embed {
  * @extends {Embed}
  */
 class SuccessEmbed extends Embed {
-  /**
-   * Constructs a new SuccessEmbed instance.
-   * @param {string} description - The description of the success.
-   */
-  constructor(description) {
-    super();
+    /**
+     * Constructs a new SuccessEmbed instance.
+     * @param {string} description - The description of the success.
+     */
+    constructor(description) {
+        super();
 
-    this.setAuthor({ name: "Success" });
-    this.setColor(5763719);
+        this.setAuthor({ name: 'Success' });
+        this.setColor(5763719);
 
-    this.setDescription(description);
-  }
+        this.setDescription(description);
+    }
 }
 
 module.exports = {
-  Embed,
-  ErrorEmbed,
-  SuccessEmbed,
+    Embed,
+    ErrorEmbed,
+    SuccessEmbed
 };
