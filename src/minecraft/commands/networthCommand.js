@@ -59,7 +59,7 @@ class NetWorthCommand extends minecraftCommand {
 
       let banking_data = "N/A";
 
-      if(personal_bank == undefined){
+      if(data.profileData?.members?.length == 1){
         // No personal bank, just coop (Solo profile)
         if(data.profileData?.banking?.balance != undefined){
           banking_data = formatNumber(coop_bank);
