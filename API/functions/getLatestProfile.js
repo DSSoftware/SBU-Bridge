@@ -74,4 +74,4 @@ async function getLatestProfile(uuid, options = { museum: false }) {
   return output;
 }
 
-module.exports = { getLatestProfile, getLatestProfilev2 };
+module.exports = { getLatestProfile };
