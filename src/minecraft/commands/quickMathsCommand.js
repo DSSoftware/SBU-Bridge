@@ -18,14 +18,18 @@ class QuickMathsCommand extends minecraftCommand {
 
     this.name = "quickmaths";
     this.aliases = ["qm"];
-    this.description = "Solve the equation in less than 10 seconds! Test your math skills!";
+    this.description =
+      "Solve the equation in less than 10 seconds! Test your math skills!";
     this.options = [];
   }
 
   async onCommand(username, message, channel = "gc") {
     try {
       const userUsername = username;
-      const operands = [Math.floor(Math.random() * 25), Math.floor(Math.random() * 25)];
+      const operands = [
+        Math.floor(Math.random() * 25),
+        Math.floor(Math.random() * 25),
+      ];
       const operators = ["+", "-", "*", "/"];
       const operator = operators[Math.floor(Math.random() * operators.length)];
 
@@ -33,7 +37,9 @@ class QuickMathsCommand extends minecraftCommand {
       const answer = Math.round(eval(operands.join(operator)) * 10) / 10;
       const headStart = 250;
 
-      this.send(`/${channel} ${username} What is ${equation}? (You have ${headStart}ms headstart)`);
+      this.send(
+        `/${channel} ${username} What is ${equation}? (You have ${headStart}ms headstart)`,
+      );
       await delay(headStart);
 
       const startTime = Date.now();
@@ -45,7 +51,9 @@ class QuickMathsCommand extends minecraftCommand {
         }
 
         answered = true;
-        this.send(`/${channel} Correct! It took you ${(Date.now() - startTime).toLocaleString()}ms`);
+        this.send(
+          `/${channel} Correct! It took you ${(Date.now() - startTime).toLocaleString()}ms`,
+        );
         bot.removeListener("chat", listener);
       };
 
@@ -59,7 +67,9 @@ class QuickMathsCommand extends minecraftCommand {
         }
       }, 10000);
     } catch (error) {
-      this.send(`/${channel} ${username} [ERROR] ${error || "Something went wrong.."}`);
+      this.send(
+        `/${channel} ${username} [ERROR] ${error || "Something went wrong.."}`,
+      );
     }
   }
 }

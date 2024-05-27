@@ -10,8 +10,12 @@ function formatBestiaryMobs(userProfile, mobs) {
     }, 0);
 
     const maxKills = mob.cap;
-    const nextTierKills = mobBracket.find((tier) => totalKills < tier && tier <= maxKills);
-    const tier = nextTierKills ? mobBracket.indexOf(nextTierKills) : mobBracket.indexOf(maxKills) + 1;
+    const nextTierKills = mobBracket.find(
+      (tier) => totalKills < tier && tier <= maxKills,
+    );
+    const tier = nextTierKills
+      ? mobBracket.indexOf(nextTierKills)
+      : mobBracket.indexOf(maxKills) + 1;
 
     output.push({
       name: mob.name,
@@ -47,20 +51,40 @@ function getBestiary(userProfile) {
             name: value.name,
           };
 
-          output[category][key].mobs = formatBestiaryMobs(userProfile, value.mobs);
+          output[category][key].mobs = formatBestiaryMobs(
+            userProfile,
+            value.mobs,
+          );
 
-          tiersUnlocked += output[category][key].mobs.reduce((acc, cur) => acc + cur.tier, 0);
-          totalTiers += output[category][key].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
-          output[category][key].mobsUnlocked = output[category][key].mobs.length;
-          output[category][key].mobsMaxed = output[category][key].mobs.filter((mob) => mob.tier === mob.maxTier).length;
+          tiersUnlocked += output[category][key].mobs.reduce(
+            (acc, cur) => acc + cur.tier,
+            0,
+          );
+          totalTiers += output[category][key].mobs.reduce(
+            (acc, cur) => acc + cur.maxTier,
+            0,
+          );
+          output[category][key].mobsUnlocked =
+            output[category][key].mobs.length;
+          output[category][key].mobsMaxed = output[category][key].mobs.filter(
+            (mob) => mob.tier === mob.maxTier,
+          ).length;
         }
       } else {
         output[category].mobs = formatBestiaryMobs(userProfile, mobs);
         output[category].mobsUnlocked = output[category].mobs.length;
-        output[category].mobsMaxed = output[category].mobs.filter((mob) => mob.tier === mob.maxTier).length;
+        output[category].mobsMaxed = output[category].mobs.filter(
+          (mob) => mob.tier === mob.maxTier,
+        ).length;
 
-        tiersUnlocked += output[category].mobs.reduce((acc, cur) => acc + cur.tier, 0);
-        totalTiers += output[category].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
+        tiersUnlocked += output[category].mobs.reduce(
+          (acc, cur) => acc + cur.tier,
+          0,
+        );
+        totalTiers += output[category].mobs.reduce(
+          (acc, cur) => acc + cur.maxTier,
+          0,
+        );
       }
     }
 

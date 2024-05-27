@@ -1,6 +1,8 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const getTalismans = require("../../../API/stats/talismans.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 
 class AccessoriesCommand extends minecraftCommand {
@@ -28,7 +30,8 @@ class AccessoriesCommand extends minecraftCommand {
       username = formatUsername(username, data.profileData?.game_mode);
 
       const talismans = await getTalismans(data.profile);
-      let highest_mp = data.profile?.accessory_bag_storage?.highest_magical_power ?? 0;
+      let highest_mp =
+        data.profile?.accessory_bag_storage?.highest_magical_power ?? 0;
 
       const rarities = Object.keys(talismans)
         .map((key) => {

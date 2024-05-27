@@ -15,7 +15,9 @@ class FetchurCommand extends minecraftCommand {
     try {
       const { text, description } = getFetchur();
 
-      this.send(`/${channel} Fetchur Requests: ${text} | Description: ${description}`);
+      this.send(
+        `/${channel} Fetchur Requests: ${text} | Description: ${description}`,
+      );
     } catch (error) {
       this.send(`/${channel} [ERROR] ${error || "Something went wrong.."}`);
     }

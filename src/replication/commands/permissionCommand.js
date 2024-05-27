@@ -68,7 +68,9 @@ module.exports = {
     const level = parseInt(interaction.options.getString("level"));
 
     if (level >= executorData.level) {
-      throw new HypixelDiscordChatBridgeError("You cannot promote to level higher than yours.");
+      throw new HypixelDiscordChatBridgeError(
+        "You cannot promote to level higher than yours.",
+      );
     }
 
     let give_role = await Promise.all([
@@ -80,7 +82,9 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(5763719)
       .setAuthor({ name: "Permission Level" })
-      .setDescription(`Successfully changed the permission level of <@${discord_user}> (${level}).`)
+      .setDescription(
+        `Successfully changed the permission level of <@${discord_user}> (${level}).`,
+      )
       .setFooter({
         text: "/help for more info",
         iconURL: config.minecraft.API.SCF.logo,

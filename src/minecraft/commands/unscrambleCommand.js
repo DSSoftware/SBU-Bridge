@@ -4,13 +4,18 @@ const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const getAnswer = (message, answer) => {
   let message_parts = message.split(" ");
 
-  if (message_parts[message_parts.length - 1].toLowerCase() == answer.toLowerCase()) {
+  if (
+    message_parts[message_parts.length - 1].toLowerCase() ==
+    answer.toLowerCase()
+  ) {
     return true;
   }
   if (message_parts.length >= 2) {
     if (
-      (message_parts[message_parts.length - 1] + message_parts[message_parts.length - 2]).toLowerCase() ==
-      answer.toLowerCase()
+      (
+        message_parts[message_parts.length - 1] +
+        message_parts[message_parts.length - 2]
+      ).toLowerCase() == answer.toLowerCase()
     ) {
       return true;
     }
@@ -53,7 +58,9 @@ class unscrambleCommand extends minecraftCommand {
         const remainingTime = cooldownDuration - elapsedTime;
 
         if (remainingTime > 0) {
-          return this.send(`/${channel} Please wait until current game is over.`);
+          return this.send(
+            `/${channel} Please wait until current game is over.`,
+          );
         }
       }
 
@@ -72,7 +79,9 @@ class unscrambleCommand extends minecraftCommand {
       };
 
       bot.on("chat", listener);
-      this.send(`/${channel} Unscramble the following word: "${scrambledWord.toLowerCase()}"`);
+      this.send(
+        `/${channel} Unscramble the following word: "${scrambledWord.toLowerCase()}"`,
+      );
       const startTime = Date.now();
 
       setTimeout(() => {

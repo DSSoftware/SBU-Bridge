@@ -21,9 +21,14 @@ if (config.minecraft.hypixelUpdates.enabled === true) {
 const hypixelIncidents = {};
 async function checkForIncidents() {
   try {
-    const { items: status } = await parser.parseURL("https://status.hypixel.net/history.rss");
+    const { items: status } = await parser.parseURL(
+      "https://status.hypixel.net/history.rss",
+    );
 
-    const latestIcidents = status.filter((data) => new Date(data.pubDate).getTime() / 1000 + 43200 > Date.now() / 1000);
+    const latestIcidents = status.filter(
+      (data) =>
+        new Date(data.pubDate).getTime() / 1000 + 43200 > Date.now() / 1000,
+    );
 
     for (const incident of latestIcidents) {
       const { title, link } = incident;
@@ -39,7 +44,8 @@ async function checkForIncidents() {
         .filter((_, index) => index % 2 !== 0);
 
       for (const update of updates) {
-        if (hypixelIncidents[title]?.updates?.includes(update) === true) continue;
+        if (hypixelIncidents[title]?.updates?.includes(update) === true)
+          continue;
 
         hypixelIncidents[title].updates ??= [];
         if (bot !== undefined && bot._client.chat !== undefined) {
@@ -58,8 +64,12 @@ const hypixelUpdates = [];
 async function checkForHypixelUpdates(firstTime = false) {
   try {
     const [{ items: news }, { items: skyblockNews }] = await Promise.all([
-      parser.parseURL("https://hypixel.net/forums/news-and-announcements.4/index.rss"),
-      parser.parseURL("https://hypixel.net/forums/skyblock-patch-notes.158/index.rss"),
+      parser.parseURL(
+        "https://hypixel.net/forums/news-and-announcements.4/index.rss",
+      ),
+      parser.parseURL(
+        "https://hypixel.net/forums/skyblock-patch-notes.158/index.rss",
+      ),
     ]);
 
     const latestFeed = news.concat(skyblockNews);
@@ -69,10 +79,15 @@ async function checkForHypixelUpdates(firstTime = false) {
         continue;
       }
 
-      if (bot !== undefined && bot._client.chat !== undefined && firstTime === false) {
+      if (
+        bot !== undefined &&
+        bot._client.chat !== undefined &&
+        firstTime === false
+      ) {
         const response = await axios.get(link, {
           headers: {
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0",
+            "User-Agent":
+              "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0",
           },
         });
 
@@ -100,7 +115,9 @@ checkForHypixelUpdates(true);
 let skyblockVersion;
 async function checkForSkyblockVersion() {
   try {
-    const { data } = await axios.get("https://api.hypixel.net/resources/skyblock/skills");
+    const { data } = await axios.get(
+      "https://api.hypixel.net/resources/skyblock/skills",
+    );
 
     if (skyblockVersion !== data.version) {
       if (skyblockVersion !== undefined) {

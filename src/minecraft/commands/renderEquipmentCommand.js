@@ -1,6 +1,11 @@
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
-const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  decodeData,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 const config = require("../../../config.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { renderLore } = require("../../contracts/renderItem.js");
@@ -33,14 +38,19 @@ class EquipmentCommand extends minecraftCommand {
         return this.send(`/${channel} This player has an Inventory API off.`);
       }
 
-      const { i: inventoryData } = await decodeData(Buffer.from(profile.profile.equippment_contents.data, "base64"));
+      const { i: inventoryData } = await decodeData(
+        Buffer.from(profile.profile.equippment_contents.data, "base64"),
+      );
 
       let response = "";
       let images = "";
       let armor_pieces = "";
 
       for (const piece of Object.values(inventoryData)) {
-        if (piece?.tag?.display?.Name === undefined || piece?.tag?.display?.Lore === undefined) {
+        if (
+          piece?.tag?.display?.Name === undefined ||
+          piece?.tag?.display?.Lore === undefined
+        ) {
           continue;
         }
 
@@ -54,13 +64,15 @@ class EquipmentCommand extends minecraftCommand {
         const link = upload.data.link;
 
         images += `\n${link}`;
-        armor_pieces += `[${Name.replace(/§[0-9A-FK-OR]/ig,'')}] `;
+        armor_pieces += `[${Name.replace(/§[0-9A-FK-OR]/gi, "")}] `;
 
         response += response.split(" | ").length == 4 ? link : `${link} | `;
       }
 
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username}'s Equipment: ${armor_pieces}. Full response in Discord.`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${username}'s Equipment: ${armor_pieces}. Full response in Discord.`,
+        );
 
         this.sendDiscordFollowup(channel, images);
         return;

@@ -28,7 +28,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -37,7 +40,8 @@ module.exports = {
     }
 
     const [name, reason] = [
-      interaction.options.getString("user") ?? interaction.options.getString("name"),
+      interaction.options.getString("user") ??
+        interaction.options.getString("name"),
       interaction.options.getString("reason"),
     ];
     bot.chat(`/g kick ${name} ${reason}`);

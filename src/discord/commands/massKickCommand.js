@@ -28,7 +28,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -36,7 +39,10 @@ module.exports = {
       );
     }
 
-    const [nameList, reason] = [interaction.options.getString("names"), interaction.options.getString("reason")];
+    const [nameList, reason] = [
+      interaction.options.getString("names"),
+      interaction.options.getString("reason"),
+    ];
     const names = nameList.split(" ");
     for (let name of names) {
       bot.chat("/g kick " + name + " " + reason);

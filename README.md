@@ -25,7 +25,7 @@ If you found this project helpful or interesting, please consider giving it a st
 
 To get started, clone down the repository using:
 
-    cd /home/node && mkdir bridge && cd bridge && 
+    cd /home/node && mkdir bridge && cd bridge &&
     git clone https://github.com/DSSoftware/SBU-Bridge .
 
 Next go into the `hypixel-discord-chat-bridge` folder and install all the dependencies using NPM.

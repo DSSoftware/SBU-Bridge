@@ -1,7 +1,12 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const getSlayer = require("../../../API/stats/slayer.js");
-const { formatNumber, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  formatNumber,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 const { capitalize } = require("lodash");
 
 class SlayersCommand extends minecraftCommand {

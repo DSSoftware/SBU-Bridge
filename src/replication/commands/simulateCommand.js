@@ -22,7 +22,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -44,7 +47,9 @@ module.exports = {
     }
     debug_chat_handler.onMessage(new SimulatedCommand(simulated_message));
 
-    const commandMessage = new EmbedBuilder().setColor(2067276).setTitle("Success");
+    const commandMessage = new EmbedBuilder()
+      .setColor(2067276)
+      .setTitle("Success");
 
     await interaction.followUp({ embeds: [commandMessage], ephemeral: true });
   },

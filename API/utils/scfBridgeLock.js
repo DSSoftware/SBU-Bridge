@@ -9,7 +9,7 @@ async function getLockState(uuid) {
       resolve(false);
       return;
     }
-    
+
     let player_banned = await Promise.all([
       axios.get(
         `https://sky.dssoftware.ru/api.php?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`,
@@ -19,7 +19,7 @@ async function getLockState(uuid) {
     });
 
     player_banned = player_banned[0]?.data ?? {};
-    
+
     resolve(player_banned?.data?.locked === true);
   });
 }
@@ -35,16 +35,19 @@ async function checkBridgelock(uuid) {
       }
     }
 
-    getLockState(uuid).then((response)=>{
-      sender_cache.set(uuid, {
-        last_save: Date.now(),
-        locked: response,
-      });
-  
-      resolve(response);
-    }, ()=>{
-      resolve(false);
-    });
+    getLockState(uuid).then(
+      (response) => {
+        sender_cache.set(uuid, {
+          last_save: Date.now(),
+          locked: response,
+        });
+
+        resolve(response);
+      },
+      () => {
+        resolve(false);
+      },
+    );
   });
 }
 

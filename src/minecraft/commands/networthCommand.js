@@ -1,7 +1,12 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getNetworth } = require("skyhelper-networth");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
-const { formatNumber, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
+const {
+  formatNumber,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 
 class NetWorthCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -55,29 +60,30 @@ class NetWorthCommand extends minecraftCommand {
       const unsoulboundNetworth = formatNumber(profile.unsoulboundNetworth);
       const purse = formatNumber(profile.purse);
       const bank = profile.bank ? formatNumber(profile.bank) : "N/A";
-      const museum = data.museum ? formatNumber(profile.types.museum?.total ?? 0) : "N/A";
+      const museum = data.museum
+        ? formatNumber(profile.types.museum?.total ?? 0)
+        : "N/A";
 
       let banking_data = "N/A";
 
-      if(data.profileData?.members?.length == 1){
+      if (data.profileData?.members?.length == 1) {
         // No personal bank, just coop (Solo profile)
-        if(data.profileData?.banking?.balance != undefined){
+        if (data.profileData?.banking?.balance != undefined) {
           banking_data = formatNumber(coop_bank);
         }
-      }
-      else{
+      } else {
         // Coop bank + Personal bank (Coop profile)
         let coop_label = "N/A";
         let personal_label = "N/A";
 
-        if(data.profileData?.banking?.balance != undefined){
+        if (data.profileData?.banking?.balance != undefined) {
           coop_label = formatNumber(coop_bank);
         }
-        if(personal_bank != undefined){
+        if (personal_bank != undefined) {
           personal_label = formatNumber(personal_bank);
         }
 
-        banking_data = `${coop_label} / ${personal_label}`
+        banking_data = `${coop_label} / ${personal_label}`;
       }
 
       this.send(

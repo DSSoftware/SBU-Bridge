@@ -15,26 +15,26 @@ class minecraftCommand {
     return args;
   }
 
-  async sendDiscordFollowup(channel, content){
+  async sendDiscordFollowup(channel, content) {
     let followup_channel = config.discord.channels.officerChannel;
     let replica_channel = config.discord.replication.channels.officer;
 
-    if(channel == "gc"){
+    if (channel == "gc") {
       followup_channel = config.discord.channels.guildChatChannel;
       replica_channel = config.discord.replication.channels.guild;
     }
 
-    try{
+    try {
       await client.channels.cache.get(followup_channel).send(content);
-    }
-    catch(e){
+    } catch (e) {
       console.log(e);
     }
 
-    try{
-      await replication_client.channels.cache.get(replica_channel).send(content);
-    }
-    catch(e){
+    try {
+      await replication_client.channels.cache
+        .get(replica_channel)
+        .send(content);
+    } catch (e) {
       console.log(e);
     }
   }
@@ -46,13 +46,16 @@ class minecraftCommand {
 
     const listener = async (msg) => {
       if (
-        msg.toString().includes("You are sending commands too fast! Please slow down.") &&
+        msg
+          .toString()
+          .includes("You are sending commands too fast! Please slow down.") &&
         !msg.toString().includes(":")
       ) {
         bot.removeListener("message", listener);
         return;
       } else if (
-        msg.toString().includes("You cannot say the same message twice!") === true &&
+        msg.toString().includes("You cannot say the same message twice!") ===
+          true &&
         msg.toString().includes(":") === false
       ) {
         bot.removeListener("message", listener);

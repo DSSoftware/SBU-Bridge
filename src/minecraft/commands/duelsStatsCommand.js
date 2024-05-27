@@ -75,8 +75,14 @@ class DuelsStatsCommand extends minecraftCommand {
           }`,
         );
       } else {
-        const duelData = player.stats.duels?.[duel]?.[Object.keys(player.stats.duels[duel])[0]];
-        const division = duelData?.division ?? player.stats.duels?.[duel]?.division ?? "Unknown";
+        const duelData =
+          player.stats.duels?.[duel]?.[
+            Object.keys(player.stats.duels[duel])[0]
+          ];
+        const division =
+          duelData?.division ??
+          player.stats.duels?.[duel]?.division ??
+          "Unknown";
         const wins = formatNumber(duelData?.wins ?? 0);
         const winstreak = duelData?.winstreak ?? 0;
         const bestWinstreak = duelData?.bestWinstreak ?? 0;
@@ -93,7 +99,10 @@ class DuelsStatsCommand extends minecraftCommand {
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

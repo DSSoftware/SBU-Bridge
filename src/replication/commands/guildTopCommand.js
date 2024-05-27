@@ -39,7 +39,9 @@ module.exports = {
 
     const message = await messages;
 
-    const trimmedMessages = message.map((message) => message.trim()).filter((message) => message.includes("."));
+    const trimmedMessages = message
+      .map((message) => message.trim())
+      .filter((message) => message.includes("."));
     const description = trimmedMessages
       .map((message) => {
         const message_parts = message.split(" ");

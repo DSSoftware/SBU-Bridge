@@ -115,7 +115,9 @@ if (cluster.isPrimary) {
 
       forced_shutdown = true;
 
-      Logger.errorMessage("The bot was shut down! Continuing to run the parent process...");
+      Logger.errorMessage(
+        "The bot was shut down! Continuing to run the parent process...",
+      );
 
       for (const id in cluster.workers) {
         cluster.workers[id].kill();

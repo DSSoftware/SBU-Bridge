@@ -25,7 +25,8 @@ class SkywarsCommand extends minecraftCommand {
       let uuid = await getUUID(username);
       const player = await hypixel.getPlayer(uuid);
 
-      const { wins, kills, level, KDRatio, WLRatio, winstreak } = player.stats.skywars;
+      const { wins, kills, level, KDRatio, WLRatio, winstreak } =
+        player.stats.skywars;
 
       this.send(
         `/${channel} [${level}✫] ${player.nickname} | Kills: ${kills} KDR: ${KDRatio} | Wins: ${wins} WLR: ${WLRatio} | WS: ${winstreak}`,
@@ -35,7 +36,10 @@ class SkywarsCommand extends minecraftCommand {
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

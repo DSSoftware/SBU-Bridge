@@ -1,6 +1,8 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const getTalismans = require("../../../API/stats/talismans.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const config = require("../../../config.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
@@ -168,20 +170,34 @@ class TrophyFishCommand extends minecraftCommand {
 
         let data = this.prepareData(tfd, fish_id);
 
-        bronzes += Math.max(data.uniques.bronze, data.uniques.silver, data.uniques.gold, data.uniques.diamond);
+        bronzes += Math.max(
+          data.uniques.bronze,
+          data.uniques.silver,
+          data.uniques.gold,
+          data.uniques.diamond,
+        );
 
-        silvers += Math.max(data.uniques.silver, data.uniques.gold, data.uniques.diamond);
+        silvers += Math.max(
+          data.uniques.silver,
+          data.uniques.gold,
+          data.uniques.diamond,
+        );
 
         golds += Math.max(data.uniques.gold, data.uniques.diamond);
 
         diamonds += data.uniques.diamond;
 
-        let correct_display_name = (rarity?.[fish_display.rarity] ?? "§r") + fish_display.name;
+        let correct_display_name =
+          (rarity?.[fish_display.rarity] ?? "§r") + fish_display.name;
 
-        let display_bronzes = data.catches.bronze > 0 ? `§8${data.catches.bronze}` : "§c✖";
-        let display_silvers = data.catches.silver > 0 ? `§7${data.catches.silver}` : "§c✖";
-        let display_golds = data.catches.gold > 0 ? `§6${data.catches.gold}` : "§c✖";
-        let display_diamonds = data.catches.diamond > 0 ? `§b${data.catches.diamond}` : "§c✖";
+        let display_bronzes =
+          data.catches.bronze > 0 ? `§8${data.catches.bronze}` : "§c✖";
+        let display_silvers =
+          data.catches.silver > 0 ? `§7${data.catches.silver}` : "§c✖";
+        let display_golds =
+          data.catches.gold > 0 ? `§6${data.catches.gold}` : "§c✖";
+        let display_diamonds =
+          data.catches.diamond > 0 ? `§b${data.catches.diamond}` : "§c✖";
 
         Lore.push(
           `${correct_display_name}§7: ${display_bronzes} §7| ${display_silvers} §7| ${display_golds} §7| ${display_diamonds} §7(${data.caught})§f`,
@@ -190,10 +206,14 @@ class TrophyFishCommand extends minecraftCommand {
 
       Lore.unshift(`§f`);
 
-      let total_bronzes = bronzes == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${bronzes}§7/18)`;
-      let total_silvers = silvers == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${silvers}§7/18)`;
-      let total_golds = golds == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${golds}§7/18)`;
-      let total_diamonds = diamonds == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${diamonds}§7/18)`;
+      let total_bronzes =
+        bronzes == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${bronzes}§7/18)`;
+      let total_silvers =
+        silvers == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${silvers}§7/18)`;
+      let total_golds =
+        golds == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${golds}§7/18)`;
+      let total_diamonds =
+        diamonds == 18 ? `§a✔§7 (§a18§7/18)` : `§c✖ §7(§c${diamonds}§7/18)`;
 
       Lore.unshift(`§b§lDIAMOND: ${total_diamonds}§f`);
       Lore.unshift(`§6§lGOLD: ${total_golds}§f`);
@@ -209,14 +229,18 @@ class TrophyFishCommand extends minecraftCommand {
 
       const upload = await uploadImage(renderedItem);
 
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username}'s Trophy Fish: ${diamonds}/18 DIAMOND | Total catches: ${total_fishes}. Full response in Discord.`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${username}'s Trophy Fish: ${diamonds}/18 DIAMOND | Total catches: ${total_fishes}. Full response in Discord.`,
+        );
 
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
 
-      this.send(`/${channel} ${username}'s Trophy Fish stats: ${upload.data.link}`);
+      this.send(
+        `/${channel} ${username}'s Trophy Fish stats: ${upload.data.link}`,
+      );
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);

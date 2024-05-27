@@ -10,12 +10,16 @@ module.exports = {
       if (interaction.isChatInputCommand()) {
         await interaction.deferReply({ ephemeral: false }).catch(() => {});
 
-        const command = interaction.client.commands.get(interaction.commandName);
+        const command = interaction.client.commands.get(
+          interaction.commandName,
+        );
         if (command === undefined) {
           return;
         }
 
-        Logger.discordMessage(`${interaction.user.username} - [${interaction.commandName}]`);
+        Logger.discordMessage(
+          `${interaction.user.username} - [${interaction.commandName}]`,
+        );
         await command.execute(interaction);
       }
     } catch (error) {

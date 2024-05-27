@@ -38,7 +38,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -54,7 +57,9 @@ module.exports = {
     } else if (arg == "remove") {
       bot.chat(`/ignore remove ${name}`);
     } else {
-      throw new HypixelDiscordChatBridgeError("Invalid Usage: `/ignore [add/remove] [name]`.");
+      throw new HypixelDiscordChatBridgeError(
+        "Invalid Usage: `/ignore [add/remove] [name]`.",
+      );
     }
 
     const embed = new EmbedBuilder()

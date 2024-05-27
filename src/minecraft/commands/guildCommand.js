@@ -1,6 +1,9 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
-const { capitalize, formatNumber } = require("../../contracts/helperFunctions.js");
+const {
+  capitalize,
+  formatNumber,
+} = require("../../contracts/helperFunctions.js");
 
 class GuildInformationCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -36,7 +39,10 @@ class GuildInformationCommand extends minecraftCommand {
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

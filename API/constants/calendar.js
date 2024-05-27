@@ -1,5 +1,8 @@
 // CREDITS: https://github.com/slothpixel/core (Modified)
-const { nth, parseTimestamp } = require("../../src/contracts/helperFunctions.js");
+const {
+  nth,
+  parseTimestamp,
+} = require("../../src/contracts/helperFunctions.js");
 
 const months = [
   "Early Spring",
@@ -32,7 +35,11 @@ const zooTimeLength = yearMs / 2;
 const pets = ["Elephant", "Giraffe", "Blue Whale", "Tiger", "Lion", "Monkey"];
 
 function getOffset(month, day, hour = 0) {
-  return months.indexOf(month) * monthLength * dayMs + (day - 1) * dayMs + hour * hourMs;
+  return (
+    months.indexOf(month) * monthLength * dayMs +
+    (day - 1) * dayMs +
+    hour * hourMs
+  );
 }
 
 function timeToSkyblockYear(time) {
@@ -247,7 +254,9 @@ function buildSkyblockCalendar(events, from, to, years, stopAtYearEnd = true) {
   const currentDayOffset = (currentMonthOffset - currentDay * dayMs) % dayMs;
 
   let currentHour = Math.floor(currentDayOffset / hourMs);
-  const currentMinute = Math.floor(((currentDayOffset - currentHour * hourMs) / hourMs) * 60);
+  const currentMinute = Math.floor(
+    ((currentDayOffset - currentHour * hourMs) / hourMs) * 60,
+  );
 
   const suffix = currentHour >= 12 ? "pm" : "am";
 
@@ -267,7 +276,9 @@ function buildSkyblockCalendar(events, from, to, years, stopAtYearEnd = true) {
   });
 
   // convert 'to' to years for looping
-  let toToYears = Number.isNaN(Number(years)) ? timeToSkyblockYear(toDate) - currentYear : years;
+  let toToYears = Number.isNaN(Number(years))
+    ? timeToSkyblockYear(toDate) - currentYear
+    : years;
 
   toToYears = Math.min(toToYears, 10);
 
@@ -295,11 +306,18 @@ function buildSkyblockCalendar(events, from, to, years, stopAtYearEnd = true) {
           continue;
         }
 
-        const msTill = times.end < currentOffset ? yearMs - currentOffset + times.start : times.start - currentOffset;
+        const msTill =
+          times.end < currentOffset
+            ? yearMs - currentOffset + times.start
+            : times.start - currentOffset;
 
         const o = {
-          start_timestamp: (Math.round(fromDate / 1000) + Math.round(msTill / 1000)) * 1000,
-          end_timestamp: (Math.round(fromDate / 1000) + Math.round((msTill + duration) / 1000)) * 1000,
+          start_timestamp:
+            (Math.round(fromDate / 1000) + Math.round(msTill / 1000)) * 1000,
+          end_timestamp:
+            (Math.round(fromDate / 1000) +
+              Math.round((msTill + duration) / 1000)) *
+            1000,
           starting_in: msTill,
           ending_in: msTill + duration,
         };
@@ -312,7 +330,10 @@ function buildSkyblockCalendar(events, from, to, years, stopAtYearEnd = true) {
   }
 
   Object.keys(eventList).forEach((key) => {
-    eventList[key].events = getUniqueListBy(eventList[key].events, "start_timestamp")
+    eventList[key].events = getUniqueListBy(
+      eventList[key].events,
+      "start_timestamp",
+    )
       .filter(({ start_timestamp }) => start_timestamp < toDate)
       .sort((a, b) => a.start_timestamp - b.start_timestamp);
   });

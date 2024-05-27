@@ -1,8 +1,13 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const getWeight = require("../../../API/stats/weight.js");
-const { formatUsername, formatNumber } = require("../../contracts/helperFunctions.js");
+const {
+  formatUsername,
+  formatNumber,
+} = require("../../contracts/helperFunctions.js");
 
 class StatsCommand extends minecraftCommand {
   constructor(minecraft) {

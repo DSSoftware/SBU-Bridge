@@ -33,7 +33,7 @@ class topCommand extends minecraftCommand {
       }
 
       if (this.getArgs(message)[0] == "weekly") {
-        if(!config.minecraft.commands.integrate_images){
+        if (!config.minecraft.commands.integrate_images) {
           return this.send(`/${channel} This sub-command was disabled!`);
         }
         let top_data = await Promise.all([
@@ -41,9 +41,9 @@ class topCommand extends minecraftCommand {
             `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${config.minecraft.guild.guildId}`,
           ),
         ]).catch((error) => {});
-  
+
         let top_info = top_data?.[0]?.data ?? {};
-  
+
         if (top_info?.data == undefined || top_info?.data?.length == 0) {
           return this.send(
             `/${channel} [ERROR] Somehow top has 0 players in it.`,
@@ -57,13 +57,13 @@ class topCommand extends minecraftCommand {
         top_info?.data.forEach((element) => {
           place++;
           let place_color = "§7";
-          if(place == 1){
+          if (place == 1) {
             place_color = "§6";
           }
-          if(place == 2){
+          if (place == 2) {
             place_color = "§f";
           }
-          if(place == 3){
+          if (place == 3) {
             place_color = "§c";
           }
           let info = `§7${place_color}${place}. ${element.nick} - ${element.count} Score§7`;
@@ -79,8 +79,10 @@ class topCommand extends minecraftCommand {
         const renderedItem = await renderLore(Name, Lore);
         const upload = await uploadImage(renderedItem);
 
-        this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top: ${upload.data.link}`);
-        
+        this.send(
+          `/${channel} ${config.minecraft.guild.guildName} Guild Top: ${upload.data.link}`,
+        );
+
         return;
       }
 
@@ -109,7 +111,10 @@ class topCommand extends minecraftCommand {
 
       placement_info = placement_info[0].data ?? {};
 
-      if (placement_info.data.place == null || placement_info.data.place == undefined) {
+      if (
+        placement_info.data.place == null ||
+        placement_info.data.place == undefined
+      ) {
         return this.send(
           `/${channel} Unable to retrieve place, maybe the player sent no messages? Try running !top <username> overall. ${display_flag}`,
         );

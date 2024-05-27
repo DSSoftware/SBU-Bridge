@@ -1,4 +1,6 @@
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { getBestiary } = require("../../../API/stats/bestiary.js");
@@ -33,11 +35,15 @@ class BestiaryCommand extends minecraftCommand {
 
       const bestiary = getBestiary(data.profile);
       if (bestiary === null) {
-        return this.send(`/${channel} This player has not yet joined SkyBlock since the bestiary update.`);
+        return this.send(
+          `/${channel} This player has not yet joined SkyBlock since the bestiary update.`,
+        );
       }
 
       if (mob) {
-        const mobData = this.getBestiaryObject(bestiary).find((m) => m.name.toLowerCase().includes(mob.toLowerCase()));
+        const mobData = this.getBestiaryObject(bestiary).find((m) =>
+          m.name.toLowerCase().includes(mob.toLowerCase()),
+        );
 
         if (mobData) {
           this.send(

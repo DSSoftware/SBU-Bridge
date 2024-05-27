@@ -7,7 +7,7 @@ async function checkBlacklist(uuid) {
       resolve(false);
       return;
     }
-    
+
     let player_banned = await Promise.all([
       axios.get(
         `https://sky.dssoftware.ru/api.php?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`,
@@ -17,7 +17,7 @@ async function checkBlacklist(uuid) {
     });
 
     player_banned = player_banned[0]?.data ?? {};
-    
+
     resolve(player_banned.data === true);
   });
 }

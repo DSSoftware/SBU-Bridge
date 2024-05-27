@@ -3,7 +3,7 @@ const config = require("../../../config.js");
 const { EmbedBuilder } = require("discord.js");
 const app = require("../../Application.js");
 const AuthProvider = require("../AuthProvider.js");
-const { spawn } = require('child_process');
+const { spawn } = require("child_process");
 const { exec } = require("child_process");
 
 module.exports = {
@@ -18,7 +18,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -45,7 +48,7 @@ module.exports = {
           exec("git reset --hard", (error, stdout, stderr) => {
             console.log(stdout);
             spawn(process.argv[0], process.argv.slice(1), {
-              stdio: 'ignore',
+              stdio: "ignore",
             }).unref();
 
             process.exit(5);

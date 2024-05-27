@@ -1,4 +1,7 @@
-const { capitalize, formatNumber } = require("../../contracts/helperFunctions.js");
+const {
+  capitalize,
+  formatNumber,
+} = require("../../contracts/helperFunctions.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
 const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
@@ -32,7 +35,8 @@ class BedwarsCommand extends minecraftCommand {
       const player = await hypixel.getPlayer(uuid);
 
       if (["overall", "all"].includes(mode)) {
-        const { level, finalKills, finalKDRatio, wins, WLRatio, winstreak } = player.stats.bedwars;
+        const { level, finalKills, finalKDRatio, wins, WLRatio, winstreak } =
+          player.stats.bedwars;
         const { broken, BLRatio } = player.stats.bedwars.beds;
 
         this.send(
@@ -44,7 +48,8 @@ class BedwarsCommand extends minecraftCommand {
         );
       } else if (mode !== undefined) {
         const { level } = player.stats.bedwars;
-        const { finalKills, finalKDRatio, wins, WLRatio, winstreak } = player.stats.bedwars[mode];
+        const { finalKills, finalKDRatio, wins, WLRatio, winstreak } =
+          player.stats.bedwars[mode];
         const { broken, BLRatio } = player.stats.bedwars[mode].beds;
 
         this.send(
@@ -55,14 +60,19 @@ class BedwarsCommand extends minecraftCommand {
           )} BLR: ${BLRatio} WS: ${winstreak}`,
         );
       } else {
-        this.send(`/${channel} Invalid mode. Valid modes: overall, solo, doubles, threes, fours, 4v4`);
+        this.send(
+          `/${channel} Invalid mode. Valid modes: overall, solo, doubles, threes, fours, 4v4`,
+        );
       }
     } catch (error) {
       this.send(
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

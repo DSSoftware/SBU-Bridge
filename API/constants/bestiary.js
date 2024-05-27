@@ -254,7 +254,13 @@ const BESTIARY = {
       {
         name: "Dasher Spider",
         cap: 10000,
-        mobs: ["dasher_spider_50", "dasher_spider_45", "dasher_spider_42", "dasher_spider_4", "dasher_spider_6"],
+        mobs: [
+          "dasher_spider_50",
+          "dasher_spider_45",
+          "dasher_spider_42",
+          "dasher_spider_4",
+          "dasher_spider_6",
+        ],
         bracket: 2,
       },
       {
@@ -304,7 +310,12 @@ const BESTIARY = {
       {
         name: "Voracious Spider",
         cap: 10000,
-        mobs: ["voracious_spider_50", "voracious_spider_42", "voracious_spider_45", "voracious_spider_10"],
+        mobs: [
+          "voracious_spider_50",
+          "voracious_spider_42",
+          "voracious_spider_45",
+          "voracious_spider_10",
+        ],
         bracket: 2,
       },
       {
@@ -851,25 +862,49 @@ const BESTIARY = {
       {
         name: "Blazing Golem",
         cap: 300,
-        mobs: ["blazing_golem_100", "blazing_golem_200", "blazing_golem_300", "blazing_golem_400", "blazing_golem_500"],
+        mobs: [
+          "blazing_golem_100",
+          "blazing_golem_200",
+          "blazing_golem_300",
+          "blazing_golem_400",
+          "blazing_golem_500",
+        ],
         bracket: 3,
       },
       {
         name: "Blight",
         cap: 10000,
-        mobs: ["blight_100", "blight_200", "blight_300", "blight_400", "blight_500"],
+        mobs: [
+          "blight_100",
+          "blight_200",
+          "blight_300",
+          "blight_400",
+          "blight_500",
+        ],
         bracket: 3,
       },
       {
         name: "Dropship",
         cap: 300,
-        mobs: ["dropship_100", "dropship_200", "dropship_300", "dropship_400", "dropship_500"],
+        mobs: [
+          "dropship_100",
+          "dropship_200",
+          "dropship_300",
+          "dropship_400",
+          "dropship_500",
+        ],
         bracket: 3,
       },
       {
         name: "Explosive Imp",
         cap: 3000,
-        mobs: ["explosive_imp_100", "explosive_imp_200", "explosive_imp_300", "explosive_imp_400", "explosive_imp_500"],
+        mobs: [
+          "explosive_imp_100",
+          "explosive_imp_200",
+          "explosive_imp_300",
+          "explosive_imp_400",
+          "explosive_imp_500",
+        ],
         bracket: 4,
       },
       {
@@ -971,7 +1006,13 @@ const BESTIARY = {
       {
         name: "Wither Sentry",
         cap: 75,
-        mobs: ["wither_sentry_100", "wither_sentry_200", "wither_sentry_300", "wither_sentry_400", "wither_sentry_500"],
+        mobs: [
+          "wither_sentry_100",
+          "wither_sentry_200",
+          "wither_sentry_300",
+          "wither_sentry_400",
+          "wither_sentry_500",
+        ],
         bracket: 4,
       },
     ],
@@ -1579,7 +1620,12 @@ const BESTIARY = {
       {
         name: "Mimic",
         cap: 1000,
-        mobs: ["mimic_115", "mimic_125", "master_mimic_115", "master_mimic_125"],
+        mobs: [
+          "mimic_115",
+          "mimic_125",
+          "master_mimic_115",
+          "master_mimic_125",
+        ],
         bracket: 4,
       },
       {
@@ -2001,26 +2047,34 @@ const BESTIARY = {
 
 const BESTIARY_BRACKETS = {
   1: [
-    20, 40, 60, 100, 200, 400, 800, 1400, 2000, 3000, 6000, 12000, 20000, 30000, 40000, 50000, 60000, 72000, 86000,
-    100000, 200000, 400000, 600000, 800000, 1000000,
+    20, 40, 60, 100, 200, 400, 800, 1400, 2000, 3000, 6000, 12000, 20000, 30000,
+    40000, 50000, 60000, 72000, 86000, 100000, 200000, 400000, 600000, 800000,
+    1000000,
   ],
   2: [
-    5, 10, 15, 25, 50, 100, 200, 350, 500, 750, 1500, 3000, 5000, 7500, 10000, 12500, 15000, 18000, 21500, 25000, 50000,
-    100000, 150000, 200000, 250000,
+    5, 10, 15, 25, 50, 100, 200, 350, 500, 750, 1500, 3000, 5000, 7500, 10000,
+    12500, 15000, 18000, 21500, 25000, 50000, 100000, 150000, 200000, 250000,
   ],
   3: [
-    4, 8, 12, 16, 20, 40, 80, 140, 200, 300, 600, 1200, 2000, 3000, 4000, 5000, 6000, 7200, 8600, 10000, 20000, 40000,
-    60000, 80000, 100000,
+    4, 8, 12, 16, 20, 40, 80, 140, 200, 300, 600, 1200, 2000, 3000, 4000, 5000,
+    6000, 7200, 8600, 10000, 20000, 40000, 60000, 80000, 100000,
   ],
   4: [
-    2, 4, 6, 10, 15, 20, 25, 35, 50, 75, 150, 300, 500, 750, 1000, 1350, 1650, 2000, 2500, 3000, 5000, 10000, 15000,
-    20000, 25000,
+    2, 4, 6, 10, 15, 20, 25, 35, 50, 75, 150, 300, 500, 750, 1000, 1350, 1650,
+    2000, 2500, 3000, 5000, 10000, 15000, 20000, 25000,
   ],
   5: [
-    1, 2, 3, 5, 7, 10, 15, 20, 25, 30, 60, 120, 200, 300, 400, 500, 600, 720, 860, 1000, 2000, 4000, 6000, 8000, 10000,
+    1, 2, 3, 5, 7, 10, 15, 20, 25, 30, 60, 120, 200, 300, 400, 500, 600, 720,
+    860, 1000, 2000, 4000, 6000, 8000, 10000,
   ],
-  6: [1, 2, 3, 5, 7, 9, 14, 17, 21, 25, 50, 80, 125, 175, 250, 325, 425, 525, 625, 750, 1500, 3000, 4500, 6000, 7500],
-  7: [1, 2, 3, 5, 7, 9, 11, 14, 17, 20, 30, 40, 55, 75, 100, 150, 200, 275, 375, 500, 1000, 1500, 2000, 2500, 3000],
+  6: [
+    1, 2, 3, 5, 7, 9, 14, 17, 21, 25, 50, 80, 125, 175, 250, 325, 425, 525, 625,
+    750, 1500, 3000, 4500, 6000, 7500,
+  ],
+  7: [
+    1, 2, 3, 5, 7, 9, 11, 14, 17, 20, 30, 40, 55, 75, 100, 150, 200, 275, 375,
+    500, 1000, 1500, 2000, 2500, 3000,
+  ],
 };
 
 module.exports = {

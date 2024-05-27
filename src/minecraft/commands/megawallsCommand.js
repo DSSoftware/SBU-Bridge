@@ -27,7 +27,16 @@ class EightBallCommand extends minecraftCommand {
         stats: { megawalls },
       } = await hypixel.getPlayer(uuid);
 
-      const { selectedClass = "None", finalKills, finalKDRatio, wins, WLRatio, kills, KDRatio, assists } = megawalls;
+      const {
+        selectedClass = "None",
+        finalKills,
+        finalKDRatio,
+        wins,
+        WLRatio,
+        kills,
+        KDRatio,
+        assists,
+      } = megawalls;
 
       this.send(
         `/${channel} ${username}'s Megawalls: Class: ${
@@ -39,7 +48,10 @@ class EightBallCommand extends minecraftCommand {
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

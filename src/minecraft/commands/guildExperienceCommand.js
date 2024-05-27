@@ -32,14 +32,19 @@ class GuildExperienceCommand extends minecraftCommand {
         throw "Player is not in the Guild.";
       }
 
-      this.send(`/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}.`);
+      this.send(
+        `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}.`,
+      );
     } catch (error) {
       console.log(error);
       this.send(
         `/${channel} ${error
           .toString()
           .replace("[hypixel-api-reborn] ", "")
-          .replace("For help join our Discord Server https://discord.gg/NSEBNMM", "")
+          .replace(
+            "For help join our Discord Server https://discord.gg/NSEBNMM",
+            "",
+          )
           .replace("Error:", "[ERROR]")}`,
       );
     }

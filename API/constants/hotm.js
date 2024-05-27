@@ -54,12 +54,17 @@ class Node {
   }
 
   get color() {
-    return this.status === "maxed" ? "a" : this.status === "unlocked" ? "e" : "7";
+    return this.status === "maxed"
+      ? "a"
+      : this.status === "unlocked"
+        ? "e"
+        : "7";
   }
 
   get nodeSymbol() {
     const nameColor = this.color;
-    const symbol = this.status === "maxed" ? "●" : this.status === "unlocked" ? "○" : "○";
+    const symbol =
+      this.status === "maxed" ? "●" : this.status === "unlocked" ? "○" : "○";
     return `${symbol}`;
   }
 
@@ -231,7 +236,9 @@ class Professional extends Node {
 
   perk(level) {
     const val = 50 + level * 5;
-    return [`§7Gain §a+${val}§7 §6${SYMBOLS.mining_speed} Mining Speed§7 when mining Gemstones.`];
+    return [
+      `§7Gain §a+${val}§7 §6${SYMBOLS.mining_speed} Mining Speed§7 when mining Gemstones.`,
+    ];
   }
 }
 
@@ -286,7 +293,9 @@ class Fortunate extends Node {
 
   perk(level) {
     const val = 20 + level * 4;
-    return [`§7Grants §a+${val}§7 §6${SYMBOLS.mining_fortune} Mining Fortune§7 when mining Gemstone.`];
+    return [
+      `§7Grants §a+${val}§7 §6${SYMBOLS.mining_fortune} Mining Fortune§7 when mining Gemstone.`,
+    ];
   }
 }
 
@@ -387,7 +396,9 @@ class PeakOfTheMountain extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return nextLevel <= 5 ? floor(25000 * nextLevel) : floor(500000 + 250000 * (nextLevel - 6));
+    return nextLevel <= 5
+      ? floor(25000 * nextLevel)
+      : floor(500000 + 250000 * (nextLevel - 6));
   }
 
   perk(level) {
@@ -430,7 +441,9 @@ class StarPowder extends Node {
   }
 
   perk(level) {
-    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a3x §7Mithril Powder.`];
+    return [
+      `§7Mining Mithril Ore near §5Fallen Crystals §7gives §a3x §7Mithril Powder.`,
+    ];
   }
 }
 
@@ -531,7 +544,9 @@ class EfficientMiner extends Node {
   perk(level) {
     const val1 = round(10 + level * 0.4, 1);
     const val2 = ceil((level + 1) / 20);
-    return [`§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`];
+    return [
+      `§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`,
+    ];
   }
 }
 
@@ -554,7 +569,9 @@ class Orbiter extends Node {
 
   perk(level) {
     const val = round(0.2 + level * 0.01, 2);
-    return [`§7When mining ores, you have a §a${val}%§7 chance to get a random amount of experience orbs.`];
+    return [
+      `§7When mining ores, you have a §a${val}%§7 chance to get a random amount of experience orbs.`,
+    ];
   }
 }
 
@@ -653,7 +670,9 @@ class DailyPowder extends Node {
 
   perk(level) {
     const val = 400 + (level - 1) * 36;
-    return [`§7Gain §a${val} Powder §7from the first ore you mine every day. Works for all Powder types.`];
+    return [
+      `§7Gain §a${val} Powder §7from the first ore you mine every day. Works for all Powder types.`,
+    ];
   }
 }
 
@@ -735,7 +754,9 @@ class TitaniumInsanium extends Node {
 
   perk(level) {
     const val = round(2 + level * 0.1, 1);
-    return [`§7When mining Mithril Ore, you have a §a${val}%§7 chance to convert the block into Titanium Ore.`];
+    return [
+      `§7When mining Mithril Ore, you have a §a${val}%§7 chance to convert the block into Titanium Ore.`,
+    ];
   }
 }
 
@@ -896,7 +917,9 @@ class GiftsFromTheDeparted extends Node {
   perk(level) {
     const val = level * 0.2;
 
-    return [`§7Gain a §a${val}% §7chance to get an extra item when looting a §bFrozen Corpse§7.`];
+    return [
+      `§7Gain a §a${val}% §7chance to get an extra item when looting a §bFrozen Corpse§7.`,
+    ];
   }
 }
 
@@ -913,7 +936,9 @@ class FrozenSolid extends Node {
   }
 
   perk() {
-    return [`§7Gain §a2x §bGlacite Powder §7from killing mobs in the §bGlacite Tunnels §7and §bGlacite Mineshafts§7.`];
+    return [
+      `§7Gain §a2x §bGlacite Powder §7from killing mobs in the §bGlacite Tunnels §7and §bGlacite Mineshafts§7.`,
+    ];
   }
 }
 
@@ -965,7 +990,9 @@ class Excavator extends Node {
   perk(level) {
     const val = level * 0.5;
 
-    return [`§9Suspicious Scraps §7are §a${val}% §7more likely to contain a fossil.`];
+    return [
+      `§9Suspicious Scraps §7are §a${val}% §7more likely to contain a fossil.`,
+    ];
   }
 }
 
@@ -984,7 +1011,9 @@ class RagsOfRiches extends Node {
   perk(level) {
     const val = level * 2;
 
-    return [`§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7while mining inside a §bGlaite Mineshaft`];
+    return [
+      `§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7while mining inside a §bGlaite Mineshaft`,
+    ];
   }
 }
 
@@ -1058,7 +1087,9 @@ class SubzeroMining extends Node {
   perk(level) {
     const val = level * 1;
 
-    return [`§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7when mining §bGlacite§7.`];
+    return [
+      `§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7when mining §bGlacite§7.`,
+    ];
   }
 }
 
@@ -1077,7 +1108,9 @@ class EagerAdventurer extends Node {
   perk(level) {
     const val = level * 2;
 
-    return [`§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when inside the §bGlacite Mineshafts§7.`];
+    return [
+      `§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when inside the §bGlacite Mineshafts§7.`,
+    ];
   }
 }
 
@@ -1115,7 +1148,9 @@ class WarmHearted extends Node {
   perk(level) {
     const val = level * 0.2;
 
-    return [`§7Grants §a+${val} §b${SYMBOLS.cold_resistence} Cold Resistence§7.`];
+    return [
+      `§7Grants §a+${val} §b${SYMBOLS.cold_resistence} Cold Resistence§7.`,
+    ];
   }
 }
 
@@ -1178,7 +1213,9 @@ class StrongArm extends Node {
   perk(level) {
     const val = level * 5;
 
-    return [`§7Gain §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when mining Tungsten or Umber.`];
+    return [
+      `§7Gain §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when mining Tungsten or Umber.`,
+    ];
   }
 }
 
@@ -1290,18 +1327,74 @@ const nodeClasses = {
 
 const HOTM_Tree = {
   1: [null, null, null, "mining_speed", null, null, null],
-  2: [null, "mining_speed_boost", "titanium_insanium", "mining_fortune", "forge_time", "pickaxe_toss", null],
-  3: [null, "random_event", null, "daily_powder", null, "fallen_star_bonus", null],
-  4: ["daily_effect", "mining_madness", "mining_experience", "efficient_miner", "experience_orbs", "front_loaded", "precision_mining"],
+  2: [
+    null,
+    "mining_speed_boost",
+    "titanium_insanium",
+    "mining_fortune",
+    "forge_time",
+    "pickaxe_toss",
+    null,
+  ],
+  3: [
+    null,
+    "random_event",
+    null,
+    "daily_powder",
+    null,
+    "fallen_star_bonus",
+    null,
+  ],
+  4: [
+    "daily_effect",
+    "mining_madness",
+    "mining_experience",
+    "efficient_miner",
+    "experience_orbs",
+    "front_loaded",
+    "precision_mining",
+  ],
   5: [null, "star_powder", null, "special_0", null, "goblin_killer", null],
-  6: ["vein_seeker", "lonesome_miner", "professional", "mole", "fortunate", "great_explorer", "maniac_miner"],
-  7: [null, "mining_speed_2", null, "powder_buff", null, "mining_fortune_2", null],
-  8: ["keen_eye", "warm_hearted", "dust_collector", "daily_grind", "strong_arm", "no_stone_unturned", "mineshaft_mayhem"],
+  6: [
+    "vein_seeker",
+    "lonesome_miner",
+    "professional",
+    "mole",
+    "fortunate",
+    "great_explorer",
+    "maniac_miner",
+  ],
+  7: [
+    null,
+    "mining_speed_2",
+    null,
+    "powder_buff",
+    null,
+    "mining_fortune_2",
+    null,
+  ],
+  8: [
+    "keen_eye",
+    "warm_hearted",
+    "dust_collector",
+    "daily_grind",
+    "strong_arm",
+    "no_stone_unturned",
+    "mineshaft_mayhem",
+  ],
   9: [null, "surveyor", null, "subzero_mining", null, "eager_adventurer", null],
-  10: ["gemstone_infusion", "gifts_from_the_departed", "frozen_solid", "hungry_for_more", "excavator", "rags_of_riches", "hazardous_miner"],
+  10: [
+    "gemstone_infusion",
+    "gifts_from_the_departed",
+    "frozen_solid",
+    "hungry_for_more",
+    "excavator",
+    "rags_of_riches",
+    "hazardous_miner",
+  ],
 };
 
 module.exports = {
   tree: HOTM_Tree,
-  nodes: nodeClasses
+  nodes: nodeClasses,
 };

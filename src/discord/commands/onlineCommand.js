@@ -30,7 +30,9 @@ module.exports = {
     const message = await messages;
 
     const onlineMembers = message.find((m) => m.startsWith("Online Members: "));
-    const totalMembers = message.find((message) => message.startsWith("Total Members: "));
+    const totalMembers = message.find((message) =>
+      message.startsWith("Total Members: "),
+    );
 
     const onlineMembersList = message;
     const online = onlineMembersList

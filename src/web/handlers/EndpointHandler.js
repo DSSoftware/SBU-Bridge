@@ -8,7 +8,9 @@ const { getNetworth } = require("skyhelper-networth");
 const getDungeons = require("../../../API/stats/dungeons.js");
 const getSkills = require("../../../API/stats/skills.js");
 const getSlayer = require("../../../API/stats/slayer.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 
 class EndpointHandler {
   constructor(server) {
@@ -35,30 +37,43 @@ class EndpointHandler {
       let skill_requirements = false;
 
       let masteries_data = {
-        "passed": 5,
-        "required": 5-config.minecraft.guildRequirements.requirements.masteries.maximumFailed,
-        "masteries": {
-          "skyblockLevel": {
-            "current": 0,
-            "required": config.minecraft.guildRequirements.requirements.masteries.skyblockLevel
+        passed: 5,
+        required:
+          5 -
+          config.minecraft.guildRequirements.requirements.masteries
+            .maximumFailed,
+        masteries: {
+          skyblockLevel: {
+            current: 0,
+            required:
+              config.minecraft.guildRequirements.requirements.masteries
+                .skyblockLevel,
           },
-          "catacombsLevel": {
-            "current": 0,
-            "required": config.minecraft.guildRequirements.requirements.masteries.catacombsLevel
+          catacombsLevel: {
+            current: 0,
+            required:
+              config.minecraft.guildRequirements.requirements.masteries
+                .catacombsLevel,
           },
-          "networth": {
-            "current": 0,
-            "required": config.minecraft.guildRequirements.requirements.masteries.networth
+          networth: {
+            current: 0,
+            required:
+              config.minecraft.guildRequirements.requirements.masteries
+                .networth,
           },
-          "skillAverage": {
-            "current": 0,
-            "required": config.minecraft.guildRequirements.requirements.masteries.skillAverage
+          skillAverage: {
+            current: 0,
+            required:
+              config.minecraft.guildRequirements.requirements.masteries
+                .skillAverage,
           },
-          "slayerEXP": {
-            "current": 0,
-            "required": config.minecraft.guildRequirements.requirements.masteries.slayerEXP
-          }
-        }
+          slayerEXP: {
+            current: 0,
+            required:
+              config.minecraft.guildRequirements.requirements.masteries
+                .slayerEXP,
+          },
+        },
       };
 
       let passed_requirements = true;
@@ -68,86 +83,125 @@ class EndpointHandler {
       try {
         let profile = await getLatestProfile(uuid);
 
-        const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
+        const skyblockLevel =
+          (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
         const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
-        const catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
+        const catacombsLevel = Math.round(
+          dungeonsStats?.catacombs?.skill?.levelWithProgress || 0,
+        );
 
         // MAIN REQS
-        if(skyblockLevel < config.minecraft.guildRequirements.requirements.skyblockLevel){
+        if (
+          skyblockLevel <
+          config.minecraft.guildRequirements.requirements.skyblockLevel
+        ) {
           passed_requirements = false;
         }
-        if(catacombsLevel < config.minecraft.guildRequirements.requirements.catacombsLevel){
+        if (
+          catacombsLevel <
+          config.minecraft.guildRequirements.requirements.catacombsLevel
+        ) {
           passed_requirements = false;
         }
         // MAIN REQS
-        
-        if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
-          const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
-            onlyNetworth: true,
-            museumData: profile.museum,
-          });
+
+        if (
+          config.minecraft.guildRequirements.requirements.masteries
+            .masteriesEnabled === "true"
+        ) {
+          const networthCalculated = await getNetworth(
+            profile.profile,
+            profile.profileData?.banking?.balance || 0,
+            {
+              onlyNetworth: true,
+              museumData: profile.museum,
+            },
+          );
 
           const calculatedSkills = getSkills(profile.profile);
 
-          const skillAverage = (
+          const skillAverage =
             Object.keys(calculatedSkills)
               .filter((skill) => !["runecrafting", "social"].includes(skill))
               .map((skill) => calculatedSkills[skill].levelWithProgress || 0)
               .reduce((a, b) => a + b, 0) /
-            (Object.keys(calculatedSkills).length - 2)
-          );
+            (Object.keys(calculatedSkills).length - 2);
 
           const calculatedSlayers = getSlayer(profile.profile);
           let slayerXP = 0;
-          Object.keys(calculatedSlayers).reduce(
-            (acc, slayer) => {
-              slayerXP += calculatedSlayers[slayer].xp ?? 0;
-            }
-          );
-  
+          Object.keys(calculatedSlayers).reduce((acc, slayer) => {
+            slayerXP += calculatedSlayers[slayer].xp ?? 0;
+          });
+
           // MASTERIES
           masteries_data.masteries.skyblockLevel.current = skyblockLevel;
           masteries_data.masteries.catacombsLevel.current = catacombsLevel;
-          masteries_data.masteries.networth.current = networthCalculated.networth;
+          masteries_data.masteries.networth.current =
+            networthCalculated.networth;
           masteries_data.masteries.skillAverage.current = skillAverage;
           masteries_data.masteries.slayerEXP.current = slayerXP;
 
-          if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
+          if (
+            skyblockLevel <
+            config.minecraft.guildRequirements.requirements.masteries
+              .skyblockLevel
+          ) {
             masteries_failed += 1;
           }
-          if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
+          if (
+            catacombsLevel <
+            config.minecraft.guildRequirements.requirements.masteries
+              .catacombsLevel
+          ) {
             masteries_failed += 1;
           }
-          if((networthCalculated.networth ?? 0) < config.minecraft.guildRequirements.requirements.masteries.networth){
+          if (
+            (networthCalculated.networth ?? 0) <
+            config.minecraft.guildRequirements.requirements.masteries.networth
+          ) {
             masteries_failed += 1;
           }
-          if(skillAverage < config.minecraft.guildRequirements.requirements.masteries.skillAverage){
+          if (
+            skillAverage <
+            config.minecraft.guildRequirements.requirements.masteries
+              .skillAverage
+          ) {
             masteries_failed += 1;
           }
-          if(slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
+          if (
+            slayerXP <
+            config.minecraft.guildRequirements.requirements.masteries.slayerEXP
+          ) {
             masteries_failed += 1;
           }
 
           masteries_data.passed -= masteries_failed;
 
-          if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
+          if (
+            masteries_failed <=
+            config.minecraft.guildRequirements.requirements.masteries
+              .maximumFailed
+          ) {
             masteries_passed = true;
           }
           // MASTERIES
-        }
-        else{
+        } else {
           masteries_passed = true;
         }
 
         skill_requirements = passed_requirements && masteries_passed;
-      }
-      catch (e) {
+      } catch (e) {
         // Failed to lookup player data.
         console.log(e);
       }
       //
 
-      if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true && skill_requirements === true) {
+      if (
+        skykings_scammer !== true &&
+        blacklisted !== true &&
+        scf_blacklisted !== true &&
+        skill_requirements === true
+      ) {
         bot.chat(`/guild invite ${username}`);
         success = true;
       }
@@ -156,16 +210,20 @@ class EndpointHandler {
           success: success,
           reason: "Player lookup failed OR another internal error occured",
           masteries: masteries_data,
-          banned: skykings_scammer === true || blacklisted !== true && scf_blacklisted !== true,
-          requirements: passed_requirements
+          banned:
+            skykings_scammer === true ||
+            (blacklisted !== true && scf_blacklisted !== true),
+          requirements: passed_requirements,
         });
         return;
       }
       res.send({
         success: success,
         masteries: masteries_data,
-        banned: skykings_scammer === true || blacklisted !== true && scf_blacklisted !== true,
-        requirements: passed_requirements
+        banned:
+          skykings_scammer === true ||
+          (blacklisted !== true && scf_blacklisted !== true),
+        requirements: passed_requirements,
       });
     });
 
@@ -181,7 +239,11 @@ class EndpointHandler {
       const blacklisted = await Blacklist.checkBlacklist(uuid);
       const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
 
-      if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true) {
+      if (
+        skykings_scammer !== true &&
+        blacklisted !== true &&
+        scf_blacklisted !== true
+      ) {
         bot.chat(`/guild invite ${username}`);
         success = true;
       }

@@ -1,7 +1,12 @@
 // eslint-disable-next-line
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const config = require("../../../config.js");
-const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  decodeData,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 
 class RenderCommand extends minecraftCommand {
@@ -27,13 +32,20 @@ class RenderCommand extends minecraftCommand {
 
       const profile = await getLatestProfile(required_ign);
 
-      required_ign = formatUsername(required_ign, profile.profileData?.game_mode);
+      required_ign = formatUsername(
+        required_ign,
+        profile.profileData?.game_mode,
+      );
 
       if (!profile.profile.inv_contents?.data) {
         return this.send(`/${channel} This player has an Inventory API off.`);
       }
 
-      const inventoryData = (await decodeData(Buffer.from(profile.profile.inv_contents.data, "base64"))).i;
+      const inventoryData = (
+        await decodeData(
+          Buffer.from(profile.profile.inv_contents.data, "base64"),
+        )
+      ).i;
 
       let inventory = `${required_ign}'s inventory:`;
       let inventory2 = ``;
@@ -43,7 +55,10 @@ class RenderCommand extends minecraftCommand {
         if (!inventoryData[x] || !Object.keys(inventoryData[x] || {}).length) {
           current_item = ` [${x + 1}] Empty`;
         } else {
-          let proper_name = (inventoryData[x]?.tag?.display?.Name).replace(/§./g, "");
+          let proper_name = (inventoryData[x]?.tag?.display?.Name).replace(
+            /§./g,
+            "",
+          );
           current_item += ` [${x + 1}] ${proper_name}`;
         }
 

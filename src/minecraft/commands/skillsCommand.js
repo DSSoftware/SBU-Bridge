@@ -1,5 +1,7 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const getSkills = require("../../../API/stats/skills.js");
 const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
@@ -60,9 +62,12 @@ class SkillsCommand extends minecraftCommand {
             }
           }
 
-          const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
+          const level = Math.min(
+            Math.floor(profile[skill].levelWithProgress ?? 0),
+            skill_cap,
+          );
 
-          if(skill != "runecrafting" && skill != "social"){
+          if (skill != "runecrafting" && skill != "social") {
             sa_points += level;
             sa_skills++;
           }
@@ -74,11 +79,13 @@ class SkillsCommand extends minecraftCommand {
 
       let skillAverage = "N/A";
 
-      if(sa_skills != 0){
+      if (sa_skills != 0) {
         skillAverage = (sa_points / sa_skills).toFixed(2);
       }
 
-      this.send(`/${channel} ${username}'s Skill Average: ${skillAverage ?? 0} (${skillsFormatted})`);
+      this.send(
+        `/${channel} ${username}'s Skill Average: ${skillAverage ?? 0} (${skillsFormatted})`,
+      );
     } catch (error) {
       this.send(`/${channel} [ERROR] ${error}}`);
     }

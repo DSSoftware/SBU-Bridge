@@ -50,7 +50,10 @@ module.exports = function calcSkill(skill, experience, type) {
     xpForNext = Math.ceil(xp_tables[table][level] || 200000000);
   }
 
-  progress = level >= maxLevel && skill !== "dungeoneering" ? 0 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  progress =
+    level >= maxLevel && skill !== "dungeoneering"
+      ? 0
+      : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   return {
     totalXp,

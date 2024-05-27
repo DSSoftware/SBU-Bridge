@@ -36,8 +36,12 @@ class AuctionHouseCommand extends minecraftCommand {
 
       const { hypixelAPIkey } = config.minecraft.API;
       const [auctionResponse, playerResponse] = await Promise.all([
-        axios.get(`https://api.hypixel.net/skyblock/auction?key=${hypixelAPIkey}&player=${uuid}`),
-        axios.get(`https://api.hypixel.net/player?key=${hypixelAPIkey}&uuid=${uuid}`),
+        axios.get(
+          `https://api.hypixel.net/skyblock/auction?key=${hypixelAPIkey}&player=${uuid}`,
+        ),
+        axios.get(
+          `https://api.hypixel.net/player?key=${hypixelAPIkey}&uuid=${uuid}`,
+        ),
       ]);
 
       const auctions = auctionResponse.data?.auctions || [];
@@ -47,7 +51,9 @@ class AuctionHouseCommand extends minecraftCommand {
         return this.send(`/${channel} This player has no active auctions.`);
       }
 
-      const activeAuctions = auctions.filter((auction) => auction.end >= Date.now());
+      const activeAuctions = auctions.filter(
+        (auction) => auction.end >= Date.now(),
+      );
 
       let auctions_len = 0;
       let price = 0;
@@ -59,14 +65,20 @@ class AuctionHouseCommand extends minecraftCommand {
 
       for (const auction of activeAuctions) {
         let item_price = 0;
-        
+
         const lore = auction.item_lore.split("\n");
 
-        lore.push("§8§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯", `§7Seller: ${getRank(player)} ${player.displayname}`);
+        lore.push(
+          "§8§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯",
+          `§7Seller: ${getRank(player)} ${player.displayname}`,
+        );
 
         if (auction.bin === undefined) {
           if (auction.bids.length === 0) {
-            lore.push(`§7Starting Bid: §6${addCommas(auction.starting_bid)} coins`, `§7`);
+            lore.push(
+              `§7Starting Bid: §6${addCommas(auction.starting_bid)} coins`,
+              `§7`,
+            );
           } else if (auction.bids.length > 0) {
             const bidderUUID = auction.bids[auction.bids.length - 1].bidder;
 
@@ -93,11 +105,18 @@ class AuctionHouseCommand extends minecraftCommand {
             );
           }
         } else {
-          lore.push(`§7Buy it now: §6${auction.starting_bid.toLocaleString()} coins`, `§7`);
+          lore.push(
+            `§7Buy it now: §6${auction.starting_bid.toLocaleString()} coins`,
+            `§7`,
+          );
           item_price = auction.starting_bid ?? 0;
         }
 
-        lore.push(`§7Ends in: §e${timeSince(auction.end)}`, `§7`, `§eClick to inspect`);
+        lore.push(
+          `§7Ends in: §e${timeSince(auction.end)}`,
+          `§7`,
+          `§eClick to inspect`,
+        );
 
         if (auctions_len == 4) {
           string += ` (4 out of ${activeAuctions.length})`;
@@ -111,12 +130,14 @@ class AuctionHouseCommand extends minecraftCommand {
           string += string === "" ? upload.data.link : " | " + upload.data.link;
         }
         auctions_len++;
-        
+
         price += item_price;
       }
 
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}. Full response in Discord.`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${nick} has ${auctions_len} auctions totalling ${formatNumber(price, 2)}. Full response in Discord.`,
+        );
         this.sendDiscordFollowup(channel, images);
         return;
       }

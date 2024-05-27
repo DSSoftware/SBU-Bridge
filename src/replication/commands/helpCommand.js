@@ -21,7 +21,11 @@ module.exports = {
     if (commandName === undefined) {
       const discordCommands = interaction.client.commands
         .map(({ name, options }) => {
-          const optionsString = options?.map(({ name, required }) => (required ? ` (${name})` : ` [${name}]`)).join("");
+          const optionsString = options
+            ?.map(({ name, required }) =>
+              required ? ` (${name})` : ` [${name}]`,
+            )
+            .join("");
           return `- \`${name}${optionsString ? optionsString : ""}\`\n`;
         })
         .join("");
@@ -32,7 +36,9 @@ module.exports = {
         .map((file) => {
           const command = new (require(`../../minecraft/commands/${file}`))();
           const optionsString = command.options
-            ?.map(({ name, required }) => (required ? ` (${name})` : ` [${name}]`))
+            ?.map(({ name, required }) =>
+              required ? ` (${name})` : ` [${name}]`,
+            )
             .join("");
 
           return `- \`${command.name}${optionsString}\`\n`;
@@ -66,13 +72,22 @@ module.exports = {
         .readdirSync("./src/minecraft/commands")
         .filter((file) => file.endsWith(".js"))
         .map((file) => new (require(`../../minecraft/commands/${file}`))())
-        .find((command) => command.name === commandName || command.aliases.includes(commandName));
+        .find(
+          (command) =>
+            command.name === commandName ||
+            command.aliases.includes(commandName),
+        );
 
       const type = minecraftCommand ? "minecraft" : "discord";
 
-      const command = interaction.client.commands.find((command) => command.name === commandName) ?? minecraftCommand;
+      const command =
+        interaction.client.commands.find(
+          (command) => command.name === commandName,
+        ) ?? minecraftCommand;
       if (command === undefined) {
-        throw new HypixelDiscordChatBridgeError(`Command ${commandName} not found.`);
+        throw new HypixelDiscordChatBridgeError(
+          `Command ${commandName} not found.`,
+        );
       }
 
       const description = `${command.description}\n\n${
@@ -86,7 +101,9 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setColor(0x0099ff)
-        .setTitle(`**${type === "discord" ? "/" : config.minecraft.bot.prefix}${command.name}**`)
+        .setTitle(
+          `**${type === "discord" ? "/" : config.minecraft.bot.prefix}${command.name}**`,
+        )
         .setDescription(description + "\n")
         .setFooter({
           text: "() = required, [] = optional",

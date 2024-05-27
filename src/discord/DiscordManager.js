@@ -1,4 +1,9 @@
-const { Client, Collection, AttachmentBuilder, GatewayIntentBits } = require("discord.js");
+const {
+  Client,
+  Collection,
+  AttachmentBuilder,
+  GatewayIntentBits,
+} = require("discord.js");
 const CommunicationBridge = require("../contracts/CommunicationBridge.js");
 const { replaceVariables } = require("../contracts/helperFunctions.js");
 const messageToImage = require("../contracts/messageToImage.js");
@@ -24,20 +29,28 @@ class DiscordManager extends CommunicationBridge {
 
   async connect() {
     global.client = new Client({
-      intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+      ],
     });
 
     this.client = client;
 
     this.client.on("ready", () => this.stateHandler.onReady());
-    this.client.on("messageCreate", (message) => this.messageHandler.onMessage(message));
+    this.client.on("messageCreate", (message) =>
+      this.messageHandler.onMessage(message),
+    );
 
     this.client.login(config.discord.bot.token).catch((error) => {
       Logger.errorMessage(error);
     });
 
     client.commands = new Collection();
-    const commandFiles = fs.readdirSync("src/discord/commands").filter((file) => file.endsWith(".js"));
+    const commandFiles = fs
+      .readdirSync("src/discord/commands")
+      .filter((file) => file.endsWith(".js"));
 
     for (const file of commandFiles) {
       const command = require(`./commands/${file}`);
@@ -45,7 +58,9 @@ class DiscordManager extends CommunicationBridge {
     }
 
     const eventsPath = path.join(__dirname, "events");
-    const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
+    const eventFiles = fs
+      .readdirSync(eventsPath)
+      .filter((file) => file.endsWith(".js"));
 
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
@@ -78,7 +93,16 @@ class DiscordManager extends CommunicationBridge {
     return webhooks.first();
   }
 
-  async onBroadcast({ fullMessage, chat, chatType, username, rank, guildRank, message, color = 8421504 }) {
+  async onBroadcast({
+    fullMessage,
+    chat,
+    chatType,
+    username,
+    rank,
+    guildRank,
+    message,
+    color = 8421504,
+  }) {
     if (chat == "Guild/Replication") {
       chat = "Guild"; // Inter Discord Communication Support
       guildRank = "Inter-Discord";
@@ -93,12 +117,16 @@ class DiscordManager extends CommunicationBridge {
 
     if (
       (chat === undefined && chatType !== "debugChannel") ||
-      ((username === undefined || message === undefined) && chat !== "debugChannel")
+      ((username === undefined || message === undefined) &&
+        chat !== "debugChannel")
     ) {
       return;
     }
 
-    const mode = chat === "debugChannel" ? "minecraft" : config.discord.other.messageMode.toLowerCase();
+    const mode =
+      chat === "debugChannel"
+        ? "minecraft"
+        : config.discord.other.messageMode.toLowerCase();
 
     message = chat === "debugChannel" ? fullMessage : message;
     if (message !== undefined && chat !== "debugChannel") {
@@ -109,8 +137,17 @@ class DiscordManager extends CommunicationBridge {
     }
 
     // ? custom message format (config.discord.other.messageFormat)
-    if (config.discord.other.messageMode === "minecraft" && chat !== "debugChannel") {
-      message = replaceVariables(config.discord.other.messageFormat, { chatType, username, rank, guildRank, message });
+    if (
+      config.discord.other.messageMode === "minecraft" &&
+      chat !== "debugChannel"
+    ) {
+      message = replaceVariables(config.discord.other.messageFormat, {
+        chatType,
+        username,
+        rank,
+        guildRank,
+        message,
+      });
     }
 
     const channel = await this.stateHandler.getChannel(chat || "Guild");
@@ -118,12 +155,17 @@ class DiscordManager extends CommunicationBridge {
       return;
     }
 
-    if(chat == "Officer"){
-      channel.send({
-        content: `[OFFICER]@${username}@${message}`
-      }).then((message_officer) => {
-        message_officer.delete();
-      }, () => {})
+    if (chat == "Officer") {
+      channel
+        .send({
+          content: `[OFFICER]@${username}@${message}`,
+        })
+        .then(
+          (message_officer) => {
+            message_officer.delete();
+          },
+          () => {},
+        );
     }
 
     switch (mode) {
@@ -145,12 +187,11 @@ class DiscordManager extends CommunicationBridge {
           ],
         });
 
-        try{
+        try {
           const links = message.match(/https?:\/\/[^\s]+/g).join("\n");
 
           channel.send(links);
-        }
-        catch(e){
+        } catch (e) {
           // Failed to embed links, noone cares about this, right?
         }
 
@@ -162,7 +203,10 @@ class DiscordManager extends CommunicationBridge {
           return;
         }
 
-        this.app.discord.webhook = await this.getWebhook(this.app.discord, chatType);
+        this.app.discord.webhook = await this.getWebhook(
+          this.app.discord,
+          chatType,
+        );
         this.app.discord.webhook.send({
           content: message,
           username: username,
@@ -186,7 +230,9 @@ class DiscordManager extends CommunicationBridge {
         break;
 
       default:
-        throw new Error("Invalid message mode: must be bot, webhook or minecraft");
+        throw new Error(
+          "Invalid message mode: must be bot, webhook or minecraft",
+        );
     }
   }
 
@@ -246,7 +292,10 @@ class DiscordManager extends CommunicationBridge {
           return;
         }
 
-        this.app.discord.webhook = await this.getWebhook(this.app.discord, channel);
+        this.app.discord.webhook = await this.getWebhook(
+          this.app.discord,
+          channel,
+        );
         this.app.discord.webhook.send({
           username: username,
           avatarURL: `https://www.mc-heads.net/avatar/${username}`,
@@ -294,7 +343,9 @@ class DiscordManager extends CommunicationBridge {
       .split("\n")
       .map((part) => {
         part = part.trim();
-        return part.length === 0 ? "" : part.replace(/@(everyone|here)/gi, "").trim() + " ";
+        return part.length === 0
+          ? ""
+          : part.replace(/@(everyone|here)/gi, "").trim() + " ";
       })
       .join("");
   }

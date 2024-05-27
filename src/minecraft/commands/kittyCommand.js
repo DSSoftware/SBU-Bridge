@@ -15,11 +15,15 @@ class KittyCommand extends minecraftCommand {
 
   async onCommand(username, message, channel = "gc") {
     try {
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} Blame Hypixel for banning cute cat images :sob:`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} Blame Hypixel for banning cute cat images :sob:`,
+        );
         return;
       }
-      const { data } = await axios.get(`https://api.thecatapi.com/v1/images/search`);
+      const { data } = await axios.get(
+        `https://api.thecatapi.com/v1/images/search`,
+      );
 
       if (data === undefined) {
         // eslint-disable-next-line no-throw-literal

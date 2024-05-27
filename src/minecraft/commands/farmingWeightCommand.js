@@ -27,29 +27,29 @@ class topCommand extends minecraftCommand {
 
       let farming_weight = `https://api.elitebot.dev/Weight/${player_uuid}`;
 
-      let weight_info = await Promise.all([
-        axios.get(farming_weight)
-      ]).catch((error) => {
-        throw "No player with that IGN found."
-      });
+      let weight_info = await Promise.all([axios.get(farming_weight)]).catch(
+        (error) => {
+          throw "No player with that IGN found.";
+        },
+      );
 
       weight_info = weight_info[0].data ?? {};
 
       let weight = 0;
       let position = "N/A";
 
-      for(let profile of (weight_info?.profiles ?? [])){
+      for (let profile of weight_info?.profiles ?? []) {
         const profile_id = profile?.profileId;
         const profile_weight = profile?.totalWeight ?? 0;
 
-        if(profile_weight >= weight){
+        if (profile_weight >= weight) {
           weight = profile_weight;
 
           let farming_lb = `https://api.elitebot.dev/Leaderboard/ranks/${player_uuid}/${profile_id}`;
 
-          let lb_info = await Promise.all([
-            axios.get(farming_lb)
-          ]).catch((error) => {});
+          let lb_info = await Promise.all([axios.get(farming_lb)]).catch(
+            (error) => {},
+          );
 
           lb_info = lb_info[0].data ?? {};
 
@@ -58,10 +58,9 @@ class topCommand extends minecraftCommand {
       }
 
       weight = weight.toFixed(2);
-      if(position == -1 || position == "N/A"){
+      if (position == -1 || position == "N/A") {
         position = "N/A";
-      }
-      else{
+      } else {
         position = `#${position}`;
       }
 

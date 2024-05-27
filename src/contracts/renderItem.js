@@ -35,18 +35,20 @@ const RGBA_COLOR = {
   f: "rgba(255,255,255,1)",
 };
 
-async function getCanvasWidthAndHeight(lore, monospace=false) {
+async function getCanvasWidthAndHeight(lore, monospace = false) {
   const canvas = Canvas.createCanvas(1, 1);
   const ctx = canvas.getContext("2d");
   ctx.font = "24px Minecraft";
-  if(monospace){
+  if (monospace) {
     ctx.font = "24px Monocraft";
   }
 
   let highestWidth = 0;
   if (!lore) return;
   for (let i = 0; i < lore.length; i++) {
-    const width = ctx.measureText(lore[i].replace(/\u00A7[0-9A-FK-OR]/gi, "")).width;
+    const width = ctx.measureText(
+      lore[i].replace(/\u00A7[0-9A-FK-OR]/gi, ""),
+    ).width;
     if (width > highestWidth) {
       highestWidth = width;
     }
@@ -55,7 +57,7 @@ async function getCanvasWidthAndHeight(lore, monospace=false) {
   return { height: lore.length * 24 + 15, width: highestWidth + 20 };
 }
 
-async function renderLore(itemName, lore, monospace=false) {
+async function renderLore(itemName, lore, monospace = false) {
   if (itemName) lore.unshift(itemName);
   const measurements = await getCanvasWidthAndHeight(lore, monospace);
   if (!measurements) return;
@@ -72,7 +74,7 @@ async function renderLore(itemName, lore, monospace=false) {
   ctx.font = "24px Minecraft";
   ctx.fillStyle = "#ffffff";
 
-  if(monospace){
+  if (monospace) {
     ctx.font = "24px Monocraft";
   }
 
@@ -93,7 +95,7 @@ async function renderLore(itemName, lore, monospace=false) {
         ctx.font = "24px Minecraft, MinecraftUnicode";
       }
 
-      if(monospace){
+      if (monospace) {
         ctx.font = "24px Monocraft";
       }
 

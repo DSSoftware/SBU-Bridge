@@ -13,39 +13,56 @@ module.exports = {
   async execute(interaction) {
     try {
       if (interaction.isChatInputCommand()) {
-        await interaction.deferReply({ ephemeral: false }).catch((e) => {console.log(e)});
+        await interaction.deferReply({ ephemeral: false }).catch((e) => {
+          console.log(e);
+        });
 
-        const command = interaction.client.commands.get(interaction.commandName);
+        const command = interaction.client.commands.get(
+          interaction.commandName,
+        );
         if (command === undefined) {
           return;
         }
 
-        if (command.moderatorOnly === true && isModerator(interaction) === false) {
-          throw new HypixelDiscordChatBridgeError("You don't have permission to use this command.");
+        if (
+          command.moderatorOnly === true &&
+          isModerator(interaction) === false
+        ) {
+          throw new HypixelDiscordChatBridgeError(
+            "You don't have permission to use this command.",
+          );
         }
 
         if (command.requiresBot === true && isBotOnline() === false) {
-          throw new HypixelDiscordChatBridgeError("Bot doesn't seem to be connected to Hypixel. Please try again.");
+          throw new HypixelDiscordChatBridgeError(
+            "Bot doesn't seem to be connected to Hypixel. Please try again.",
+          );
         }
 
-        Logger.discordMessage(`${interaction.user.username} - [${interaction.commandName}]`);
+        Logger.discordMessage(
+          `${interaction.user.username} - [${interaction.commandName}]`,
+        );
         await command.execute(interaction);
       }
     } catch (error) {
       console.log(error);
-      try{
+      try {
         const errrorMessage =
           error instanceof HypixelDiscordChatBridgeError
             ? ""
             : "Please try again later. The error has been sent to the Developers.\n\n";
 
-        const errorEmbed = new ErrorEmbed(`${errrorMessage}\`\`\`${error}\`\`\``);
+        const errorEmbed = new ErrorEmbed(
+          `${errrorMessage}\`\`\`${error}\`\`\``,
+        );
 
         await interaction.editReply({ embeds: [errorEmbed] });
 
         if (error instanceof HypixelDiscordChatBridgeError === false) {
-          const username = interaction.user.username ?? interaction.user.tag ?? "Unknown";
-          const commandOptions = JSON.stringify(interaction.options.data) ?? "Unknown";
+          const username =
+            interaction.user.username ?? interaction.user.tag ?? "Unknown";
+          const commandOptions =
+            JSON.stringify(interaction.options.data) ?? "Unknown";
           const commandName = interaction.commandName ?? "Unknown";
           const errorStack = error.stack ?? error ?? "Unknown";
           const userID = interaction.user.id ?? "Unknown";
@@ -53,14 +70,17 @@ module.exports = {
           const errorLog = new ErrorEmbed(
             `Command: \`${commandName}\`\nOptions: \`${commandOptions}\`\nUser ID: \`${userID}\`\nUser: \`${username}\`\n\`\`\`${errorStack}\`\`\``,
           );
-          interaction.client.channels.cache.get(config.discord.channels.loggingChannel).send({
-            content: `<@&${config.discord.commands.notifyRole}>`,
-            embeds: [errorLog],
-          });
+          interaction.client.channels.cache
+            .get(config.discord.channels.loggingChannel)
+            .send({
+              content: `<@&${config.discord.commands.notifyRole}>`,
+              embeds: [errorLog],
+            });
         }
-      }
-      catch(e){
-        console.log("Failed to respond to interaction and wasn't able to send an error. Probably error with bot permissions.")
+      } catch (e) {
+        console.log(
+          "Failed to respond to interaction and wasn't able to send an error. Probably error with bot permissions.",
+        );
       }
     }
   },

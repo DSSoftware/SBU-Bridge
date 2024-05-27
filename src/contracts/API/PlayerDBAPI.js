@@ -4,10 +4,13 @@ const Logger = require("../../Logger");
 
 const cache = new Map();
 
-setInterval(()=>{
-  Logger.infoMessage(`Cleared up UUID Cache (Entries: ${cache?.size ?? 0})`);
-  cache.clear();
-}, 30*60*1000)
+setInterval(
+  () => {
+    Logger.infoMessage(`Cleared up UUID Cache (Entries: ${cache?.size ?? 0})`);
+    cache.clear();
+  },
+  30 * 60 * 1000,
+);
 
 async function getUUID(username, full = false) {
   try {
@@ -27,8 +30,10 @@ async function getUUID(username, full = false) {
     let uuid = null;
     let ign = null;
 
-    if(config.minecraft.API.mojang_resolver){
-      const { data } = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+    if (config.minecraft.API.mojang_resolver) {
+      const { data } = await axios.get(
+        `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`,
+      );
 
       if (data.errorMessage || data.id === undefined) {
         throw data.errorMessage ?? "Invalid username.";
@@ -36,9 +41,10 @@ async function getUUID(username, full = false) {
 
       uuid = data.id;
       ign = data.name;
-    }
-    else{
-      const { data } = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
+    } else {
+      const { data } = await axios.get(
+        `https://mojang.dssoftware.ru/?nick=${username}`,
+      );
 
       if (data.success == false || data.id === null) {
         throw "Invalid username.";
@@ -48,7 +54,7 @@ async function getUUID(username, full = false) {
       ign = data.name;
     }
 
-    if(uuid == null || ign == null){
+    if (uuid == null || ign == null) {
       throw "Invalid username.";
     }
 
@@ -57,7 +63,7 @@ async function getUUID(username, full = false) {
     cache.set(ign.toLowerCase(), {
       last_save: Date.now(),
       id: correct_uuid,
-      name: ign
+      name: ign,
     });
 
     if (full) {
@@ -88,7 +94,9 @@ async function getUUID(username, full = false) {
 
 async function getUsername(uuid) {
   try {
-    const { data } = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
+    const { data } = await axios.get(
+      `https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`,
+    );
     return data.name;
   } catch (error) {
     console.log(error);

@@ -29,7 +29,8 @@ module.exports = (profile) => {
       xpForNext = Math.ceil(xp_tables.slayer[slayer][level]);
     }
 
-    progress = level >= maxLevel ? 0 : Math.max(0, Math.min(experience / xpForNext, 1));
+    progress =
+      level >= maxLevel ? 0 : Math.max(0, Math.min(experience / xpForNext, 1));
 
     const kills = {};
     let total = 0;
@@ -38,8 +39,11 @@ module.exports = (profile) => {
       if (Object.keys(slayers)[i].startsWith("boss_kills_tier_")) {
         // This indeed looks pretty bad I know... (kills[boss tier number])
         total += Object.values(slayers)[i];
-        kills[Number(Object.keys(slayers)[i].charAt(Object.keys(slayers)[i].length - 1)) + 1] =
-          Object.values(slayers)[i];
+        kills[
+          Number(
+            Object.keys(slayers)[i].charAt(Object.keys(slayers)[i].length - 1),
+          ) + 1
+        ] = Object.values(slayers)[i];
       }
     }
 

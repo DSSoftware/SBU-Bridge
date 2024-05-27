@@ -12,7 +12,9 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(0x0099ff)
       .setTitle("🏓 Pong!")
-      .setDescription(`Client Latency: \`${clientLatency}ms\`\nAPI Latency: \`${apiLatency}ms\``)
+      .setDescription(
+        `Client Latency: \`${clientLatency}ms\`\nAPI Latency: \`${apiLatency}ms\``,
+      )
       .setFooter({
         text: "/help [command] for more information",
         iconURL: config.minecraft.API.SCF.logo,

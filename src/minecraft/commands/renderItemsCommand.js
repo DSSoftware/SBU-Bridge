@@ -1,6 +1,11 @@
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
-const { decodeData, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  decodeData,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 const config = require("../../../config.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { renderLore } = require("../../contracts/renderItem.js");
@@ -31,7 +36,9 @@ class RenderCommand extends minecraftCommand {
       let itemNumber = 0;
       const arg = this.getArgs(message);
       if (!arg[0]) {
-        this.send(`/${channel} Wrong Usage: !render [name] [slot] | !render [slot]`);
+        this.send(
+          `/${channel} Wrong Usage: !render [name] [slot] | !render [slot]`,
+        );
       }
       if (!isNaN(Number(arg[0]))) {
         itemNumber = arg[0];
@@ -41,7 +48,9 @@ class RenderCommand extends minecraftCommand {
         if (!isNaN(Number(arg[1]))) {
           itemNumber = arg[1];
         } else {
-          this.send(`/${channel} Wrong Usage: !render [name] [slot] | !render [slot]`);
+          this.send(
+            `/${channel} Wrong Usage: !render [name] [slot] | !render [slot]`,
+          );
           return;
         }
       }
@@ -54,13 +63,17 @@ class RenderCommand extends minecraftCommand {
         return this.send(`/${channel} This player has an Inventory API off.`);
       }
 
-      const { i: inventoryData } = await decodeData(Buffer.from(profile.profile.inv_contents.data, "base64"));
+      const { i: inventoryData } = await decodeData(
+        Buffer.from(profile.profile.inv_contents.data, "base64"),
+      );
 
       if (
         inventoryData[itemNumber - 1] === undefined ||
         Object.keys(inventoryData[itemNumber - 1] || {}).length === 0
       ) {
-        return this.send(`/${channel} Player does not have an item at slot ${itemNumber}.`);
+        return this.send(
+          `/${channel} Player does not have an item at slot ${itemNumber}.`,
+        );
       }
 
       const Name = inventoryData[itemNumber - 1]?.tag?.display?.Name;
@@ -70,16 +83,20 @@ class RenderCommand extends minecraftCommand {
 
       const upload = await uploadImage(renderedItem);
 
-      let proper_name = Name.replace(/§[0-9A-FK-OR]/ig,'');
+      let proper_name = Name.replace(/§[0-9A-FK-OR]/gi, "");
 
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} is holding [${proper_name}]. Full response in Discord.`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${username} is holding [${proper_name}]. Full response in Discord.`,
+        );
 
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
 
-      this.send(`/${channel} ${username}'s item at slot ${itemNumber}: ${upload.data.link}`);
+      this.send(
+        `/${channel} ${username}'s item at slot ${itemNumber}: ${upload.data.link}`,
+      );
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);

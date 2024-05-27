@@ -7,7 +7,9 @@ class StateHandler {
   }
 
   async onReady() {
-    Logger.replicationInfo("Client ready, logged in as " + this.discord.client.user.tag);
+    Logger.replicationInfo(
+      "Client ready, logged in as " + this.discord.client.user.tag,
+    );
     this.discord.client.user.setPresence({
       activities: [{ name: `/help | by @artemdev` }],
     });
@@ -50,13 +52,21 @@ class StateHandler {
 
     switch (type.replace(/§[0-9a-fk-or]/g, "").trim()) {
       case "Guild":
-        return this.discord.client.channels.cache.get(config.discord.replication.channels.guild);
+        return this.discord.client.channels.cache.get(
+          config.discord.replication.channels.guild,
+        );
       case "Officer":
-        return this.discord.client.channels.cache.get(config.discord.replication.channels.officer);
+        return this.discord.client.channels.cache.get(
+          config.discord.replication.channels.officer,
+        );
       case "Logger":
-        return this.discord.client.channels.cache.get(config.discord.replication.channels.logging);
+        return this.discord.client.channels.cache.get(
+          config.discord.replication.channels.logging,
+        );
       default:
-        return this.discord.client.channels.cache.get(config.discord.replication.channels.debug);
+        return this.discord.client.channels.cache.get(
+          config.discord.replication.channels.debug,
+        );
     }
   }
 }

@@ -26,7 +26,14 @@ function addNotation(type, value) {
   let returnVal = value;
   let notList = [];
   if (type === "shortScale") {
-    notList = [" Thousand", " Million", " Billion", " Trillion", " Quadrillion", " Quintillion"];
+    notList = [
+      " Thousand",
+      " Million",
+      " Billion",
+      " Trillion",
+      " Quadrillion",
+      " Quintillion",
+    ];
   }
 
   if (type === "oneLetters") {
@@ -270,19 +277,25 @@ function formatNumber(number, decimals = 2) {
 
   const isNegative = number < 0;
 
-  if (number < 100000 && number > -100000) return parseInt(number).toLocaleString();
+  if (number < 100000 && number > -100000)
+    return parseInt(number).toLocaleString();
 
   const abbrev = ["", "K", "M", "B", "T", "Qa", "Qi", "S", "O", "N", "D"];
   const unformattedNumber = Math.abs(number);
 
   const abbrevIndex = Math.floor(Math.log10(unformattedNumber) / 3);
-  const shortNumber = (unformattedNumber / Math.pow(10, abbrevIndex * 3)).toFixed(decimals);
+  const shortNumber = (
+    unformattedNumber / Math.pow(10, abbrevIndex * 3)
+  ).toFixed(decimals);
 
   return `${isNegative ? "-" : ""}${shortNumber}${abbrev[abbrevIndex]}`;
 }
 
 function replaceVariables(template, variables) {
-  return template.replace(/\{(\w+)\}/g, (match, name) => variables[name] ?? match);
+  return template.replace(
+    /\{(\w+)\}/g,
+    (match, name) => variables[name] ?? match,
+  );
 }
 
 module.exports = {

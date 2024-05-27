@@ -1,5 +1,7 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const config = require("../../../config.js");
@@ -114,7 +116,12 @@ class MedalsCommand extends minecraftCommand {
         let crop_id = element[0];
         let crop_name = element[1];
 
-        let crop_data = this.getCropMedals(crop_id, crop_name, unique_brackets, personal_bests);
+        let crop_data = this.getCropMedals(
+          crop_id,
+          crop_name,
+          unique_brackets,
+          personal_bests,
+        );
         golds += crop_data.gold;
 
         Lore.push(crop_data.display);
@@ -128,19 +135,25 @@ class MedalsCommand extends minecraftCommand {
       );
       Lore.unshift(`§f`);
       Lore.unshift(`§7Unique golds: §6${golds}§7/10.`);
-      Lore.unshift(`§7Participated in §6${Object.entries(contests).length}§7 contests.`);
+      Lore.unshift(
+        `§7Participated in §6${Object.entries(contests).length}§7 contests.`,
+      );
       Lore.unshift(`§f`);
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
 
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length} contests. Full response in Discord.`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length} contests. Full response in Discord.`,
+        );
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
 
-      this.send(`/${channel} ${username}'s Jacobs Contest stats: ${upload.data.link}.`);
+      this.send(
+        `/${channel} ${username}'s Jacobs Contest stats: ${upload.data.link}.`,
+      );
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);

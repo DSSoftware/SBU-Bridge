@@ -66,21 +66,30 @@ class MinecraftManager extends CommunicationBridge {
       return;
     }
 
-    if (channel === config.discord.channels.debugChannel && config.discord.channels.debugMode === true) {
+    if (
+      channel === config.discord.channels.debugChannel &&
+      config.discord.channels.debugMode === true
+    ) {
       return this.bot.chat(message);
     }
 
-    if (channel === config.discord.replication.channels.debug && config.discord.channels.debugMode === true) {
+    if (
+      channel === config.discord.replication.channels.debug &&
+      config.discord.channels.debugMode === true
+    ) {
       return this.bot.chat(message);
     }
 
     const chat =
-      channel === config.discord.channels.officerChannel || channel === config.discord.replication.channels.officer
+      channel === config.discord.channels.officerChannel ||
+      channel === config.discord.replication.channels.officer
         ? "/oc"
         : "/gc";
 
     if (message.length > 750) {
-      return this.bot.chat(`${chat} [ERROR] Failed to send the message, as it was longer than 750 symbols!`);
+      return this.bot.chat(
+        `${chat} [ERROR] Failed to send the message, as it was longer than 750 symbols!`,
+      );
     }
 
     let chunks = this.chunkSubstr(message, 150);
@@ -100,7 +109,10 @@ class MinecraftManager extends CommunicationBridge {
       });
 
       if (replyingTo) {
-        message_chunk = message_chunk.replace(username, `${username} replying to ${replyingTo}`);
+        message_chunk = message_chunk.replace(
+          username,
+          `${username} replying to ${replyingTo}`,
+        );
       }
 
       let successfullySent = false;
@@ -109,7 +121,8 @@ class MinecraftManager extends CommunicationBridge {
 
         if (
           receivedMessage.includes(message) &&
-          (this.chatHandler.isGuildMessage(receivedMessage) || this.chatHandler.isOfficerMessage(receivedMessage))
+          (this.chatHandler.isGuildMessage(receivedMessage) ||
+            this.chatHandler.isOfficerMessage(receivedMessage))
         ) {
           bot.removeListener("message", messageListener);
           successfullySent = true;
@@ -123,11 +136,11 @@ class MinecraftManager extends CommunicationBridge {
         setTimeout(() => {
           bot.removeListener("message", messageListener);
           if (successfullySent === true) {
-            discord.react("✅").catch(e => {});
+            discord.react("✅").catch((e) => {});
             return;
           }
 
-          discord.react("❌").catch(e => {});
+          discord.react("❌").catch((e) => {});
         }, 500);
       }
     }

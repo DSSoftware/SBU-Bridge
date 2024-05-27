@@ -1,12 +1,14 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const HOTM = require("../../../API/constants/hotm.js");
 const config = require("../../../config.js");
 const { formatUsername } = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 
-function formatNumber(x){
+function formatNumber(x) {
   return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -26,7 +28,7 @@ class MedalsCommand extends minecraftCommand {
     ];
   }
 
-  async getHOTMLevel(experience){
+  async getHOTMLevel(experience) {
     const HOTM_XP = {
       1: 0,
       2: 3000,
@@ -47,15 +49,14 @@ class MedalsCommand extends minecraftCommand {
     let xp_to_next = 0;
     let next_level = null;
 
-    for(let level_info of Object.entries(HOTM_XP)){
+    for (let level_info of Object.entries(HOTM_XP)) {
       let hotm_level = level_info[0];
       let hotm_exp = level_info[1];
 
-      if(left_exp >= hotm_exp){
+      if (left_exp >= hotm_exp) {
         left_exp -= hotm_exp;
         level = hotm_level;
-      }
-      else{
+      } else {
         xp_remaining = left_exp;
         next_level = hotm_level;
         xp_to_next = hotm_exp;
@@ -67,11 +68,11 @@ class MedalsCommand extends minecraftCommand {
       level: level,
       next_level: next_level,
       xp_left: xp_remaining,
-      xp_to_next: xp_to_next
+      xp_to_next: xp_to_next,
     };
   }
 
-  async getPowderInfo(type, display, color, data, just_powder=false){
+  async getPowderInfo(type, display, color, data, just_powder = false) {
     let powder_spent = data?.[`powder_spent_${type}`] ?? 0;
     let powder_available = data?.[`powder_${type}`] ?? 0;
 
@@ -79,47 +80,53 @@ class MedalsCommand extends minecraftCommand {
 
     let response = `${color}${display} §7Powder: ${color}${formatNumber(total_powder)} §7Available: ${color}${formatNumber(powder_available)}`;
 
-    if(just_powder){
+    if (just_powder) {
       return formatNumber(total_powder);
     }
 
     return response;
   }
 
-  async getNucleusRuns(data){
+  async getNucleusRuns(data) {
     let jade_places = data?.crystals?.jade_crystal?.total_placed ?? 0;
     let amber_places = data?.crystals?.amber_crystal?.total_placed ?? 0;
     let topaz_places = data?.crystals?.topaz_crystal?.total_placed ?? 0;
     let sapphire_places = data?.crystals?.sapphire_crystal?.total_placed ?? 0;
     let amethyst_places = data?.crystals?.amethyst_crystal?.total_placed ?? 0;
 
-    let runs = Math.min(jade_places, amber_places, topaz_places, sapphire_places, amethyst_places)
+    let runs = Math.min(
+      jade_places,
+      amber_places,
+      topaz_places,
+      sapphire_places,
+      amethyst_places,
+    );
 
     let response = `§aNu§6cle§eus §bRu§5ns§7: ${runs}`;
 
     return response;
   }
 
-  async getHOTMTree(layer, data, hotm_lvl=0){
+  async getHOTMTree(layer, data, hotm_lvl = 0) {
     let hotm_tree = HOTM.tree;
     let hotm_nodes = HOTM.nodes;
 
     let hotm_symbols = "";
     let hotm_names = "";
 
-    for(let node of hotm_tree?.[layer]){
-      if(node == null){
+    for (let node of hotm_tree?.[layer]) {
+      if (node == null) {
         hotm_symbols += " §0|      ";
         hotm_names += " §0|      ";
         continue;
       }
       let level = data?.nodes?.[node] ?? 0;
-      let hotm_node = new (hotm_nodes[node])({level: level});
+      let hotm_node = new hotm_nodes[node]({ level: level });
 
       let symbol = hotm_node.nodeSymbol;
       let color = hotm_node.color;
 
-      if(layer > hotm_lvl){
+      if (layer > hotm_lvl) {
         color = "c";
         symbol = "-";
       }
@@ -127,15 +134,15 @@ class MedalsCommand extends minecraftCommand {
 
       let proper_node = `§${color}${symbol} §${color}${level}`;
       let pn_pars = (proper_node.match(/§/g) || []).length;
-      proper_node = proper_node.padEnd(7+pn_pars, ' ');
-      name = name.padEnd(7, ' ');
+      proper_node = proper_node.padEnd(7 + pn_pars, " ");
+      name = name.padEnd(7, " ");
 
-      hotm_symbols += " §0| " +  proper_node;
+      hotm_symbols += " §0| " + proper_node;
       hotm_names += " §0| " + name;
     }
 
-    hotm_symbols = (hotm_symbols + " §0|").replace(/ /g,"§7 ");
-    hotm_names = (hotm_names + " §0|").replace(/ /g,"§7 ");
+    hotm_symbols = (hotm_symbols + " §0|").replace(/ /g, "§7 ");
+    hotm_names = (hotm_names + " §0|").replace(/ /g, "§7 ");
 
     return [` §0${"⎯".repeat(77)} `, hotm_symbols, hotm_names];
   }
@@ -148,29 +155,46 @@ class MedalsCommand extends minecraftCommand {
 
       let hotm_data = data?.profile?.mining_core;
 
-      if (hotm_data == undefined || Object.keys(hotm_data?.nodes ?? {}).length == 0) {
+      if (
+        hotm_data == undefined ||
+        Object.keys(hotm_data?.nodes ?? {}).length == 0
+      ) {
         throw "Player has no HOTM data.";
       }
 
       let hotm_exp = hotm_data?.experience;
-      let hotm_level_data = await this.getHOTMLevel(hotm_exp);      
+      let hotm_level_data = await this.getHOTMLevel(hotm_exp);
 
       let Name = `§6${username}'s HOTM Stats:`;
       let Lore = [];
 
       Lore.push(`§f`);
 
-      Lore.push(`§7HOTM Level: §6§l${hotm_level_data?.level} §7(${formatNumber(hotm_exp)} EXP)`);
-      Lore.push(`§7Next Level: ${
-        hotm_level_data?.next_level == null ? "§a§lMAXED" : `§6§l${hotm_level_data?.next_level} §7(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)})`
-      }`);
-      Lore.push(`§7Peak of the Mountain: §5§l${hotm_data?.nodes?.special_0 || "§c§l-"}`);
+      Lore.push(
+        `§7HOTM Level: §6§l${hotm_level_data?.level} §7(${formatNumber(hotm_exp)} EXP)`,
+      );
+      Lore.push(
+        `§7Next Level: ${
+          hotm_level_data?.next_level == null
+            ? "§a§lMAXED"
+            : `§6§l${hotm_level_data?.next_level} §7(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)})`
+        }`,
+      );
+      Lore.push(
+        `§7Peak of the Mountain: §5§l${hotm_data?.nodes?.special_0 || "§c§l-"}`,
+      );
 
       Lore.push(`§f`);
 
-      Lore.push(await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data));
-      Lore.push(await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data));
-      Lore.push(await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data));
+      Lore.push(
+        await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data),
+      );
+      Lore.push(
+        await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data),
+      );
+      Lore.push(
+        await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data),
+      );
 
       Lore.push(`§f`);
 
@@ -198,17 +222,37 @@ class MedalsCommand extends minecraftCommand {
       const renderedItem = await renderLore(Name, Lore, true);
       const upload = await uploadImage(renderedItem);
 
-      if(!config.minecraft.commands.integrate_images){
-        let mithril_powder = await this.getPowderInfo("mithril", "Mithril", "§2", hotm_data, true);
-        let gemstone_powder = await this.getPowderInfo("gemstone", "Gemstone", "§d", hotm_data, true);
-        let glacite_powder = await this.getPowderInfo("glacite", "Glacite", "§b", hotm_data, true);
+      if (!config.minecraft.commands.integrate_images) {
+        let mithril_powder = await this.getPowderInfo(
+          "mithril",
+          "Mithril",
+          "§2",
+          hotm_data,
+          true,
+        );
+        let gemstone_powder = await this.getPowderInfo(
+          "gemstone",
+          "Gemstone",
+          "§d",
+          hotm_data,
+          true,
+        );
+        let glacite_powder = await this.getPowderInfo(
+          "glacite",
+          "Glacite",
+          "§b",
+          hotm_data,
+          true,
+        );
 
-        this.send(`/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite. Full response in Discord.`);
+        this.send(
+          `/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite. Full response in Discord.`,
+        );
 
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
-      
+
       this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
     } catch (error) {
       console.log(error);

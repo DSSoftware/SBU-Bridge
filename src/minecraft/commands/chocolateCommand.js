@@ -3,11 +3,14 @@ const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
 const axios = require("axios");
 const config = require("../../../config.js");
 const rabbits_handler = require("../../../API/constants/rabbits.js");
-const { formatNumber, formatUsername } = require("../../contracts/helperFunctions.js");
+const {
+  formatNumber,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
 const { renderLore } = require("../../contracts/renderItem.js");
 const { uploadImage } = require("../../contracts/API/imgurAPI.js");
 
-function convertPrestige(prestige){
+function convertPrestige(prestige) {
   const prestiges = {
     1: "§a§lI",
     2: "§9§lII",
@@ -20,55 +23,55 @@ function convertPrestige(prestige){
   return response;
 }
 
-function convertEmployeeLevel(level){
-  if(level >= 175){
+function convertEmployeeLevel(level) {
+  if (level >= 175) {
     return `§7[${level}] §6Director`;
   }
-  if(level >= 125){
+  if (level >= 125) {
     return `§7[${level}] §5Manager`;
   }
-  if(level >= 75){
+  if (level >= 75) {
     return `§7[${level}] §9Assistant`;
   }
-  if(level >= 10){
+  if (level >= 10) {
     return `§7[${level}] §aEmployee`;
   }
-  if(level > 0){
+  if (level > 0) {
     return `§7[${level}] §fIntern`;
   }
-  if(level <= 0){
+  if (level <= 0) {
     return `§7[0] §7Unemployed`;
   }
 
   return "N/A";
 }
 
-function prepareRabbits(rabbits){
+function prepareRabbits(rabbits) {
   delete rabbits?.collected_eggs;
 
   let formatting = {
-    "COMMON": "§f§lCOMMON",
-    "UNCOMMON": "§a§lUNCOMMON",
-    "RARE": "§9§lRARE",
-    "EPIC": "§5§lEPIC",
-    "LEGENDARY": "§6§lLEGENDARY",
-    "MYTHIC": "§d§lMYTHIC",
-    "UNKNOWN": "§7§lUNKNOWN"
+    COMMON: "§f§lCOMMON",
+    UNCOMMON: "§a§lUNCOMMON",
+    RARE: "§9§lRARE",
+    EPIC: "§5§lEPIC",
+    LEGENDARY: "§6§lLEGENDARY",
+    MYTHIC: "§d§lMYTHIC",
+    UNKNOWN: "§7§lUNKNOWN",
   };
 
   let rarities = {
-    "COMMON": 0,
-    "UNCOMMON": 0,
-    "RARE": 0,
-    "EPIC": 0,
-    "LEGENDARY": 0,
-    "MYTHIC": 0
+    COMMON: 0,
+    UNCOMMON: 0,
+    RARE: 0,
+    EPIC: 0,
+    LEGENDARY: 0,
+    MYTHIC: 0,
   };
 
   let rabbits_caught = 0;
   let rabbits_total = 0;
 
-  for(let rabbit_data of Object.entries(rabbits)){
+  for (let rabbit_data of Object.entries(rabbits)) {
     let rabbit = rabbit_data[0];
     let rabbit_counter = rabbit_data[1];
 
@@ -83,31 +86,38 @@ function prepareRabbits(rabbits){
   let rabbits_counter = 0;
   let total_counter = 0;
 
-  for(let rarity_data of Object.entries(rarities)){
+  for (let rarity_data of Object.entries(rarities)) {
     let rarity_id = rarity_data[0];
     let rabbits = rarity_data[1];
     let ctr_color = "c";
     let formatted_rarity = formatting?.[rarity_id];
 
-    let rabbits_total = (rabbits_handler?.[rarity_id.toLowerCase()] ?? {})?.length ?? 0;
+    let rabbits_total =
+      (rabbits_handler?.[rarity_id.toLowerCase()] ?? {})?.length ?? 0;
 
     rabbits_counter += rabbits;
     total_counter += rabbits_total;
 
-    if(rabbits >= rabbits_total){
-      ctr_color = 'a';
+    if (rabbits >= rabbits_total) {
+      ctr_color = "a";
     }
 
-    lines.push(`${formatted_rarity} §7Rabbits: §${ctr_color}${rabbits}§7/§a${rabbits_total}`);
+    lines.push(
+      `${formatted_rarity} §7Rabbits: §${ctr_color}${rabbits}§7/§a${rabbits_total}`,
+    );
   }
 
-  let total_color = 'c';
-  if(rabbits_counter >= total_counter){
-    total_color = 'a';
+  let total_color = "c";
+  if (rabbits_counter >= total_counter) {
+    total_color = "a";
   }
 
-  lines.unshift(`§${total_color}§lTOTAL §7Rabbits: §${total_color}${rabbits_counter}§7/§a${total_counter}`);
-  lines.unshift(`§7Eggs found: §6${rabbits_total}§7 (Unique: §a${rabbits_caught}§7 | Dupe: §c${rabbits_total-rabbits_caught}§7)`);
+  lines.unshift(
+    `§${total_color}§lTOTAL §7Rabbits: §${total_color}${rabbits_counter}§7/§a${total_counter}`,
+  );
+  lines.unshift(
+    `§7Eggs found: §6${rabbits_total}§7 (Unique: §a${rabbits_caught}§7 | Dupe: §c${rabbits_total - rabbits_caught}§7)`,
+  );
 
   return lines;
 }
@@ -136,42 +146,43 @@ class topCommand extends minecraftCommand {
 
       let player_profile = `https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${player_uuid}`;
 
-      let player_data = await Promise.all([
-        axios.get(player_profile)
-      ]).catch((error) => {
-        throw "Player has no SkyBlock profiles."
-      });
+      let player_data = await Promise.all([axios.get(player_profile)]).catch(
+        (error) => {
+          throw "Player has no SkyBlock profiles.";
+        },
+      );
 
       player_data = player_data[0].data ?? {};
-      if(!player_data?.success){
-        throw "Player has no SkyBlock profiles."
+      if (!player_data?.success) {
+        throw "Player has no SkyBlock profiles.";
       }
 
       let selected_profile = null;
 
-      for(let profile of (player_data?.profiles ?? [])){
-        if(profile?.selected == true){
+      for (let profile of player_data?.profiles ?? []) {
+        if (profile?.selected == true) {
           selected_profile = profile?.members?.[player_uuid];
         }
       }
 
-      if(selected_profile == null || selected_profile == undefined){
+      if (selected_profile == null || selected_profile == undefined) {
         throw "Player has no selected profile.";
       }
 
       let easter_stats = selected_profile?.events?.easter;
 
-      if(easter_stats == undefined){
+      if (easter_stats == undefined) {
         throw "Player hasn't participated in the easter event.";
       }
 
       let chocolate = easter_stats?.chocolate ?? 0;
-      let chocolate_since_prestige = easter_stats?.chocolate_since_prestige ?? 0;
+      let chocolate_since_prestige =
+        easter_stats?.chocolate_since_prestige ?? 0;
       let total_chocolate = easter_stats?.total_chocolate ?? 0;
       let rabbits = easter_stats?.rabbits ?? {};
       let employees = easter_stats?.employees;
-      let prestige = easter_stats?.chocolate_level ?? 0;    
-      
+      let prestige = easter_stats?.chocolate_level ?? 0;
+
       let barn_capacity = easter_stats?.rabbit_barn_capacity_level ?? 0;
       let click_upgrades = 1 + (easter_stats?.click_upgrades ?? 0);
       let time_tower = easter_stats?.time_tower?.level ?? 0;
@@ -192,11 +203,21 @@ class topCommand extends minecraftCommand {
       Lore.push(...prepareRabbits(rabbits));
       Lore.push(`§f`);
       Lore.push(`§7Employees:`);
-      Lore.push(`§7Rabbit Bro: ${convertEmployeeLevel(employees?.rabbit_bro ?? 0)}`);
-      Lore.push(`§7Rabbit Cousin: ${convertEmployeeLevel(employees?.rabbit_cousin ?? 0)}`);
-      Lore.push(`§7Rabbit Sis: ${convertEmployeeLevel(employees?.rabbit_sis ?? 0)}`);
-      Lore.push(`§7Rabbit Father: ${convertEmployeeLevel(employees?.rabbit_father ?? 0)}`);
-      Lore.push(`§7Rabbit Grandma: ${convertEmployeeLevel(employees?.rabbit_grandma ?? 0)}`);
+      Lore.push(
+        `§7Rabbit Bro: ${convertEmployeeLevel(employees?.rabbit_bro ?? 0)}`,
+      );
+      Lore.push(
+        `§7Rabbit Cousin: ${convertEmployeeLevel(employees?.rabbit_cousin ?? 0)}`,
+      );
+      Lore.push(
+        `§7Rabbit Sis: ${convertEmployeeLevel(employees?.rabbit_sis ?? 0)}`,
+      );
+      Lore.push(
+        `§7Rabbit Father: ${convertEmployeeLevel(employees?.rabbit_father ?? 0)}`,
+      );
+      Lore.push(
+        `§7Rabbit Grandma: ${convertEmployeeLevel(employees?.rabbit_grandma ?? 0)}`,
+      );
       Lore.push(`§f`);
       Lore.push(`§7Upgrades:`);
       Lore.push(`§aRabbit Barn ${barn_capacity}`);
@@ -208,14 +229,18 @@ class topCommand extends minecraftCommand {
 
       const renderedItem = await renderLore(Name, Lore);
       const upload = await uploadImage(renderedItem);
-      
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} ${username} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)}). Full response in Discord.`);
+
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} ${username} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)}). Full response in Discord.`,
+        );
         this.sendDiscordFollowup(channel, upload.data.link);
         return;
       }
 
-      this.send(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
+      this.send(
+        `/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`,
+      );
     } catch (error) {
       console.log(error);
       this.send(`/${channel} [ERROR] ${error}`);

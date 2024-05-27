@@ -9,7 +9,9 @@ class CommandHandler {
     this.discord = discord;
 
     const commands = [];
-    const commandFiles = fs.readdirSync("src/discord/commands").filter((file) => file.endsWith(".js"));
+    const commandFiles = fs
+      .readdirSync("src/discord/commands")
+      .filter((file) => file.endsWith(".js"));
 
     for (const file of commandFiles) {
       const command = require(`./commands/${file}`);
@@ -18,10 +20,16 @@ class CommandHandler {
 
     const rest = new REST({ version: "10" }).setToken(config.discord.bot.token);
 
-    const clientID = Buffer.from(config.discord.bot.token.split(".")[0], "base64").toString("ascii");
+    const clientID = Buffer.from(
+      config.discord.bot.token.split(".")[0],
+      "base64",
+    ).toString("ascii");
 
     rest
-      .put(Routes.applicationGuildCommands(clientID, config.discord.bot.serverID), { body: commands })
+      .put(
+        Routes.applicationGuildCommands(clientID, config.discord.bot.serverID),
+        { body: commands },
+      )
       .catch(console.error);
   }
 }

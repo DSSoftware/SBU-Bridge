@@ -29,7 +29,10 @@ module.exports = {
     let permission = false;
 
     const AuthData = new AuthProvider();
-    permission = (await AuthData.permissionInfo(user)).permissions?.[permission_required] ?? false;
+    permission =
+      (await AuthData.permissionInfo(user)).permissions?.[
+        permission_required
+      ] ?? false;
 
     if (!permission) {
       throw new HypixelDiscordChatBridgeError(
@@ -37,7 +40,10 @@ module.exports = {
       );
     }
 
-    const [name, time] = [interaction.options.getString("name"), interaction.options.getString("time")];
+    const [name, time] = [
+      interaction.options.getString("name"),
+      interaction.options.getString("time"),
+    ];
     bot.chat(`/g mute ${name} ${time}`);
 
     const embed = new EmbedBuilder()

@@ -9,14 +9,17 @@ class FoxCommand extends minecraftCommand {
 
     this.name = "fox";
     this.aliases = ["cutefox"];
-    this.description = "Random image of cute fox. Special thanks to 987654321Rui :)";
+    this.description =
+      "Random image of cute fox. Special thanks to 987654321Rui :)";
     this.options = [];
   }
 
   async onCommand(username, message, channel = "gc") {
     try {
-      if(!config.minecraft.commands.integrate_images){
-        this.send(`/${channel} Blame Hypixel for banning cute fox images :sob:`);
+      if (!config.minecraft.commands.integrate_images) {
+        this.send(
+          `/${channel} Blame Hypixel for banning cute fox images :sob:`,
+        );
         return;
       }
       const { data } = await axios.get("https://randomfox.ca/floof/");

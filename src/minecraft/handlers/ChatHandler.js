@@ -1,5 +1,10 @@
-const { replaceAllRanks, replaceVariables } = require("../../contracts/helperFunctions.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  replaceAllRanks,
+  replaceVariables,
+} = require("../../contracts/helperFunctions.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
 const { getUUID } = require("../../contracts/API/PlayerDBAPI.js");
@@ -37,7 +42,11 @@ class StateHandler extends eventHandler {
     const colouredMessage = event.toMotd();
 
     // NOTE: fixes "100/100❤     100/100✎ Mana" spam in the debug channel
-    if (message.includes("✎ Mana") && message.includes("❤") && message.includes("/")) {
+    if (
+      message.includes("✎ Mana") &&
+      message.includes("❤") &&
+      message.includes("/")
+    ) {
       return;
     }
 
@@ -49,19 +58,28 @@ class StateHandler extends eventHandler {
       });
     }
 
-    if (this.isLobbyJoinMessage(message) && config.discord.other.autoLimbo === true) {
+    if (
+      this.isLobbyJoinMessage(message) &&
+      config.discord.other.autoLimbo === true
+    ) {
       return bot.chat("\u00a7");
     }
 
     if (this.isRequestMessage(message)) {
       let username = replaceAllRanks(
-        message.split("has")[0].replaceAll("-----------------------------------------------------\n", ""),
+        message
+          .split("has")[0]
+          .replaceAll(
+            "-----------------------------------------------------\n",
+            "",
+          ),
       );
       try {
         username = username.trim();
-      }
-      catch (e) {
-        bot.chat(`/oc Somehow bot failed trim the player's IGN. Accept the invite manually!`);
+      } catch (e) {
+        bot.chat(
+          `/oc Somehow bot failed trim the player's IGN. Accept the invite manually!`,
+        );
         return;
       }
       var is_banned = false;
@@ -72,7 +90,9 @@ class StateHandler extends eventHandler {
           throw "Failed to obtain UUID";
         }
       } catch (e) {
-        bot.chat(`/oc Could not obtain UUID for ${username}. Please check manually!`);
+        bot.chat(
+          `/oc Could not obtain UUID for ${username}. Please check manually!`,
+        );
         return;
       }
 
@@ -95,75 +115,109 @@ class StateHandler extends eventHandler {
         try {
           let profile = await getLatestProfile(uuid);
 
-          skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
+          skyblockLevel =
+            (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
           const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
-          catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
+          catacombsLevel = Math.round(
+            dungeonsStats?.catacombs?.skill?.levelWithProgress || 0,
+          );
 
           // MAIN REQS
-          if(skyblockLevel < config.minecraft.guildRequirements.requirements.skyblockLevel){
+          if (
+            skyblockLevel <
+            config.minecraft.guildRequirements.requirements.skyblockLevel
+          ) {
             passed_requirements = false;
           }
-          if(catacombsLevel < config.minecraft.guildRequirements.requirements.catacombsLevel){
+          if (
+            catacombsLevel <
+            config.minecraft.guildRequirements.requirements.catacombsLevel
+          ) {
             passed_requirements = false;
           }
           // MAIN REQS
-          
-          if(config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === "true"){
-            calcNetworth, slayerXP, skillAverage = 0, 0, 0;
 
-            const networthCalculated = await getNetworth(profile.profile, profile.profileData?.banking?.balance || 0, {
-              onlyNetworth: true,
-              museumData: profile.museum,
-            });
-            calcNetworth = (networthCalculated.networth ?? 0);
+          if (
+            config.minecraft.guildRequirements.requirements.masteries
+              .masteriesEnabled === "true"
+          ) {
+            calcNetworth, slayerXP, (skillAverage = 0), 0, 0;
+
+            const networthCalculated = await getNetworth(
+              profile.profile,
+              profile.profileData?.banking?.balance || 0,
+              {
+                onlyNetworth: true,
+                museumData: profile.museum,
+              },
+            );
+            calcNetworth = networthCalculated.networth ?? 0;
 
             const calculatedSkills = getSkills(profile.profile);
 
-            skillAverage = (
+            skillAverage =
               Object.keys(calculatedSkills)
                 .filter((skill) => !["runecrafting", "social"].includes(skill))
                 .map((skill) => calculatedSkills[skill].levelWithProgress || 0)
                 .reduce((a, b) => a + b, 0) /
-              (Object.keys(calculatedSkills).length - 2)
-            );
+              (Object.keys(calculatedSkills).length - 2);
 
             const calculatedSlayers = getSlayer(profile.profile);
             slayerXP = 0;
-            Object.keys(calculatedSlayers).reduce(
-              (acc, slayer) => {
-                slayerXP += calculatedSlayers[slayer].xp ?? 0;
-              }
-            );
-    
+            Object.keys(calculatedSlayers).reduce((acc, slayer) => {
+              slayerXP += calculatedSlayers[slayer].xp ?? 0;
+            });
+
             // MASTERIES
-            if(skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel){
+            if (
+              skyblockLevel <
+              config.minecraft.guildRequirements.requirements.masteries
+                .skyblockLevel
+            ) {
               masteries_failed += 1;
             }
-            if(catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel){
+            if (
+              catacombsLevel <
+              config.minecraft.guildRequirements.requirements.masteries
+                .catacombsLevel
+            ) {
               masteries_failed += 1;
             }
-            if(calcNetworth < config.minecraft.guildRequirements.requirements.masteries.networth){
+            if (
+              calcNetworth <
+              config.minecraft.guildRequirements.requirements.masteries.networth
+            ) {
               masteries_failed += 1;
             }
-            if(skillAverage < config.minecraft.guildRequirements.requirements.masteries.skillAverage){
+            if (
+              skillAverage <
+              config.minecraft.guildRequirements.requirements.masteries
+                .skillAverage
+            ) {
               masteries_failed += 1;
             }
-            if(slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP){
+            if (
+              slayerXP <
+              config.minecraft.guildRequirements.requirements.masteries
+                .slayerEXP
+            ) {
               masteries_failed += 1;
             }
 
-            if(masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed){
+            if (
+              masteries_failed <=
+              config.minecraft.guildRequirements.requirements.masteries
+                .maximumFailed
+            ) {
               masteries_passed = true;
             }
             // MASTERIES
-          }
-          else{
+          } else {
             masteries_passed = true;
           }
 
           skill_requirements = passed_requirements && masteries_passed;
-        }
-        catch (e) {
+        } catch (e) {
           bot.chat(
             `/oc Couldn't check ${username}'s stats. Please, check manually.`,
           );
@@ -172,63 +226,65 @@ class StateHandler extends eventHandler {
         //
 
         const statsEmbed = new EmbedBuilder()
-            .setColor(2067276)
-            .setTitle(`${username} has requested to join the Guild!`)
-            .setDescription(`Info:`)
-            .addFields(
-              {
-                name: "Skyblock Level",
-                value: `\`${skyblockLevel.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "Catacombs Level",
-                value: `\`${catacombsLevel.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "Networth",
-                value: `\`${calcNetworth.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "SA",
-                value: `\`${skillAverage.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "Slayer XP",
-                value: `\`${slayerXP.toLocaleString()}\``,
-                inline: true,
-              },
-              {
-                name: "Passed Skill Requirements",
-                value: skill_requirements ? ":white_check_mark:" : ":x:",
-                inline: true,
-              },
-              {
-                name: "Skykings Flag",
-                value: `\`${skykings_scammer}\``,
-                inline: true,
-              },
-              {
-                name: "Blacklist Flag",
-                value: `\`${blacklisted}\``,
-                inline: true,
-              },
-              {
-                name: "SCF Flag",
-                value: `\`${scf_blacklisted}\``,
-                inline: true,
-              },
-            )
-            .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
-            .setFooter({
-              text: `/help [command] for more information`,
-              iconURL: config.minecraft.API.SCF.logo,
-            });
+          .setColor(2067276)
+          .setTitle(`${username} has requested to join the Guild!`)
+          .setDescription(`Info:`)
+          .addFields(
+            {
+              name: "Skyblock Level",
+              value: `\`${skyblockLevel.toLocaleString()}\``,
+              inline: true,
+            },
+            {
+              name: "Catacombs Level",
+              value: `\`${catacombsLevel.toLocaleString()}\``,
+              inline: true,
+            },
+            {
+              name: "Networth",
+              value: `\`${calcNetworth.toLocaleString()}\``,
+              inline: true,
+            },
+            {
+              name: "SA",
+              value: `\`${skillAverage.toLocaleString()}\``,
+              inline: true,
+            },
+            {
+              name: "Slayer XP",
+              value: `\`${slayerXP.toLocaleString()}\``,
+              inline: true,
+            },
+            {
+              name: "Passed Skill Requirements",
+              value: skill_requirements ? ":white_check_mark:" : ":x:",
+              inline: true,
+            },
+            {
+              name: "Skykings Flag",
+              value: `\`${skykings_scammer}\``,
+              inline: true,
+            },
+            {
+              name: "Blacklist Flag",
+              value: `\`${blacklisted}\``,
+              inline: true,
+            },
+            {
+              name: "SCF Flag",
+              value: `\`${scf_blacklisted}\``,
+              inline: true,
+            },
+          )
+          .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
+          .setFooter({
+            text: `/help [command] for more information`,
+            iconURL: config.minecraft.API.SCF.logo,
+          });
 
-        await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
+        await client.channels.cache
+          .get(`${config.discord.channels.loggingChannel}`)
+          .send({ embeds: [statsEmbed] });
 
         if (
           skill_requirements &&
@@ -237,8 +293,7 @@ class StateHandler extends eventHandler {
           scf_blacklisted !== true
         ) {
           meetRequirements = true;
-        }
-        else {
+        } else {
           if (skykings_scammer || blacklisted || scf_blacklisted) {
             try {
               bot.chat(
@@ -246,7 +301,8 @@ class StateHandler extends eventHandler {
               );
 
               this.minecraft.broadcastHeadedEmbed({
-                message: "Banned player (" + username + ") tried to join the guild.",
+                message:
+                  "Banned player (" + username + ") tried to join the guild.",
                 title: `Banned player`,
                 icon: `https://mc-heads.net/avatar/${username}`,
                 color: 15548997,
@@ -255,18 +311,22 @@ class StateHandler extends eventHandler {
 
               await delay(10000);
 
-              bot.chat(`/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`);
+              bot.chat(
+                `/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`,
+              );
               return;
-            }
-            catch(e){
-              bot.chat(`/oc Something went wrong while trying to kick a banned player...`);
+            } catch (e) {
+              bot.chat(
+                `/oc Something went wrong while trying to kick a banned player...`,
+              );
               return;
             }
           }
         }
 
         bot.chat(
-          `/oc ${username} ${meetRequirements ? "meets" : "Doesn't meet"
+          `/oc ${username} ${
+            meetRequirements ? "meets" : "Doesn't meet"
           } Requirements. SB Level: ${skyblockLevel.toLocaleString()} | Cata Level: ${catacombsLevel.toLocaleString()} | Scammer: ${skykings_scammer.toLocaleString()} | Blacklist: ${blacklisted.toLocaleString()}`,
         );
         await delay(1000);
@@ -281,7 +341,11 @@ class StateHandler extends eventHandler {
 
     if (this.isLoginMessage(message)) {
       if (config.discord.other.joinMessage === true) {
-        const username = message.split(">")[1].trim().split("joined.")[0].trim();
+        const username = message
+          .split(">")[1]
+          .trim()
+          .split("joined.")[0]
+          .trim();
         return this.minecraft.broadcastPlayerToggle({
           fullMessage: colouredMessage,
           username: username,
@@ -312,8 +376,7 @@ class StateHandler extends eventHandler {
         .split(/ +/g)[0];
       try {
         username = username.trim();
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e);
       }
 
@@ -329,32 +392,34 @@ class StateHandler extends eventHandler {
       const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
 
       const statsEmbed = new EmbedBuilder()
-            .setColor(2067276)
-            .setTitle(`${username} has joined the Guild!`)
-            .addFields(
-              {
-                name: "Skykings Flag",
-                value: `\`${skykings_scammer}\``,
-                inline: true,
-              },
-              {
-                name: "Blacklist Flag",
-                value: `\`${blacklisted}\``,
-                inline: true,
-              },
-              {
-                name: "SCF Flag",
-                value: `\`${scf_blacklisted}\``,
-                inline: true,
-              },
-            )
-            .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
-            .setFooter({
-              text: `/help [command] for more information`,
-              iconURL: config.minecraft.API.SCF.logo,
-            });
+        .setColor(2067276)
+        .setTitle(`${username} has joined the Guild!`)
+        .addFields(
+          {
+            name: "Skykings Flag",
+            value: `\`${skykings_scammer}\``,
+            inline: true,
+          },
+          {
+            name: "Blacklist Flag",
+            value: `\`${blacklisted}\``,
+            inline: true,
+          },
+          {
+            name: "SCF Flag",
+            value: `\`${scf_blacklisted}\``,
+            inline: true,
+          },
+        )
+        .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
+        .setFooter({
+          text: `/help [command] for more information`,
+          iconURL: config.minecraft.API.SCF.logo,
+        });
 
-      await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
+      await client.channels.cache
+        .get(`${config.discord.channels.loggingChannel}`)
+        .send({ embeds: [statsEmbed] });
 
       if (
         skykings_scammer === true ||
@@ -369,13 +434,17 @@ class StateHandler extends eventHandler {
           channel: "Logger",
         });
 
-        bot.chat(`/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`);
-        
+        bot.chat(
+          `/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`,
+        );
+
         return;
       }
 
       await delay(1000);
-      let invite_message = config.minecraft.guild.join_message_override ? config.minecraft.guild.join_message : messages.guildJoinMessage;
+      let invite_message = config.minecraft.guild.join_message_override
+        ? config.minecraft.guild.join_message
+        : messages.guildJoinMessage;
 
       bot.chat(
         `/gc ${replaceVariables(invite_message, {
@@ -386,7 +455,9 @@ class StateHandler extends eventHandler {
       if (process.env.notify_enabled === "true") {
         await client.channels.cache
           .get(`${config.discord.channels.loggingChannel}`)
-          .send(`${process.env.notify_content}\n${username} has joined the guild!`);
+          .send(
+            `${process.env.notify_content}\n${username} has joined the guild!`,
+          );
       }
 
       return [
@@ -604,14 +675,16 @@ class StateHandler extends eventHandler {
 
       try {
         if (config.discord.replication.enabled) {
-          replication_client.channels.cache.get(config.discord.replication.channels.guild).send({
-            embeds: [
-              {
-                color: 15548997,
-                description: messages.repeatMessage,
-              },
-            ],
-          });
+          replication_client.channels.cache
+            .get(config.discord.replication.channels.guild)
+            .send({
+              embeds: [
+                {
+                  color: 15548997,
+                  description: messages.repeatMessage,
+                },
+              ],
+            });
         }
       } catch (e) {
         Logger.errorMessage("Failed to broadcast to replication!");
@@ -630,7 +703,8 @@ class StateHandler extends eventHandler {
     if (this.isMuted(message)) {
       const formattedMessage = message.split(" ").slice(1).join(" ");
       this.minecraft.broadcastHeadedEmbed({
-        message: formattedMessage.charAt(0).toUpperCase() + formattedMessage.slice(1),
+        message:
+          formattedMessage.charAt(0).toUpperCase() + formattedMessage.slice(1),
 
         title: `Bot is currently muted.`,
         color: 15548997,
@@ -943,7 +1017,11 @@ class StateHandler extends eventHandler {
         ? /^(?<chatType>§[0-9a-fA-F](Guild|Officer)) > (?<rank>§[0-9a-fA-F](?:\[.*?\])?)?\s*(?<username>[^§\s]+)\s*(?:(?<guildRank>§[0-9a-fA-F](?:\[.*?\])?))?\s*§f: (?<message>.*)/
         : /^(?<chatType>\w+) > (?:(?:\[(?<rank>[^\]]+)\] )?(?:(?<username>\w+)(?: \[(?<guildRank>[^\]]+)\])?: )?)?(?<message>.+)$/;
 
-    const match = (config.discord.other.messageMode === "minecraft" ? colouredMessage : message).match(regex);
+    const match = (
+      config.discord.other.messageMode === "minecraft"
+        ? colouredMessage
+        : message
+    ).match(regex);
 
     if (!match) {
       return;
@@ -961,15 +1039,35 @@ class StateHandler extends eventHandler {
         this.command.handle(player, command, command_channel);
       }
 
-      this.command.handle(match.groups.username, match.groups.message, command_channel);
+      this.command.handle(
+        match.groups.username,
+        match.groups.message,
+        command_channel,
+      );
     }
 
-    this.saveGuildMessage(match.groups.username, config.minecraft.guild.guildId, message);
+    this.saveGuildMessage(
+      match.groups.username,
+      config.minecraft.guild.guildId,
+      message,
+    );
 
-    if ((this.isDiscordMessage(match.groups.message) && match.groups.username === this.bot.username) === false) {
-      const { chatType, rank, username, guildRank = "Member", message } = match.groups;
+    if (
+      (this.isDiscordMessage(match.groups.message) &&
+        match.groups.username === this.bot.username) === false
+    ) {
+      const {
+        chatType,
+        rank,
+        username,
+        guildRank = "Member",
+        message,
+      } = match.groups;
 
-      if (message.includes("replying to") && match.groups.username === this.bot.username) {
+      if (
+        message.includes("replying to") &&
+        match.groups.username === this.bot.username
+      ) {
         return;
       }
 
@@ -986,8 +1084,8 @@ class StateHandler extends eventHandler {
     }
   }
 
-  async saveGuildMessage(username, guild, message=undefined) {
-    if(username == undefined){
+  async saveGuildMessage(username, guild, message = undefined) {
+    if (username == undefined) {
       return;
     }
     let uuid;
@@ -1005,22 +1103,26 @@ class StateHandler extends eventHandler {
       axios.get(
         `https://sky.dssoftware.ru/api.php?method=saveGuildMessage&uuid=${uuid}&source=minecraft&api=${config.minecraft.API.SCF.key}&nick=${username}&guild_id=${guild}&content=${encodeURIComponent(message)}`,
       ),
-    ]).catch((error) => { });
+    ]).catch((error) => {});
 
     return;
   }
 
   isDiscordMessage(message) {
-    const isDiscordMessage = /^(?<username>(?!https?:\/\/)[^\s»:>]+)\s*[»:>]\s*(?<message>.*)/;
+    const isDiscordMessage =
+      /^(?<username>(?!https?:\/\/)[^\s»:>]+)\s*[»:>]\s*(?<message>.*)/;
 
     return isDiscordMessage.test(message);
   }
 
   isCommand(message) {
-    const regex = new RegExp(`^(?<prefix>[${config.minecraft.bot.prefix}-])(?<command>\\S+)(?:\\s+(?<args>.+))?\\s*$`);
+    const regex = new RegExp(
+      `^(?<prefix>[${config.minecraft.bot.prefix}-])(?<command>\\S+)(?:\\s+(?<args>.+))?\\s*$`,
+    );
 
     if (regex.test(message) === false) {
-      const getMessage = /^(?<username>(?!https?:\/\/)[^\s»:>]+)\s*[»:>]\s*(?<message>.*)/;
+      const getMessage =
+        /^(?<username>(?!https?:\/\/)[^\s»:>]+)\s*[»:>]\s*(?<message>.*)/;
 
       const match = message.match(getMessage);
       if (match === null || match.groups.message === undefined) {
@@ -1034,7 +1136,8 @@ class StateHandler extends eventHandler {
   }
 
   getCommandData(message) {
-    const regex = /^(?<player>[^\s»:>\s]+(?:\s+[^\s»:>\s]+)*)\s*[»:>\s]\s*(?<command>.*)/;
+    const regex =
+      /^(?<player>[^\s»:>\s]+(?:\s+[^\s»:>\s]+)*)\s*[»:>\s]\s*(?<command>.*)/;
 
     const match = message.match(regex);
     if (match === null) {
@@ -1066,16 +1169,25 @@ class StateHandler extends eventHandler {
 
   isAlreadyBlacklistedMessage(message) {
     return (
-      message.includes(`You've already ignored that player! /ignore remove Player to unignore them!`) &&
-      !message.includes(":")
+      message.includes(
+        `You've already ignored that player! /ignore remove Player to unignore them!`,
+      ) && !message.includes(":")
     );
   }
   isBlacklistRemovedMessage(message) {
-    return message.startsWith("Removed") && message.includes("from your ignore list.") && !message.includes(":");
+    return (
+      message.startsWith("Removed") &&
+      message.includes("from your ignore list.") &&
+      !message.includes(":")
+    );
   }
 
   isBlacklistMessage(message) {
-    return message.startsWith("Added") && message.includes("to your ignore list.") && !message.includes(":");
+    return (
+      message.startsWith("Added") &&
+      message.includes("to your ignore list.") &&
+      !message.includes(":")
+    );
   }
 
   isGuildMessage(message) {
@@ -1087,15 +1199,27 @@ class StateHandler extends eventHandler {
   }
 
   isGuildQuestCompletion(message) {
-    return message.includes("GUILD QUEST TIER ") && message.includes("COMPLETED") && !message.includes(":");
+    return (
+      message.includes("GUILD QUEST TIER ") &&
+      message.includes("COMPLETED") &&
+      !message.includes(":")
+    );
   }
 
   isLoginMessage(message) {
-    return message.startsWith("Guild >") && message.endsWith("joined.") && !message.includes(":");
+    return (
+      message.startsWith("Guild >") &&
+      message.endsWith("joined.") &&
+      !message.includes(":")
+    );
   }
 
   isLogoutMessage(message) {
-    return message.startsWith("Guild >") && message.endsWith("left.") && !message.includes(":");
+    return (
+      message.startsWith("Guild >") &&
+      message.endsWith("left.") &&
+      !message.includes(":")
+    );
   }
 
   isJoinMessage(message) {
@@ -1107,11 +1231,16 @@ class StateHandler extends eventHandler {
   }
 
   isKickMessage(message) {
-    return message.includes("was kicked from the guild by") && !message.includes(":");
+    return (
+      message.includes("was kicked from the guild by") && !message.includes(":")
+    );
   }
 
   isPartyMessage(message) {
-    return message.includes("has invited you to join their party!") && !message.includes(":");
+    return (
+      message.includes("has invited you to join their party!") &&
+      !message.includes(":")
+    );
   }
 
   isPromotionMessage(message) {
@@ -1127,7 +1256,9 @@ class StateHandler extends eventHandler {
   }
 
   isBlockedMessage(message) {
-    return message.includes("We blocked your comment") && !message.includes(":");
+    return (
+      message.includes("We blocked your comment") && !message.includes(":")
+    );
   }
 
   isRepeatMessage(message) {
@@ -1141,13 +1272,17 @@ class StateHandler extends eventHandler {
         message.includes(
           "I'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error.",
         ) ||
-        message.includes("You cannot mute a guild member with a higher guild rank!") ||
+        message.includes(
+          "You cannot mute a guild member with a higher guild rank!",
+        ) ||
         message.includes("You cannot kick this player!") ||
         message.includes("You can only promote up to your own rank!") ||
         message.includes("You cannot mute yourself from the guild!") ||
         message.includes("is the guild master so can't be demoted!") ||
         message.includes("is the guild master so can't be promoted anymore!") ||
-        message.includes("You do not have permission to kick people from the guild!")) &&
+        message.includes(
+          "You do not have permission to kick people from the guild!",
+        )) &&
       !message.includes(":")
     );
   }
@@ -1167,7 +1302,9 @@ class StateHandler extends eventHandler {
   isOfflineInvite(message) {
     return (
       message.includes("You sent an offline invite to") &&
-      message.includes("They will have 5 minutes to accept once they come online!") &&
+      message.includes(
+        "They will have 5 minutes to accept once they come online!",
+      ) &&
       !message.includes(":")
     );
   }
@@ -1176,14 +1313,19 @@ class StateHandler extends eventHandler {
     return (
       (message.includes("is already in another guild!") ||
         message.includes("You cannot invite this player to your guild!") ||
-        (message.includes("You've already invited") && message.includes("to your guild! Wait for them to accept!")) ||
+        (message.includes("You've already invited") &&
+          message.includes("to your guild! Wait for them to accept!")) ||
         message.includes("is already in your guild!")) &&
       !message.includes(":")
     );
   }
 
   isUserMuteMessage(message) {
-    return message.includes("has muted") && message.includes("for") && !message.includes(":");
+    return (
+      message.includes("has muted") &&
+      message.includes("for") &&
+      !message.includes(":")
+    );
   }
 
   isUserUnmuteMessage(message) {
@@ -1191,23 +1333,36 @@ class StateHandler extends eventHandler {
   }
 
   isCannotMuteMoreThanOneMonth(message) {
-    return message.includes("You cannot mute someone for more than one month") && !message.includes(":");
+    return (
+      message.includes("You cannot mute someone for more than one month") &&
+      !message.includes(":")
+    );
   }
 
   isGuildMuteMessage(message) {
-    return message.includes("has muted the guild chat for") && !message.includes(":");
+    return (
+      message.includes("has muted the guild chat for") && !message.includes(":")
+    );
   }
 
   isGuildUnmuteMessage(message) {
-    return message.includes("has unmuted the guild chat!") && !message.includes(":");
+    return (
+      message.includes("has unmuted the guild chat!") && !message.includes(":")
+    );
   }
 
   isSetrankFail(message) {
-    return message.includes("I couldn't find a rank by the name of ") && !message.includes(":");
+    return (
+      message.includes("I couldn't find a rank by the name of ") &&
+      !message.includes(":")
+    );
   }
 
   isAlreadyMuted(message) {
-    return message.includes("This player is already muted!") && !message.includes(":");
+    return (
+      message.includes("This player is already muted!") &&
+      !message.includes(":")
+    );
   }
 
   isNotInGuild(message) {
@@ -1215,23 +1370,38 @@ class StateHandler extends eventHandler {
   }
 
   isLowestRank(message) {
-    return message.includes("is already the lowest rank you've created!") && !message.includes(":");
+    return (
+      message.includes("is already the lowest rank you've created!") &&
+      !message.includes(":")
+    );
   }
 
   isAlreadyHasRank(message) {
-    return message.includes("They already have that rank!") && !message.includes(":");
+    return (
+      message.includes("They already have that rank!") && !message.includes(":")
+    );
   }
 
   isLobbyJoinMessage(message) {
-    return (message.endsWith(" the lobby!") || message.endsWith(" the lobby! <<<")) && message.includes("[MVP+");
+    return (
+      (message.endsWith(" the lobby!") ||
+        message.endsWith(" the lobby! <<<")) &&
+      message.includes("[MVP+")
+    );
   }
 
   isTooFast(message) {
-    return message.includes("You are sending commands too fast! Please slow down.") && !message.includes(":");
+    return (
+      message.includes(
+        "You are sending commands too fast! Please slow down.",
+      ) && !message.includes(":")
+    );
   }
 
   isMuted(message) {
-    return message.includes("Your mute will expire in") && !message.includes(":");
+    return (
+      message.includes("Your mute will expire in") && !message.includes(":")
+    );
   }
 
   isPlayerNotFound(message) {
@@ -1239,7 +1409,9 @@ class StateHandler extends eventHandler {
   }
 
   isGuildLevelUpMessage(message) {
-    return message.includes("The guild has reached Level") && !message.includes(":");
+    return (
+      message.includes("The guild has reached Level") && !message.includes(":")
+    );
   }
 
   minecraftChatColorToHex(color) {

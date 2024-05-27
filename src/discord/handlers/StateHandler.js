@@ -7,7 +7,9 @@ class StateHandler {
   }
 
   async onReady() {
-    Logger.discordMessage("Client ready, logged in as " + this.discord.client.user.tag);
+    Logger.discordMessage(
+      "Client ready, logged in as " + this.discord.client.user.tag,
+    );
     this.discord.client.user.setPresence({
       activities: [{ name: `/help | by @artemdev` }],
     });
@@ -50,13 +52,21 @@ class StateHandler {
 
     switch (type.replace(/§[0-9a-fk-or]/g, "").trim()) {
       case "Guild":
-        return this.discord.client.channels.cache.get(config.discord.channels.guildChatChannel);
+        return this.discord.client.channels.cache.get(
+          config.discord.channels.guildChatChannel,
+        );
       case "Officer":
-        return this.discord.client.channels.cache.get(config.discord.channels.officerChannel);
+        return this.discord.client.channels.cache.get(
+          config.discord.channels.officerChannel,
+        );
       case "Logger":
-        return this.discord.client.channels.cache.get(config.discord.channels.loggingChannel);
+        return this.discord.client.channels.cache.get(
+          config.discord.channels.loggingChannel,
+        );
       default:
-        return this.discord.client.channels.cache.get(config.discord.channels.debugChannel);
+        return this.discord.client.channels.cache.get(
+          config.discord.channels.debugChannel,
+        );
     }
   }
 }

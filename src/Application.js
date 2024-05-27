@@ -8,15 +8,14 @@ const axios = require("axios");
 const fs = require("fs").promises;
 
 const getGitId = async () => {
-  try{
-    const gitId = await fs.readFile('.git/HEAD', 'utf8');
-    if (gitId.indexOf(':') === -1) {
+  try {
+    const gitId = await fs.readFile(".git/HEAD", "utf8");
+    if (gitId.indexOf(":") === -1) {
       return gitId;
     }
-    const refPath = '.git/' + gitId.substring(5).trim();
-    return await fs.readFile(refPath, 'utf8');
-  }
-  catch(e){
+    const refPath = ".git/" + gitId.substring(5).trim();
+    return await fs.readFile(refPath, "utf8");
+  } catch (e) {
     return "N/A";
   }
 };
@@ -51,12 +50,12 @@ class Application {
 
     let fail_checks = 0;
 
-    async function sendStatus(){
+    async function sendStatus() {
       function isBotOnline() {
         if (bot === undefined || bot._client.chat === undefined) {
           return 0;
         }
-      
+
         return 1;
       }
 
@@ -64,12 +63,13 @@ class Application {
 
       let commit_version = ((await getGitId()) ?? "N/A").slice(0, 7);
 
-      if(botConnected == 0){
+      if (botConnected == 0) {
         fail_checks++;
-        Logger.warnMessage(`Bot isn't connected to Hypixel. Error ${fail_checks}/5.`);
-      }
-      else{
-        if(fail_checks != 0){
+        Logger.warnMessage(
+          `Bot isn't connected to Hypixel. Error ${fail_checks}/5.`,
+        );
+      } else {
+        if (fail_checks != 0) {
           Logger.warnMessage(`Reset failchecks.`);
         }
         fail_checks = 0;
@@ -78,20 +78,22 @@ class Application {
       let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
 
       axios
-      .get(statusURL)
-      .then(function (response) {
-        // Successfully sent bot status.
-      })
-      .catch(function (error) {
-        // Failed to send bot status...
-      });
+        .get(statusURL)
+        .then(function (response) {
+          // Successfully sent bot status.
+        })
+        .catch(function (error) {
+          // Failed to send bot status...
+        });
 
-      if(fail_checks >= 5){
-        Logger.errorMessage(`Bot will reboot, as it failed the max amount of failchecks (5/5).`);
+      if (fail_checks >= 5) {
+        Logger.errorMessage(
+          `Bot will reboot, as it failed the max amount of failchecks (5/5).`,
+        );
         process.exit(124);
       }
     }
-    
+
     sendStatus();
     setInterval(sendStatus, 30000);
   }

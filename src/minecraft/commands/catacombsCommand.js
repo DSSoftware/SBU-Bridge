@@ -1,7 +1,12 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const getDungeons = require("../../../API/stats/dungeons.js");
-const { formatNumber, formatUsername } = require("../../contracts/helperFunctions.js");
-const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js");
+const {
+  formatNumber,
+  formatUsername,
+} = require("../../contracts/helperFunctions.js");
+const {
+  getLatestProfile,
+} = require("../../../API/functions/getLatestProfile.js");
 
 class CatacombsCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -38,14 +43,19 @@ class CatacombsCommand extends minecraftCommand {
         .flatMap((floors) => Object.values(floors || {}))
         .reduce((total, floor) => total + (floor.completions || 0), 0);
 
-      const level = (dungeons.catacombs.skill.levelWithProgress || 0).toFixed(1);
+      const level = (dungeons.catacombs.skill.levelWithProgress || 0).toFixed(
+        1,
+      );
       const classAvrg = (
-        Object.values(dungeons.classes).reduce((total, { levelWithProgress = 0 }) => total + levelWithProgress, 0) /
-        Object.keys(dungeons.classes).length
+        Object.values(dungeons.classes).reduce(
+          (total, { levelWithProgress = 0 }) => total + levelWithProgress,
+          0,
+        ) / Object.keys(dungeons.classes).length
       ).toFixed(1);
 
       const SRValue = dungeons.secrets_found / completions;
-      const SR = isNaN(SRValue) || SRValue === Infinity ? 0 : SRValue.toFixed(2);
+      const SR =
+        isNaN(SRValue) || SRValue === Infinity ? 0 : SRValue.toFixed(2);
 
       this.send(
         `/${channel} ${username}'s Catacombs: ${level} | Class Average: ${classAvrg} (${

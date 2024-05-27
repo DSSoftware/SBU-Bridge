@@ -27,13 +27,17 @@ module.exports = {
       ),
     ]).catch((error) => {
       console.log(error);
-      throw new HypixelDiscordChatBridgeError("Failed to connect to API. Let admins know, or try again later.");
+      throw new HypixelDiscordChatBridgeError(
+        "Failed to connect to API. Let admins know, or try again later.",
+      );
     });
 
     let result = data[0].data ?? {};
 
     if ((result?.response ?? "FAULT") == "FAULT") {
-      throw new HypixelDiscordChatBridgeError(result?.info ?? "Failed to connect to API.");
+      throw new HypixelDiscordChatBridgeError(
+        result?.info ?? "Failed to connect to API.",
+      );
     }
 
     const embed = new EmbedBuilder()

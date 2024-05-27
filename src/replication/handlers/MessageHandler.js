@@ -33,12 +33,17 @@ class MessageHandler {
       let uuid = player_info?.data?.uuid;
 
       let hypixel_info = await Promise.all([
-        axios.get(`https://api.hypixel.net/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`),
+        axios.get(
+          `https://api.hypixel.net/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`,
+        ),
       ]).catch((error) => {});
 
       hypixel_info = hypixel_info?.[0]?.data ?? {};
 
-      if (!hypixel_info?.success || hypixel_info?.player?.displayname == undefined) {
+      if (
+        !hypixel_info?.success ||
+        hypixel_info?.player?.displayname == undefined
+      ) {
         return response;
       }
 
@@ -46,7 +51,9 @@ class MessageHandler {
       response.nick = hypixel_info?.player?.displayname;
 
       let guild_info = await Promise.all([
-        axios.get(`https://api.hypixel.net/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`),
+        axios.get(
+          `https://api.hypixel.net/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`,
+        ),
       ]).catch((error) => {});
 
       guild_info = guild_info?.[0]?.data ?? {};
@@ -82,7 +89,10 @@ class MessageHandler {
 
   async onMessage(message) {
     try {
-      if (message.author.id === replication_client.user.id || !this.shouldBroadcastMessage(message)) {
+      if (
+        message.author.id === replication_client.user.id ||
+        !this.shouldBroadcastMessage(message)
+      ) {
         return;
       }
 
@@ -90,7 +100,7 @@ class MessageHandler {
 
       if (sender_data?.data?.nick == undefined && !message.author.bot) {
         if (message.channel.id == config.discord.replication.channels.officer) {
-          message.react("❌").catch(e => {});
+          message.react("❌").catch((e) => {});
           return;
         }
         replication_client.channels.cache.get(message.channel.id).send({
@@ -99,16 +109,21 @@ class MessageHandler {
             {
               color: 15548997,
               description:
-                "In order to use bridge, please use `/" + `${config.minecraft.bot.replication_prefix}` + "link" + "` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.",
+                "In order to use bridge, please use `/" +
+                `${config.minecraft.bot.replication_prefix}` +
+                "link" +
+                "` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.",
             },
           ],
         });
         return;
       }
 
-      const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
-      if(isBridgeLocked){
-        message.react("❌").catch(e => {});
+      const isBridgeLocked = await scfBridgeLock.checkBridgelock(
+        sender_data?.data?.uuid,
+      );
+      if (isBridgeLocked) {
+        message.react("❌").catch((e) => {});
         return;
       }
 
@@ -127,10 +142,10 @@ class MessageHandler {
         chat = "Officer/Replication";
       }
 
-      if(chat == "Officer/InterDiscord" && message.author.bot){
+      if (chat == "Officer/InterDiscord" && message.author.bot) {
         let parts = content.split("@");
         let identifier = parts.shift();
-        if(identifier == "[OFFICER]"){
+        if (identifier == "[OFFICER]") {
           let player_nick = parts.shift();
           let message = parts.join(" ");
 
@@ -139,7 +154,11 @@ class MessageHandler {
         }
       }
 
-      this.saveGuildMessage(real_username, sender_data?.data?.uuid, sender_data?.data?.guild_id ?? "");
+      this.saveGuildMessage(
+        real_username,
+        sender_data?.data?.uuid,
+        sender_data?.data?.guild_id ?? "",
+      );
 
       const messageData = {
         member: message.member.user,
@@ -151,19 +170,24 @@ class MessageHandler {
         discord: message,
       };
 
-      const images = content.split(" ").filter((line) => line.startsWith("http"));
+      const images = content
+        .split(" ")
+        .filter((line) => line.startsWith("http"));
       for (const attachment of message.attachments.values()) {
         images.push(attachment.url);
       }
 
       if (images.length > 0) {
         for (const attachment of images) {
-          if(!config.minecraft.commands.integrate_images){
+          if (!config.minecraft.commands.integrate_images) {
             break;
           }
           const imgurLink = await uploadImage(attachment);
 
-          messageData.message = messageData.message.replace(attachment, imgurLink.data.link);
+          messageData.message = messageData.message.replace(
+            attachment,
+            imgurLink.data.link,
+          );
 
           if (messageData.message.includes(imgurLink.data.link) === false) {
             messageData.message += ` ${imgurLink.data.link}`;
@@ -196,22 +220,32 @@ class MessageHandler {
 
   async fetchReply(message) {
     try {
-      if (message.reference?.messageId === undefined || message.mentions === undefined) {
+      if (
+        message.reference?.messageId === undefined ||
+        message.mentions === undefined
+      ) {
         return null;
       }
 
-      const reference = await message.channel.messages.fetch(message.reference.messageId);
+      const reference = await message.channel.messages.fetch(
+        message.reference.messageId,
+      );
 
       let mentionedUserName = message.mentions.repliedUser.username;
       let mentionedUserID = message?.mentions?.repliedUser?.id;
       if (mentionedUserID != undefined) {
-        let repliedUserObject = await message.guild.members.cache.get(mentionedUserID);
+        let repliedUserObject =
+          await message.guild.members.cache.get(mentionedUserID);
 
         let sender_data = await this.getSenderData(mentionedUserID);
-        mentionedUserName = sender_data?.data?.nick ?? repliedUserObject?.user?.username;
+        mentionedUserName =
+          sender_data?.data?.nick ?? repliedUserObject?.user?.username;
       }
 
-      if (config.discord.other.messageMode === "bot" && reference.embed !== null) {
+      if (
+        config.discord.other.messageMode === "bot" &&
+        reference.embed !== null
+      ) {
         const name = reference.embeds[0]?.author?.name;
         if (name === undefined) {
           return mentionedUserName;
@@ -220,7 +254,10 @@ class MessageHandler {
         return name;
       }
 
-      if (config.discord.other.messageMode === "minecraft" && reference.attachments !== null) {
+      if (
+        config.discord.other.messageMode === "minecraft" &&
+        reference.attachments !== null
+      ) {
         const name = reference.attachments.values()?.next()?.value?.name;
         if (name === undefined) {
           return mentionedUserName;
@@ -249,7 +286,9 @@ class MessageHandler {
       .split("\n")
       .map((part) => {
         part = part.trim();
-        return part.length === 0 ? "" : part.replace(/@(everyone|here)/gi, "").trim() + " ";
+        return part.length === 0
+          ? ""
+          : part.replace(/@(everyone|here)/gi, "").trim() + " ";
       })
       .join("");
 
@@ -267,7 +306,8 @@ class MessageHandler {
       // Replace <#1072863636596465726> with #💬・guild-chat
       const channelMentionPattern = /<#(\d+)>/g;
       const replaceChannelMention = (match, mentionedChannelId) => {
-        const mentionedChannel = message.guild.channels.cache.get(mentionedChannelId);
+        const mentionedChannel =
+          message.guild.channels.cache.get(mentionedChannelId);
 
         return `#${mentionedChannel.name}`;
       };
@@ -292,8 +332,12 @@ class MessageHandler {
 
   shouldBroadcastMessage(message) {
     const isBot =
-      message.author.bot && config.discord.channels.allowedBots.includes(message.author.id) === false ? true : false;
-    const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0);
+      message.author.bot &&
+      config.discord.channels.allowedBots.includes(message.author.id) === false
+        ? true
+        : false;
+    const isValid =
+      !isBot && (message.content.length > 0 || message?.attachments?.size > 0);
     const validChannelIds = [
       config.discord.replication.channels.guild,
       config.discord.replication.channels.officer,

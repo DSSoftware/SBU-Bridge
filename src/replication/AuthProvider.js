@@ -25,7 +25,7 @@ const ADM_PERMS = {
   mc_promote: true,
   restart: true,
   unmute: true,
-  debug: false
+  debug: false,
 };
 
 const MOD_PERMS = {
@@ -39,7 +39,7 @@ const MOD_PERMS = {
   mc_promote: true,
   restart: true,
   unmute: true,
-  debug: false
+  debug: false,
 };
 
 const DEFAULT_PERMS = {
@@ -53,7 +53,7 @@ const DEFAULT_PERMS = {
   mc_promote: false,
   restart: false,
   unmute: false,
-  debug: false
+  debug: false,
 };
 
 class AuthHandler {
@@ -64,51 +64,51 @@ class AuthHandler {
     let perm_name = "Member";
     let auth_provider = "INNATE";
 
-    config.discord.replication.permissions.mod.forEach(mod_id => {
+    config.discord.replication.permissions.mod.forEach((mod_id) => {
       if (user.roles.cache.has(mod_id)) {
         permission_level = 1;
         perm_name = "Moderator";
         auth_provider = "ROLES";
-  
+
         permissions = MOD_PERMS;
       }
     });
 
-    config.discord.replication.permissions.admin.forEach(admin_id => {
+    config.discord.replication.permissions.admin.forEach((admin_id) => {
       if (user.roles.cache.has(admin_id)) {
         permission_level = 3;
         perm_name = "Administrator";
         auth_provider = "ROLES";
-  
+
         permissions = ADM_PERMS;
       }
     });
 
-    config.discord.replication.permissions.ownerIDs.forEach(owner_id => {
+    config.discord.replication.permissions.ownerIDs.forEach((owner_id) => {
       if (user.id == owner_id) {
         permission_level = 5;
         perm_name = "Guild Owner";
         auth_provider = "INTERNAL";
-  
+
         permissions = GM_PERMS;
       }
     });
 
     try {
-      if(config.minecraft.API.SCF.enabled){
+      if (config.minecraft.API.SCF.enabled) {
         let player_info = await Promise.all([
           axios.get(
             `https://sky.dssoftware.ru/api.php?method=getPermissionsLevel&discord_id=${user.id}&api=${config.minecraft.API.SCF.key}`,
           ),
         ]).catch((error) => {});
-  
+
         player_info = player_info[0]?.data ?? {};
-  
+
         if (player_info?.data?.exists) {
           permission_level = player_info?.data?.permission_level ?? 0;
           perm_name = "Role was assigned via permission command.";
           permissions = player_info?.permissions ?? DEFAULT_PERMS;
-  
+
           auth_provider = "SCF_WEB";
         }
       }
@@ -116,7 +116,7 @@ class AuthHandler {
       console.log("Permission API Down");
     }
 
-    config.discord.replication.permissions.dev.forEach(dev_id => {
+    config.discord.replication.permissions.dev.forEach((dev_id) => {
       if (user.roles.cache.has(dev_id)) {
         permissions.debug = true;
       }

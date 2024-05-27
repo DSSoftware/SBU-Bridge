@@ -9,7 +9,9 @@ module.exports = {
     const uptimeEmbed = new EmbedBuilder()
       .setColor(0x0099ff)
       .setTitle("🕐 Uptime!")
-      .setDescription(`Online since <t:${Math.floor((Date.now() - interaction.client.uptime) / 1000)}:R>`)
+      .setDescription(
+        `Online since <t:${Math.floor((Date.now() - interaction.client.uptime) / 1000)}:R>`,
+      )
       .setFooter({
         text: "/help [command] for more information",
         iconURL: config.minecraft.API.SCF.logo,

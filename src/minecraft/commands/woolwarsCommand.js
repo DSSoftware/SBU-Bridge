@@ -1,7 +1,11 @@
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const { formatNumber } = require("../../contracts/helperFunctions.js");
 const hypixel = require("../../contracts/API/HypixelRebornAPI.js");
-const { getUUID, getUsername, resolveUsernameOrUUID } = require("../../contracts/API/PlayerDBAPI.js");
+const {
+  getUUID,
+  getUsername,
+  resolveUsernameOrUUID,
+} = require("../../contracts/API/PlayerDBAPI.js");
 
 class WoolwarsCommand extends minecraftCommand {
   constructor(minecraft) {
@@ -38,14 +42,24 @@ class WoolwarsCommand extends minecraftCommand {
         throw "This player has never played WoolWars.";
       }
 
-      const { wins = 0, games_played = 0, kills = 0, deaths = 0, blocks_broken = 0, wool_placed = 0 } = woolWars;
-      const experience = response.player?.stats?.WoolGames?.progression?.experience ?? 0;
+      const {
+        wins = 0,
+        games_played = 0,
+        kills = 0,
+        deaths = 0,
+        blocks_broken = 0,
+        wool_placed = 0,
+      } = woolWars;
+      const experience =
+        response.player?.stats?.WoolGames?.progression?.experience ?? 0;
       const level = getWoolWarsStar(experience);
 
       this.send(
         `/${channel} [${Math.floor(level)}✫] ${username}: W: ${formatNumber(wins ?? 0)} | WLR: ${(
           wins / games_played
-        ).toFixed(2)} | KDR: ${(kills / deaths).toFixed(2)} | BB: ${formatNumber(blocks_broken)} | WP: ${formatNumber(
+        ).toFixed(
+          2,
+        )} | KDR: ${(kills / deaths).toFixed(2)} | BB: ${formatNumber(blocks_broken)} | WP: ${formatNumber(
           wool_placed,
         )} | WPP: ${(wool_placed / games_played).toFixed(2)} | WPG: ${(wool_placed / blocks_broken).toFixed(2)}`,
       );
