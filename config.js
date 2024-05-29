@@ -14,9 +14,9 @@ module.exports = {
             normal: true,
             soopy: process.env.soopy == 'true',
             /*
-        true (integrated)   = send image link in the minecraft message
-        false (discrete)    = replace image with text where possible
-      */
+                true (integrated)   = send image link in the minecraft message
+                false (discrete)    = replace image with text where possible
+            */
             integrate_images: false
         },
         guild: {
@@ -165,11 +165,15 @@ module.exports = {
         },
         GCL: {
             // Guild Cross Link Settings
-            enabled: process.env.gcl_enabled,
+            // WARNING! Make sure to add required bridges to config.discord.channels.allowedBots, otherwise it wont work.
+            enabled: process.env.gcl_enabled == "true",
             settings: {
+                console: process.env.gcl_console,
                 channels: {
-                    enabled: false
-                }
+                    guild: process.env.gcl_link_guild == "true",
+                    officer: process.env.gcl_link_officer == "true",
+                },
+                
             }
         },
         commands: {

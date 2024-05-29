@@ -45,6 +45,7 @@ function convertEmployeeLevel(level) {
 
 function prepareRabbits(rabbits) {
     delete rabbits?.collected_eggs;
+    delete rabbits?.collected_locations;
 
     let formatting = {
         COMMON: '§f§lCOMMON',
@@ -197,6 +198,8 @@ class topCommand extends minecraftCommand {
             Lore.push(`§7Rabbit Sis: ${convertEmployeeLevel(employees?.rabbit_sis ?? 0)}`);
             Lore.push(`§7Rabbit Father: ${convertEmployeeLevel(employees?.rabbit_father ?? 0)}`);
             Lore.push(`§7Rabbit Grandma: ${convertEmployeeLevel(employees?.rabbit_grandma ?? 0)}`);
+            Lore.push(`§7Rabbit Uncle: ${convertEmployeeLevel(employees?.rabbit_uncle ?? 0)}`);
+            Lore.push(`§7Rabbit Dog: ${convertEmployeeLevel(employees?.rabbit_dog ?? 0)}`);
             Lore.push(`§f`);
             Lore.push(`§7Upgrades:`);
             Lore.push(`§aRabbit Barn ${barn_capacity}`);
