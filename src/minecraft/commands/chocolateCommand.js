@@ -13,7 +13,8 @@ function convertPrestige(prestige) {
         2: '§9§lII',
         3: '§5§lIII',
         4: '§6§lIV',
-        5: '§d§lV'
+        5: '§d§lV',
+        6: '§b§lVI'
     };
 
     let response = prestiges?.[prestige] ?? '§7Unknown';
@@ -54,6 +55,7 @@ function prepareRabbits(rabbits) {
         EPIC: '§5§lEPIC',
         LEGENDARY: '§6§lLEGENDARY',
         MYTHIC: '§d§lMYTHIC',
+        DIVINE: '§b§lDIVINE',
         UNKNOWN: '§7§lUNKNOWN'
     };
 
@@ -63,7 +65,8 @@ function prepareRabbits(rabbits) {
         RARE: 0,
         EPIC: 0,
         LEGENDARY: 0,
-        MYTHIC: 0
+        MYTHIC: 0,
+        DIVINE: 0,
     };
 
     let rabbits_caught = 0;

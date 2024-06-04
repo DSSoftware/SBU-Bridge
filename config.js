@@ -166,14 +166,13 @@ module.exports = {
         GCL: {
             // Guild Cross Link Settings
             // WARNING! Make sure to add required bridges to config.discord.channels.allowedBots, otherwise it wont work.
-            enabled: process.env.gcl_enabled == "true",
+            enabled: process.env.gcl_enabled == 'true',
             settings: {
                 console: process.env.gcl_console,
                 channels: {
-                    guild: process.env.gcl_link_guild == "true",
-                    officer: process.env.gcl_link_officer == "true",
-                },
-                
+                    guild: process.env.gcl_link_guild == 'true',
+                    officer: process.env.gcl_link_officer == 'true'
+                }
             }
         },
         commands: {

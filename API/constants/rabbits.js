@@ -17,6 +17,7 @@ let common_rabbits = [
     'alfie',
     'alice',
     'almond_amaretto',
+    'alpha',
     'angus',
     'annabelle',
     'archie',
@@ -54,6 +55,7 @@ let common_rabbits = [
     'buttercream_blossom',
     'cadet',
     'callie',
+    'cave',
     'chase',
     'chester',
     'chip',
@@ -65,6 +67,7 @@ let common_rabbits = [
     'copper',
     'cottontail',
     'cricket',
+    'crush',
     'cuddles',
     'cupcake',
     'delboy',
@@ -75,8 +78,10 @@ let common_rabbits = [
     'dulce_drizzle',
     'dusty',
     'ellie',
+    'ember',
     'emerson',
     'espresso_eclair',
+    'eta',
     'fergie',
     'fievel',
     'fluffy',
@@ -102,18 +107,21 @@ let common_rabbits = [
     'hershey',
     'hondo',
     'hopper',
+    'hubby',
     'huck',
     'hugo',
     'humphrey',
     'hunter',
     'iggy',
     'indie',
+    'jade',
     'jake',
     'james',
     'jammer',
     'jasmine',
     'jazmin',
     'jeffery',
+    'jerry',
     'joey',
     'jonah',
     'josephine',
@@ -129,6 +137,7 @@ let common_rabbits = [
     'mickey',
     'miles',
     'milly',
+    'mimi',
     'mochi',
     'molly',
     'mona',
@@ -141,6 +150,7 @@ let common_rabbits = [
     'nibbles',
     'niko',
     'niza',
+    'nu',
     'nutmeg',
     'oletta',
     'oliver',
@@ -154,6 +164,7 @@ let common_rabbits = [
     'peony',
     'petunia',
     'pickles',
+    'picky',
     'pinky',
     'poppy',
     'porter',
@@ -187,9 +198,11 @@ let common_rabbits = [
     'spencer',
     'spot',
     'stanley',
+    'stinky',
     'stuart',
     'suri',
     'tagalong',
+    'tau',
     'teddy',
     'thalai',
     'theo',
@@ -197,9 +210,12 @@ let common_rabbits = [
     'thumper',
     'ticky',
     'tobi',
+    'webb',
     'william',
     'winston',
-    'zack'
+    'woody',
+    'zack',
+    'zea'
 ];
 
 for (let rabbit of common_rabbits) {
@@ -207,17 +223,21 @@ for (let rabbit of common_rabbits) {
 }
 
 let uncommon_rabbits = [
+    'abi',
     'abigail',
     'alexa',
     'alexander',
     'alpaca',
     'amazon',
+    'arachno',
     'ashes',
     'asterix',
+    'average',
     'bambam',
     'bandit',
     'barcode',
     'benji',
+    'beta',
     'bilbo',
     'blossom',
     'blueberry',
@@ -253,6 +273,7 @@ let uncommon_rabbits = [
     'domino',
     'eastwood',
     'ella',
+    'fish_the_rabbit',
     'fitch',
     'flip_flop',
     'forrest',
@@ -265,6 +286,7 @@ let uncommon_rabbits = [
     'honey_hazelnut',
     'hop_a_long',
     'icing_ivy',
+    'inferno',
     'irena',
     'jasmine_jello',
     'jazz',
@@ -273,7 +295,9 @@ let uncommon_rabbits = [
     'leopold',
     'lulu',
     'maybelline',
+    'mediocrity',
     'milo',
+    'modest',
     'morgan',
     'oakley',
     'obelix',
@@ -287,7 +311,9 @@ let uncommon_rabbits = [
     'pillsbury',
     'polka_dot',
     'porsche',
+    'prestige',
     'pretzel',
+    'prudent',
     'quincy',
     'raven',
     'ringo',
@@ -296,14 +322,21 @@ let uncommon_rabbits = [
     'seinfield',
     'snoopy',
     'sprinkles',
+    'squish',
     'stewart',
+    'sven',
     'sweetpea',
     'sylvester',
+    'theta',
     'toby',
     'trixie',
     'una',
+    'upsilon',
+    'void',
     'wadsworth',
-    'waffle'
+    'waffle',
+    'xi',
+    'zombie'
 ];
 
 for (let rabbit of uncommon_rabbits) {
@@ -319,6 +352,7 @@ let rare_rabbits = [
     'blackjack',
     'bugatti',
     'bun_bun',
+    'burst',
     'cajun',
     'caramel',
     'casanova',
@@ -329,12 +363,15 @@ let rare_rabbits = [
     'draco',
     'easter',
     'elvis',
+    'favor',
     'figaro',
     'frodo',
+    'gamma',
     'gremlin',
     'honey',
     'hope',
     'hyde',
+    'iota',
     'jasper',
     'jynx',
     'kiwi_kiss',
@@ -347,6 +384,7 @@ let rare_rabbits = [
     'neptune',
     'nougat_nebula',
     'olympe',
+    'omicron',
     'onyx',
     'orange_obsidian',
     'orlando',
@@ -354,6 +392,7 @@ let rare_rabbits = [
     'peanut',
     'pepper',
     'phantom',
+    'phi',
     'popcorn',
     'pride',
     'pumpkin',
@@ -384,25 +423,32 @@ let epic_rabbits = [
     'alpine',
     'angel',
     'calypso',
+    'chi',
     'comet',
+    'delta',
     'gatsby',
+    'implode',
     'jedi',
+    'kappa',
     'ken',
     'kiera',
     'kodo',
     'merlin',
+    'necron',
     'peppermint_pearl',
+    'pi',
     'prince',
     'punch',
     'quince_quark',
     'rambo',
     'raspberry_ripple',
+    'saga',
     'simba',
     'strawberry_swirl',
     'thor',
     'toffee_tulip',
     'trix',
-    'tubro'
+    'turbo'
 ];
 
 for (let rabbit of epic_rabbits) {
@@ -414,11 +460,18 @@ let legendary_rabbits = [
     'april',
     'atlas',
     'echo',
+    'el_dorado',
+    'epsilon',
+    'extra',
     'general',
     'houdini',
+    'kaeman',
+    'lambda',
     'magic',
     'mystic',
     'nova',
+    'psi',
+    'rho',
     'shadow',
     'solomon',
     'storm',
@@ -433,10 +486,28 @@ for (let rabbit of legendary_rabbits) {
     rabbits[rabbit] = 'LEGENDARY';
 }
 
-let mythic_rabbits = ['dante', 'einstein', 'galaxy', 'king', 'napoleon', 'zest_zephyr', 'zorro'];
+let mythic_rabbits = [
+    'dante',
+    'einstein',
+    'galaxy',
+    'king',
+    'mu',
+    'napoleon',
+    'omega',
+    'sigma',
+    'zest_zephyr',
+    'zeta',
+    'zorro'
+];
 
 for (let rabbit of mythic_rabbits) {
     rabbits[rabbit] = 'MYTHIC';
+}
+
+let divine_rabbits = ['aurora', 'celestia', 'orion', 'starfire', 'vega'];
+
+for (let rabbit of divine_rabbits) {
+    rabbits[rabbit] = 'DIVINE';
 }
 
 module.exports = {
@@ -447,5 +518,6 @@ module.exports = {
     rare: rare_rabbits,
     epic: epic_rabbits,
     legendary: legendary_rabbits,
-    mythic: mythic_rabbits
+    mythic: mythic_rabbits,
+    divine: divine_rabbits
 };
