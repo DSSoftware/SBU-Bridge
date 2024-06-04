@@ -273,7 +273,7 @@ let uncommon_rabbits = [
     'domino',
     'eastwood',
     'ella',
-    'fish_the_rabbit',
+    'fish',
     'fitch',
     'flip_flop',
     'forrest',
