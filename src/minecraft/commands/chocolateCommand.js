@@ -22,6 +22,12 @@ function convertPrestige(prestige) {
 }
 
 function convertEmployeeLevel(level) {
+    if (level >= 220) {
+        return `§7[${level}] §bBoard Member`;
+    }
+    if (level >= 200) {
+        return `§7[${level}] §dExecutive`;
+    }
     if (level >= 175) {
         return `§7[${level}] §6Director`;
     }
