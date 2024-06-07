@@ -25,7 +25,7 @@ class GuildExperienceCommand extends minecraftCommand {
             const uuid = await getUUID(username);
             const guild = await hypixel.getGuild('player', uuid);
 
-            const player = guild.members.find((member) => member.uuid == uuid);
+            const player = (guild?.members ?? {}).find((member) => member.uuid == uuid);
 
             if (player === undefined) {
                 // eslint-disable-next-line no-throw-literal
@@ -33,7 +33,7 @@ class GuildExperienceCommand extends minecraftCommand {
             }
 
             this.send(
-                `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}.`
+                `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}. Guild: ${guild?.name ?? "N/A"} [${guild?.tag}]`
             );
         } catch (error) {
             console.log(error);
