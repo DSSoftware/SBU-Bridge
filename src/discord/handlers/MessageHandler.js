@@ -3,6 +3,7 @@ const { demojify } = require('discord-emoji-converter');
 const config = require('../../../config.js');
 const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
+const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 
 const sender_cache = new Map();
 
@@ -44,7 +45,7 @@ class MessageHandler {
             }
 
             response.uuid = player_info?.data?.uuid;
-            response.nick = hypixel_info?.player?.displayname;
+            response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
 
             let guild_info = await Promise.all([
                 axios.get(`https://api.hypixel.net/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)

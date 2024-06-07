@@ -92,8 +92,8 @@ async function getUUID(username, full = false) {
 
 async function getUsername(uuid) {
     try {
-        const { data } = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
-        return data.name;
+        const { data } = await axios.get(`https://mojang.dssoftware.ru/?uuid=${uuid}`);
+        return data.name ?? "N/A";
     } catch (error) {
         console.log(error);
     }
