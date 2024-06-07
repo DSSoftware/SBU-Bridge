@@ -33,7 +33,7 @@ class GuildExperienceCommand extends minecraftCommand {
             }
 
             this.send(
-                `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}. Guild: ${guild?.name ?? "N/A"} [${guild?.tag}]`
+                `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}. Guild: "${guild?.name ?? "N/A"}"`
             );
         } catch (error) {
             console.log(error);
