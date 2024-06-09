@@ -25,7 +25,7 @@ const ADM_PERMS = {
     mc_promote: true,
     restart: true,
     unmute: true,
-    debug: false
+    debug: true
 };
 
 const MOD_PERMS = {
