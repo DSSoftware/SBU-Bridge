@@ -40,7 +40,7 @@ class GuildExperienceCommand extends minecraftCommand {
         } catch (error) {
             console.log(error);
             this.send(
-                `/${channel} ${error
+                `/${channel} [ERROR] ${error
                     .toString()
                     .replace('[hypixel-api-reborn] ', '')
                     .replace('For help join our Discord Server https://discord.gg/NSEBNMM', '')
