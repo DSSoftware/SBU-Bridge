@@ -11,7 +11,8 @@ const GM_PERMS = {
     mute: true,
     mc_promote: true,
     restart: true,
-    unmute: true
+    unmute: true,
+    debug: true
 };
 
 const ADM_PERMS = {
