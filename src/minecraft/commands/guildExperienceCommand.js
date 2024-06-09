@@ -24,7 +24,9 @@ class GuildExperienceCommand extends minecraftCommand {
         try {
             const uuid = await getUUID(username);
             const guild = await hypixel.getGuild('player', uuid);
-
+            if(guild?.members == undefined){
+                throw "Player is not in a guild!";
+            }
             const player = (guild?.members ?? {}).find((member) => member.uuid == uuid);
 
             if (player === undefined) {
