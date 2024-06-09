@@ -18,7 +18,7 @@ async function getLockState(uuid) {
             resolve(false);
         });
 
-        player_banned = player_banned[0]?.data ?? {};
+        player_banned = player_banned?.[0]?.data ?? {};
 
         resolve(player_banned?.data?.locked === true);
     });

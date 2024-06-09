@@ -16,7 +16,7 @@ async function checkBlacklist(uuid) {
             resolve(false);
         });
 
-        player_banned = player_banned[0]?.data ?? {};
+        player_banned = player_banned?.[0]?.data ?? {};
 
         resolve(player_banned.data === true);
     });
