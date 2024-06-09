@@ -102,7 +102,7 @@ class AuthHandler {
                     )
                 ]).catch((error) => {});
 
-                player_info = player_info[0]?.data ?? {};
+                player_info = player_info?.[0]?.data ?? {};
 
                 if (player_info?.data?.exists) {
                     permission_level = player_info?.data?.permission_level ?? 0;
