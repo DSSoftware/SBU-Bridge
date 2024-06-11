@@ -4,7 +4,7 @@ const config = require('../../../config.js');
 const AuthProvider = require('../AuthProvider.js');
 
 module.exports = {
-    name: `${config.minecraft.bot.guild_prefix}` + `massrank`,
+    name: `${config.minecraft.bot.guild_prefix}` + `rank`,
     description: 'Set the users\' rank in bulk.',
     options: [
         {
