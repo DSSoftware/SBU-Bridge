@@ -58,7 +58,7 @@ class topCommand extends minecraftCommand {
             const aps = gexp + 500 * score;
 
             this.send(
-                `/${channel} ${username}'s Activity Points: ${aps} (GEXP: ${gexp}, Score: ${score})`
+                `/${channel} ${username}'s Activity Points: ${aps.toLocaleString()} (GEXP: ${gexp.toLocaleString()}, Score: ${score.toLocaleString()})`
             );
         } catch (error) {
             console.log(error);
