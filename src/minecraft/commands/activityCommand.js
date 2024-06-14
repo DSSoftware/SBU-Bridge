@@ -2,8 +2,7 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const axios = require('axios');
 const config = require('../../../config.js');
-const { renderLore } = require('../../contracts/renderItem.js');
-const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 
 class topCommand extends minecraftCommand {
     constructor(minecraft) {
