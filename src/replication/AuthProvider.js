@@ -95,28 +95,6 @@ class AuthHandler {
             }
         });
 
-        try {
-            if (config.minecraft.API.SCF.enabled) {
-                let player_info = await Promise.all([
-                    axios.get(
-                        `https://sky.dssoftware.ru/api.php?method=getPermissionsLevel&discord_id=${user.id}&api=${config.minecraft.API.SCF.key}`
-                    )
-                ]).catch((error) => {});
-
-                player_info = player_info?.[0]?.data ?? {};
-
-                if (player_info?.data?.exists) {
-                    permission_level = player_info?.data?.permission_level ?? 0;
-                    perm_name = 'Role was assigned via permission command.';
-                    permissions = player_info?.permissions ?? DEFAULT_PERMS;
-
-                    auth_provider = 'SCF_WEB';
-                }
-            }
-        } catch (e) {
-            console.log('Permission API Down');
-        }
-
         config.discord.replication.permissions.dev.forEach((dev_id) => {
             if (user.roles.cache.has(dev_id)) {
                 permissions.debug = true;
