@@ -5,7 +5,6 @@ const Logger = require('./src/Logger.js');
 
 const webhook_url = config.minecraft.API.SCF.fail_webhook;
 
-const notifications_url = `https://sky.dssoftware.ru/api.php?method=getBotState&api=${config.minecraft.API.SCF.key}`;
 const fetch = require('node-fetch');
 
 if (cluster.isPrimary) {
@@ -54,34 +53,17 @@ if (cluster.isPrimary) {
         }
         let requested_state = 1;
 
-        axios
-            .get(notifications_url)
-            .then(function (response) {
-                let new_state = 1;
-                if (response.data.data === 0) {
-                    new_state = 0;
+        if (requested_state === 1) {
+            if (!process_state) {
+                reforkProcess();
+            }
+        } else {
+            if (process_state) {
+                for (const id in cluster.workers) {
+                    cluster.workers[id].kill();
                 }
-
-                requested_state = new_state;
-            })
-            .catch(function (error) {
-                requested_state = 1;
-            })
-            .then(() => {
-                if (requested_state === 1) {
-                    if (!process_state) {
-                        reforkProcess();
-                    }
-                } else {
-                    if (process_state) {
-                        for (const id in cluster.workers) {
-                            cluster.workers[id].kill();
-                        }
-                    }
-                }
-
-                //console.log("Checked state:", requested_state);
-            });
+            }
+        }
     }
 
     checkInstructions();
