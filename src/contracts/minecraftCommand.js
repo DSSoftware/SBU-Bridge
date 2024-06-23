@@ -24,16 +24,10 @@ class minecraftCommand {
             replica_channel = config.discord.replication.channels.guild;
         }
 
-        try {
-            await client.channels.cache.get(followup_channel).send(content);
-        } catch (e) {
-            console.log(e);
-        }
-
         if(!config.minecraft.API.useImgur){
             let files = [];
             for(let file of img_array){
-                files.append({
+                files.push({
                     attachment: file,
                     name: 'commandResponse.png'
                 })
@@ -53,6 +47,12 @@ class minecraftCommand {
             }
             
             return;
+        }
+
+        try {
+            await client.channels.cache.get(followup_channel).send(content);
+        } catch (e) {
+            console.log(e);
         }
 
         try {
