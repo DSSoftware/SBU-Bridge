@@ -34,7 +34,7 @@ class minecraftCommand {
             }
             if(img_array.length != 0){
                 try{
-                    await replication_client.channels.cache.get(followup_channel).send({
+                    await client.channels.cache.get(followup_channel).send({
                         files: files
                     });
                     await replication_client.channels.cache.get(replica_channel).send({
