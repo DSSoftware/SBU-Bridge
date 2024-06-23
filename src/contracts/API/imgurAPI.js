@@ -6,6 +6,13 @@ const imgurClient = new ImgurClient({
 });
 
 async function uploadImage(image) {
+    if(!config.minecraft.API.useImgur){
+        return {
+            data: {
+                link: ''
+            }
+        };
+    }
     const response = await imgurClient.upload({
         image: image
     });
@@ -13,14 +20,7 @@ async function uploadImage(image) {
     if (response.success === false) {
         console.log(response);
         // eslint-disable-next-line no-throw-literal
-        if(config.minecraft.API.useImgur){
-            throw 'An error occured while uploading the image. Please try again later.';
-        }
-        return {
-            data: {
-                link: ''
-            }
-        };
+        throw 'An error occured while uploading the image. Please try again later.';
     }
 
     return response;

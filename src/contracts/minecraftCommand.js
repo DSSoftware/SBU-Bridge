@@ -34,7 +34,7 @@ class minecraftCommand {
             let files = [];
             for(let file of img_array){
                 files.append({
-                    attachment: file.toBuffer(),
+                    attachment: file,
                     name: 'commandResponse.png'
                 })
             }
