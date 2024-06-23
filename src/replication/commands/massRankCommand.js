@@ -9,7 +9,7 @@ module.exports = {
     options: [
         {
             name: 'names',
-            description: 'Minecraft Usernames to kick, separated by spaces',
+            description: 'Minecraft Usernames to set rank of, separated by spaces',
             type: 3,
             required: true
         },
