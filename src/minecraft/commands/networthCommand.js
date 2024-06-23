@@ -59,10 +59,6 @@ class NetWorthCommand extends minecraftCommand {
 
             let banking_data = 'N/A';
 
-            console.log("Members: ", Object.entries(data.profileData?.members ?? {}).length);
-            console.log("Personal: ", data?.v2?.profile?.profile?.bank_account);
-            console.log("Co-op: ", data.profileData?.banking?.balance);
-
             if (Object.entries(data.profileData?.members ?? {}).length == 1) {
                 // No personal bank, just coop (Solo profile)
                 if (data.profileData?.banking?.balance != undefined) {
