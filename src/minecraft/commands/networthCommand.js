@@ -59,7 +59,7 @@ class NetWorthCommand extends minecraftCommand {
 
             let banking_data = 'N/A';
             
-            console.log("Members:", data.profileData);
+            console.log("Members:", Object.entries(data.profileData?.members ?? {}).length);
             console.log("Coop (Big bank):", data.profileData?.banking?.balance);
             console.log("Personal:", data?.v2?.profile?.profile?.bank_account);
 
