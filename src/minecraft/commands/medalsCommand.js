@@ -136,7 +136,7 @@ class MedalsCommand extends minecraftCommand {
 
             if (!config.minecraft.commands.integrate_images) {
                 this.send(
-                    `/${channel} ${username} has ${golds}/10 unique medals and participated in ${Object.entries(contests).length} contests. Full response in Discord.`
+                    `/${channel} ${username} has ${golds}/10 unique GOLD medals and participated in ${Object.entries(contests).length} contests. Full response in Discord.`
                 );
                 this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                 return;
