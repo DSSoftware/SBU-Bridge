@@ -58,6 +58,10 @@ class NetWorthCommand extends minecraftCommand {
             const museum = data.museum ? formatNumber(profile.types.museum?.total ?? 0) : 'N/A';
 
             let banking_data = 'N/A';
+            
+            console.log("Members:", data.profileData?.members?.length);
+            console.log("Coop (Big bank):", data.profileData?.banking?.balance);
+            console.log("Personal:", data?.v2?.profile?.profile?.bank_account);
 
             if (data.profileData?.members?.length == 1) {
                 // No personal bank, just coop (Solo profile)
