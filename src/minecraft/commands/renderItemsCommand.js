@@ -75,7 +75,7 @@ class RenderCommand extends minecraftCommand {
             if (!config.minecraft.commands.integrate_images) {
                 this.send(`/${channel} ${username} is holding [${proper_name}]. Full response in Discord.`);
 
-                this.sendDiscordFollowup(channel, upload.data.link);
+                this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                 return;
             }
 

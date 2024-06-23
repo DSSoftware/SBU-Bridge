@@ -1,4 +1,5 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
+const config = require('../../../config.js');
 
 class HelpCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -12,9 +13,9 @@ class HelpCommand extends minecraftCommand {
 
     onCommand(username, message, channel = 'gc') {
         try {
-            this.send(`/${channel} https://imgur.com/a/u03rJ1v`);
+            this.send(`/${channel} Cannot send help list due to Hypixel limits :( Please run /${config.minecraft.bot.guild_prefix}help in Discord.`);
         } catch (error) {
-            this.send('/${channel} Something went wrong..');
+            this.send(`/${channel} Something went wrong..`);
         }
     }
 }

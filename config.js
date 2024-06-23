@@ -32,6 +32,7 @@ module.exports = {
             skykingsAPIkey: process.env.keys_skykings,
 
             mojang_resolver: false,
+            useImgur: false,
 
             banlist: {
                 enabled: process.env.banlist_enabled == 'true',

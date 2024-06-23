@@ -39,6 +39,7 @@ class EquipmentCommand extends minecraftCommand {
 
             let response = '';
             let images = '';
+            let img_array = [];
             let armor_pieces = '';
 
             for (const piece of Object.values(inventoryData)) {
@@ -52,6 +53,7 @@ class EquipmentCommand extends minecraftCommand {
                 const renderedItem = await renderLore(Name, Lore);
 
                 const upload = await uploadImage(renderedItem);
+                img_array.push(renderedItem);
 
                 const link = upload.data.link;
 
@@ -64,7 +66,7 @@ class EquipmentCommand extends minecraftCommand {
             if (!config.minecraft.commands.integrate_images) {
                 this.send(`/${channel} ${username}'s Equipment: ${armor_pieces}. Full response in Discord.`);
 
-                this.sendDiscordFollowup(channel, images);
+                this.sendDiscordFollowup(channel, images, img_array);
                 return;
             }
 

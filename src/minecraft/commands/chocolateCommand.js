@@ -225,7 +225,7 @@ class topCommand extends minecraftCommand {
                 this.send(
                     `/${channel} ${username} Chocolate Factory: Prestige: ${prestige} | Chocolate: ${formatNumber(chocolate)} (Prestige: ${formatNumber(chocolate_since_prestige)} | All Time: ${formatNumber(total_chocolate)}). Full response in Discord.`
                 );
-                this.sendDiscordFollowup(channel, upload.data.link);
+                this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                 return;
             }
 

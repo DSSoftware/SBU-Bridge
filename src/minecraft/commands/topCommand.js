@@ -33,7 +33,7 @@ class topCommand extends minecraftCommand {
             }
 
             if (this.getArgs(message)[0] == 'weekly') {
-                if (!config.minecraft.commands.integrate_images) {
+                if (!config.minecraft.commands.integrate_images && config.minecraft.API.useImgur) {
                     return this.send(`/${channel} This sub-command was disabled!`);
                 }
                 let top_data = await Promise.all([
@@ -76,6 +76,13 @@ class topCommand extends minecraftCommand {
 
                 const renderedItem = await renderLore(Name, Lore);
                 const upload = await uploadImage(renderedItem);
+
+                if (!config.minecraft.commands.integrate_images) {
+                    this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top was sent in Discord.`);
+    
+                    this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
+                    return;
+                }
 
                 this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top: ${upload.data.link}`);
 

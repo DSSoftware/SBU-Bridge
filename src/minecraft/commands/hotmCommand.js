@@ -210,7 +210,7 @@ class MedalsCommand extends minecraftCommand {
                     `/${channel} ${username} HOTM Level: ${hotm_level_data?.level} (${formatNumber(hotm_exp)} EXP) | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite. Full response in Discord.`
                 );
 
-                this.sendDiscordFollowup(channel, upload.data.link);
+                this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                 return;
             }
 

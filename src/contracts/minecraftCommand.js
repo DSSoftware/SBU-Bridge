@@ -15,7 +15,7 @@ class minecraftCommand {
         return args;
     }
 
-    async sendDiscordFollowup(channel, content) {
+    async sendDiscordFollowup(channel, content, img_array) {
         let followup_channel = config.discord.channels.officerChannel;
         let replica_channel = config.discord.replication.channels.officer;
 
@@ -28,6 +28,31 @@ class minecraftCommand {
             await client.channels.cache.get(followup_channel).send(content);
         } catch (e) {
             console.log(e);
+        }
+
+        if(!config.minecraft.API.useImgur){
+            let files = [];
+            for(let file of img_array){
+                files.append({
+                    attachment: file.toBuffer(),
+                    name: 'commandResponse.png'
+                })
+            }
+            if(img_array.length != 0){
+                try{
+                    await replication_client.channels.cache.get(followup_channel).send({
+                        files: files
+                    });
+                    await replication_client.channels.cache.get(replica_channel).send({
+                        files: files
+                    });
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+            
+            return;
         }
 
         try {

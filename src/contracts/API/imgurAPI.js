@@ -13,7 +13,14 @@ async function uploadImage(image) {
     if (response.success === false) {
         console.log(response);
         // eslint-disable-next-line no-throw-literal
-        throw 'An error occured while uploading the image. Please try again later.';
+        if(config.minecraft.API.useImgur){
+            throw 'An error occured while uploading the image. Please try again later.';
+        }
+        return {
+            data: {
+                link: ''
+            }
+        };
     }
 
     return response;

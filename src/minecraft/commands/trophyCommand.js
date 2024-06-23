@@ -214,7 +214,7 @@ class TrophyFishCommand extends minecraftCommand {
                     `/${channel} ${username}'s Trophy Fish: ${diamonds}/18 DIAMOND | Total catches: ${total_fishes}. Full response in Discord.`
                 );
 
-                this.sendDiscordFollowup(channel, upload.data.link);
+                this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                 return;
             }
 
