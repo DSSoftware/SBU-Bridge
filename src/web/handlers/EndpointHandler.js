@@ -204,6 +204,20 @@ class EndpointHandler {
             });
         });
 
+        web.post('/' + guild + '/setrank', async (req, res) => {
+            if (config.web.endpoints.setrank === false) return;
+            const username = req.body.username;
+            const token = req.body.token;
+            const rank = req.body.rank;
+
+            if (config.minecraft.API.SCF.key !== token) return;
+
+            bot.chat(`/g setrank ${username} ${rank}`);
+            res.send({
+                success: true
+            });
+        });
+
         web.post('/' + guild + '/kick', async (req, res) => {
             if (config.web.endpoints.kick === false) return;
             const username = req.body.username;

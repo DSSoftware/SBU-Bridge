@@ -216,7 +216,8 @@ module.exports = {
         port: process.env.assigned_port,
         endpoints: {
             invite: true,
-            kick: true
+            kick: true,
+            setrank: true
         }
     }
 };
