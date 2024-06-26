@@ -212,7 +212,8 @@ class EndpointHandler {
 
             if (config.minecraft.API.SCF.key !== token) return;
 
-            bot.chat(`/g setrank ${username} ${rank}`);
+            console.log(`[REQUEST] SETRANK ${username} to ${rank}`);
+            //bot.chat(`/g setrank ${username} ${rank}`);
             res.send({
                 success: true
             });
@@ -226,7 +227,8 @@ class EndpointHandler {
 
             if (config.minecraft.API.SCF.key !== token) return;
             let success = false;
-            bot.chat('/g kick ' + username + ' ' + reason);
+            console.log(`[REQUEST] KICK ${username} for ${reason}`);
+            //bot.chat('/g kick ' + username + ' ' + reason);
             success = true;
             if (!success) {
                 res.send({
