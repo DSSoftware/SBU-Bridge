@@ -19,11 +19,21 @@ class EndpointHandler {
         const { web } = this.server;
         const guild = config.minecraft.bot.unique_id;
         web.post('/' + guild + '/invite', async (req, res) => {
-            if (config.web.endpoints.invite === false) return;
+            if (config.web.endpoints.invite === false) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             const username = req.body.username;
             const token = req.body.token;
 
-            if (config.minecraft.API.SCF.key !== token) return;
+            if (config.minecraft.API.SCF.key !== token) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             let success = false;
             const uuid = await getUUID(username);
             const skykings_scammer = await Skykings.lookupUUID(uuid);
@@ -177,12 +187,22 @@ class EndpointHandler {
         });
 
         web.post('/' + guild + '/inviteForce', async (req, res) => {
-            if (config.web.endpoints.invite === false) return;
+            if (config.web.endpoints.invite === false) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             const username = req.body.username;
             const uuid = req.body.uuid;
             const token = req.body.token;
 
-            if (config.minecraft.API.SCF.key !== token) return;
+            if (config.minecraft.API.SCF.key !== token) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             let success = false;
             const skykings_scammer = await Skykings.lookupUUID(uuid);
             const blacklisted = await Blacklist.checkBlacklist(uuid);
@@ -205,14 +225,24 @@ class EndpointHandler {
         });
 
         web.post('/' + guild + '/setrank', async (req, res) => {
-            if (config.web.endpoints.setrank === false) return;
+            if (config.web.endpoints.setrank === false) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             const username = req.body.username;
             const token = req.body.token;
             const rank = req.body.rank;
 
             console.log(`[REQUEST] SETRANK ${username} to ${rank}`);
 
-            if (config.minecraft.API.SCF.key !== token) return;            
+            if (config.minecraft.API.SCF.key !== token) {
+                res.send({
+                    success: false
+                });
+                return;
+            }           
             //bot.chat(`/g setrank ${username} ${rank}`);
             res.send({
                 success: true
@@ -220,13 +250,23 @@ class EndpointHandler {
         });
 
         web.post('/' + guild + '/kick', async (req, res) => {
-            if (config.web.endpoints.kick === false) return;
+            if (config.web.endpoints.kick === false) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             const username = req.body.username;
             const reason = req.body.reason;
             const token = req.body.token;
             console.log(`[REQUEST] KICK ${username} for ${reason}`);
 
-            if (config.minecraft.API.SCF.key !== token) return;
+            if (config.minecraft.API.SCF.key !== token) {
+                res.send({
+                    success: false
+                });
+                return;
+            }
             let success = false;
             //bot.chat('/g kick ' + username + ' ' + reason);
             success = true;
