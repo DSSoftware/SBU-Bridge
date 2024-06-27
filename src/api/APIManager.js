@@ -43,6 +43,8 @@ class APIManager {
                             const username = act_data.username;
                             const reason = act_data.reason;
 
+                            console.log(`[REQUEST] KICK ${username} for ${reason}`);
+
                             //bot.chat('/g kick ' + username + ' ' + reason);
                             completed = true;
                         }
