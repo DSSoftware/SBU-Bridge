@@ -37,24 +37,18 @@ class APIManager {
                         let act_data = action?.data ?? {};
                         let completed = false;
 
-                        console.log(action);
-
                         if (act_type == 'kick') {
                             const username = act_data.username;
                             const reason = act_data.reason;
 
-                            console.log(`[REQUEST] KICK ${username} for ${reason}`);
-
-                            //bot.chat('/g kick ' + username + ' ' + reason);
+                            bot.chat('/g kick ' + username + ' ' + reason);
                             completed = true;
                         }
                         if (act_type == 'setrank') {
                             const username = act_data.username;
                             const rank = act_data.newRank;
 
-                            console.log(`[REQUEST] SETRANK ${username} to ${rank}`);
-
-                            //bot.chat(`/g setrank ${username} ${rank}`);
+                            bot.chat(`/g setrank ${username} ${rank}`);
                             completed = true;
                         }
                         if (act_type == 'invite') {
