@@ -147,6 +147,15 @@ if (cluster.isWorker) {
         });
         process.exit(1);
     });
+    process.on('unhandledRejection', function(err, promise) {
+        console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
+        process.send({
+            event_id: 'exceptionCaught',
+            exception: err,
+            stack: promise
+        });
+        process.exit(1);
+    });
     const app = require('./src/Application.js');
 
     ('use strict');
