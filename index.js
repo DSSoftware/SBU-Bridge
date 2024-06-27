@@ -151,8 +151,8 @@ if (cluster.isWorker) {
         console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
         process.send({
             event_id: 'exceptionCaught',
-            exception: err,
-            stack: promise
+            exception: "Unhandled rejection. Check logs.",
+            stack: "Cannot fit rejection message here, check logs."
         });
         process.exit(1);
     });
