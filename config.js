@@ -211,13 +211,8 @@ module.exports = {
             autoLimbo: true
         }
     },
-    web: {
+    longpoll: {
         enabled: true,
-        port: process.env.assigned_port,
-        endpoints: {
-            invite: true,
-            kick: true,
-            setrank: true
-        }
+        provider: "https://sky.dssoftware.ru/longpoll/"
     }
 };

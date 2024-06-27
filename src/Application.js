@@ -1,6 +1,6 @@
 const DiscordManager = require('./discord/DiscordManager.js');
 const MinecraftManager = require('./minecraft/MinecraftManager.js');
-const webManager = require('./web/WebsiteManager.js');
+const apiManager = require('./api/APIManager.js');
 const ReplicationManager = require('./replication/ReplicationManager.js');
 const Logger = require('./Logger.js');
 const config = require('../config.js');
@@ -24,7 +24,7 @@ class Application {
     async register() {
         this.discord = new DiscordManager(this);
         this.minecraft = new MinecraftManager(this);
-        this.web = new webManager(this);
+        this.api = new apiManager(this);
 
         this.discord.setBridge(this.minecraft);
         this.minecraft.setBridge(this.discord);
@@ -43,7 +43,7 @@ class Application {
     async connect() {
         this.discord.connect();
         this.minecraft.connect();
-        this.web.connect();
+        this.api.startLongpoll();
         if (config.discord.replication.enabled) {
             this.replication.connect();
         }
