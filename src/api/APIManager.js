@@ -37,6 +37,8 @@ class APIManager {
                         let act_data = action?.data ?? {};
                         let completed = false;
 
+                        console.log(action);
+
                         if (act_type == 'kick') {
                             const username = act_data.username;
                             const reason = act_data.reason;
