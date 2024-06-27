@@ -210,9 +210,9 @@ class EndpointHandler {
             const token = req.body.token;
             const rank = req.body.rank;
 
-            if (config.minecraft.API.SCF.key !== token) return;
-
             console.log(`[REQUEST] SETRANK ${username} to ${rank}`);
+
+            if (config.minecraft.API.SCF.key !== token) return;            
             //bot.chat(`/g setrank ${username} ${rank}`);
             res.send({
                 success: true
@@ -224,10 +224,10 @@ class EndpointHandler {
             const username = req.body.username;
             const reason = req.body.reason;
             const token = req.body.token;
+            console.log(`[REQUEST] KICK ${username} for ${reason}`);
 
             if (config.minecraft.API.SCF.key !== token) return;
             let success = false;
-            console.log(`[REQUEST] KICK ${username} for ${reason}`);
             //bot.chat('/g kick ' + username + ' ' + reason);
             success = true;
             if (!success) {
