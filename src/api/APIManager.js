@@ -13,7 +13,7 @@ class APIManager {
                 return;
             }
 
-            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF}`;
+            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF.key}`;
 
             isActionRunning = true;
 
