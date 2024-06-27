@@ -246,7 +246,7 @@ class APIManager {
             }
 
             isActionRunning = false;
-        }, 5000);
+        }, 10000);
     }
 }
 
