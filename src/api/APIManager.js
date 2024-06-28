@@ -230,6 +230,7 @@ class APIManager {
                             let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
                             await axios.get(confirm_url);
                         }
+                        await new Promise(resolve => setTimeout(resolve, 500));
                     } catch (e) {
                         console.log(action);
                         console.log(e);
