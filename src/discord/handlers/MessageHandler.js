@@ -88,33 +88,35 @@ class MessageHandler {
                 return;
             }
 
-            let sender_data = await this.getSenderData(message.author.id);
+            if(config.minecraft.API.SCF.enabled){
+                let sender_data = await this.getSenderData(message.author.id);
 
-            if (sender_data?.data?.nick == undefined && !message.author.bot) {
-                if (message.channel.id == config.discord.channels.officerChannel) {
+                if (sender_data?.data?.nick == undefined && !message.author.bot) {
+                    if (message.channel.id == config.discord.channels.officerChannel) {
+                        message.react('❌').catch((e) => {});
+                        return;
+                    }
+                    client.channels.cache.get(message.channel.id).send({
+                        content: `<@${message.author.id}>`,
+                        embeds: [
+                            {
+                                color: 15548997,
+                                description:
+                                    'In order to use bridge, please use `' +
+                                    `/${config.minecraft.bot.guild_prefix}` +
+                                    'link' +
+                                    '` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.'
+                            }
+                        ]
+                    });
+                    return;
+                }
+
+                const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
+                if (isBridgeLocked) {
                     message.react('❌').catch((e) => {});
                     return;
                 }
-                client.channels.cache.get(message.channel.id).send({
-                    content: `<@${message.author.id}>`,
-                    embeds: [
-                        {
-                            color: 15548997,
-                            description:
-                                'In order to use bridge, please use `' +
-                                `/${config.minecraft.bot.guild_prefix}` +
-                                'link' +
-                                '` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.'
-                        }
-                    ]
-                });
-                return;
-            }
-
-            const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
-            if (isBridgeLocked) {
-                message.react('❌').catch((e) => {});
-                return;
             }
 
             let real_username = sender_data?.data?.nick ?? message.author.username;
