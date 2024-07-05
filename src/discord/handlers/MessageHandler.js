@@ -88,6 +88,8 @@ class MessageHandler {
                 return;
             }
 
+            let sender_data = undefined;
+
             if(config.minecraft.API.SCF.enabled){
                 let sender_data = await this.getSenderData(message.author.id);
 
