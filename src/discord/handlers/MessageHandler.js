@@ -121,6 +121,8 @@ class MessageHandler {
                 }
             }
 
+            console.log(message.author);
+
             let real_username = sender_data?.data?.nick ?? (message.author.nickname ?? message.author.username);
 
             let content = this.stripDiscordContent(message).trim();
