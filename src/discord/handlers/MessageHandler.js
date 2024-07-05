@@ -121,7 +121,7 @@ class MessageHandler {
                 }
             }
 
-            console.log(message.author);
+            console.log(message);
 
             let real_username = sender_data?.data?.nick ?? (message.author.nickname ?? message.author.username);
 
