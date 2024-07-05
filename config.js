@@ -31,7 +31,7 @@ module.exports = {
             imgurAPIkey: process.env.keys_imgur,
             skykingsAPIkey: process.env.keys_skykings,
 
-            mojang_resolver: false,
+            mojang_resolver: true,
             useImgur: false,
 
             banlist: {
