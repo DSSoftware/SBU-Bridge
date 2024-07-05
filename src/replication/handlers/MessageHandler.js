@@ -120,7 +120,7 @@ class MessageHandler {
                 }
             }
 
-            let real_username = sender_data?.data?.nick ?? message.author.username;
+            let real_username = sender_data?.data?.nick ?? (message.author.nickname ?? message.author.username);
 
             let content = this.stripDiscordContent(message).trim();
             if (content.length === 0 && message?.attachments?.size == 0) {
