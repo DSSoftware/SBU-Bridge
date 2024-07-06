@@ -31,7 +31,7 @@ module.exports = {
             imgurAPIkey: process.env.keys_imgur,
             skykingsAPIkey: process.env.keys_skykings,
 
-            mojang_resolver: true,
+            mojang_resolver: false,
             useImgur: false,
 
             banlist: {
@@ -212,7 +212,7 @@ module.exports = {
         }
     },
     longpoll: {
-        enabled: false,
+        enabled: true,
         provider: "https://sky.dssoftware.ru/longpoll/"
     }
 };
