@@ -212,7 +212,7 @@ module.exports = {
         }
     },
     longpoll: {
-        enabled: true,
+        enabled: false,
         provider: "https://sky.dssoftware.ru/longpoll/"
     }
 };
