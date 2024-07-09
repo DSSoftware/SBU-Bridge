@@ -1,5 +1,15 @@
 require('dotenv').config();
 
+const standaloneOverride = false;
+const isStandalone = (process.env.standalone == 'true') || standaloneOverride;
+
+/*
+    Setting bridge to STANDALONE mode means that it will not use any of the
+    custom features, such as Cached Mojang Resolver or Player Linking.
+
+    Standalone override FORCES standalone mode if not set in config
+*/
+
 module.exports = {
     minecraft: {
         bot: {
@@ -31,7 +41,7 @@ module.exports = {
             imgurAPIkey: process.env.keys_imgur,
             skykingsAPIkey: process.env.keys_skykings,
 
-            mojang_resolver: false,
+            mojang_resolver: isStandalone,
             useImgur: false,
 
             banlist: {
@@ -41,7 +51,7 @@ module.exports = {
             },
 
             SCF: {
-                enabled: process.env.scf_enabled == 'true',
+                enabled: (process.env.scf_enabled === 'true') & (!isStandalone),
                 key: process.env.scf_api,
                 fail_webhook: process.env.scf_fail_webhook,
                 logo: process.env.scf_logo
@@ -215,7 +225,7 @@ module.exports = {
         }
     },
     longpoll: {
-        enabled: true,
+        enabled: true & (!isStandalone),
         provider: "https://sky.dssoftware.ru/longpoll/"
     }
 };
