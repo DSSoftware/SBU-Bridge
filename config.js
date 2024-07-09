@@ -79,7 +79,8 @@ module.exports = {
                 NEW_YEAR_CELEBRATION: true,
                 SEASON_OF_JERRY: true,
                 SPOOKY_FESTIVAL: true,
-                TRAVELING_ZOO: true
+                TRAVELING_ZOO: true,
+                HOPPITY_HUNT: true
             },
             customTime: {
                 3: ['BANK_INTEREST', 'DARK_AUCTION', 'JACOBS_CONTEST'],
@@ -92,7 +93,8 @@ module.exports = {
                     'NEW_YEAR_CELEBRATION',
                     'SEASON_OF_JERRY',
                     'TRAVELING_ZOO',
-                    'SPOOKY_FESTIVAL'
+                    'SPOOKY_FESTIVAL',
+                    'HOPPITY_HUNT'
                 ],
                 30: [
                     'BANK_INTEREST',
@@ -106,7 +108,8 @@ module.exports = {
                     'NEW_YEAR_CELEBRATION',
                     'SEASON_OF_JERRY',
                     'TRAVELING_ZOO',
-                    'SPOOKY_FESTIVAL'
+                    'SPOOKY_FESTIVAL',
+                    'HOPPITY_HUNT'
                 ]
             }
         },
