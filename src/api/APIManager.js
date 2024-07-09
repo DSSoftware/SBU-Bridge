@@ -17,7 +17,7 @@ let isActionRunning = false;
 
 class APIManager {
     startLongpoll() {
-        if (config.longpoll.enabled === false) return;
+        if (!config.longpoll.enabled) return;
 
         setInterval(async () => {
             if (isActionRunning) {
