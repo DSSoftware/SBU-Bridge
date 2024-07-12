@@ -28,7 +28,7 @@ async function getUUID(username, full = false) {
             return data.id;
         }
 
-        const response = await SCFAPI.SCFgetUUID(username);
+        const response = await SCFAPI.getUUID(username);
 
         let uuid = response.id;
         let ign = response.name;

@@ -42,12 +42,12 @@ function disableFeature(feature) {
 
     process.send({
         event_id: 'exceptionCaught',
-        exception: "Service disabled",
+        exception: 'Service disabled',
         stack: `Disabled service ${feature} due to health check.`
     });
 }
 
-function enableFeature(feature){
+function enableFeature(feature) {
     Logger.warnMessage(`[FEATURES] Enabled feature ${feature}.`);
     status[feature] = {
         status: true,
@@ -55,14 +55,14 @@ function enableFeature(feature){
     };
 }
 
-function getFeatureStatus(feature){
+function getFeatureStatus(feature) {
     const data = status?.[feature];
-    if(data.status){
+    if (data.status) {
         return 'OPERATIONAL';
     }
     if (data.updated + 600000 > Date.now()) {
-        let status = config.behavior?.[feature] ?? "REPLACE";
-        if(status == "FATAL"){
+        let status = config.behavior?.[feature] ?? 'REPLACE';
+        if (status == 'FATAL') {
             Logger.errorMessage(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
             process.exit(123);
         }
@@ -72,7 +72,7 @@ function getFeatureStatus(feature){
     return 'OPERATIONAL';
 }
 
-async function SCFCheckBlacklist(uuid){
+async function SCFCheckBlacklist(uuid) {
     return new Promise(async (resolve, reject) => {
         if (!config.minecraft.API.SCF.enabled) {
             resolve(false);
@@ -81,7 +81,7 @@ async function SCFCheckBlacklist(uuid){
 
         let isBanned = false;
 
-        if(getFeatureStatus('Blacklist') == "OPERATIONAL"){
+        if (getFeatureStatus('Blacklist') == 'OPERATIONAL') {
             let player_banned = await Promise.all([
                 axios.get(
                     `https://sky.dssoftware.ru/api.php?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
@@ -98,42 +98,97 @@ async function SCFCheckBlacklist(uuid){
     });
 }
 
-async function SCFgetUUID(username){
+async function SCFCheckBridgelock(uuid) {
+    return new Promise(async (resolve, reject) => {
+        if (!config.minecraft.API.SCF.enabled) {
+            resolve(false);
+            return;
+        }
+
+        let isLocked = false;
+
+        if (getFeatureStatus('Bridgelock') == 'OPERATIONAL') {
+            let player_banned = await Promise.all([
+                axios.get(
+                    `https://sky.dssoftware.ru/api.php?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                )
+            ]).catch((error) => {
+                disableFeature('Bridgelock');
+                resolve(false);
+            });
+
+            player_banned = player_banned?.[0]?.data ?? {};
+            isLocked = player_banned?.data?.locked === true;
+        }
+
+        resolve(isLocked);
+    });
+}
+
+async function SCFgetUUID(username) {
     return new Promise(async (resolve, reject) => {
         let data = null;
-        
-        if(getFeatureStatus('Mojang') == "OPERATIONAL"){
-            try{
+
+        if (getFeatureStatus('Mojang') == 'OPERATIONAL') {
+            try {
                 data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
 
                 if (data?.success == true && data?.id != null) {
                     resolve(data?.data);
                     return;
                 }
-            }
-            catch(e){
-                if((e?.response?.status ?? "").toString().startsWith("5")){
+            } catch (e) {
+                if ((e?.response?.status ?? '').toString().startsWith('5')) {
                     disableFeature('Mojang');
-                }
-                else{
-                    reject("Invalid username.");
+                } else {
+                    reject('Invalid username.');
                     return;
                 }
             }
         }
 
-        if(getFeatureStatus('Mojang') == "REPLACE"){
-            data = await axios.get(
-                `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
-            );
+        if (getFeatureStatus('Mojang') == 'REPLACE') {
+            data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
 
             resolve(data?.data);
-        }        
+        }
+    });
+}
+
+async function SCFgetLinked(username) {
+    return new Promise(async (resolve, reject) => {
+        let data = null;
+
+        if (getFeatureStatus('Mojang') == 'OPERATIONAL') {
+            try {
+                data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
+
+                if (data?.success == true && data?.id != null) {
+                    resolve(data?.data);
+                    return;
+                }
+            } catch (e) {
+                if ((e?.response?.status ?? '').toString().startsWith('5')) {
+                    disableFeature('Mojang');
+                } else {
+                    reject('Invalid username.');
+                    return;
+                }
+            }
+        }
+
+        if (getFeatureStatus('Mojang') == 'REPLACE') {
+            data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+
+            resolve(data?.data);
+        }
     });
 }
 
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
-    SCFgetUUID: SCFgetUUID
+    checkBridgelock: SCFCheckBridgelock,
+    getUUID: SCFgetUUID,
+    
 };
