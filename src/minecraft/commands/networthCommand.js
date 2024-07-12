@@ -23,7 +23,9 @@ class NetWorthCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
+            console.log("I'm here");
             const data = await getLatestProfile(username, { museum: true });
+            console.log("I'm there!");
 
             username = formatUsername(username, data.profileData?.game_mode);
 
@@ -79,7 +81,7 @@ class NetWorthCommand extends minecraftCommand {
                 banking_data = `${coop_label} / ${personal_label}`;
             }
 
-            console.log(
+            this.send(
                 `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum} | ${cache_message}`
             );
         } catch (error) {
