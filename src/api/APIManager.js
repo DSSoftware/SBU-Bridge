@@ -1,12 +1,11 @@
 const Logger = require('../Logger.js');
 const config = require('../../config.js');
 const axios = require('axios');
-
 const { getUUID } = require('../contracts/API/PlayerDBAPI');
 const hypixel = require('../contracts/API/HypixelRebornAPI.js');
 const Skykings = require('../../API/utils/skykings');
 const Blacklist = require('../../API/utils/blacklist');
-const SCFBlacklist = require('../../API/utils/scfBlacklist');
+const SCFAPI = require('../../API/utils/scfAPIHandler.js');
 const { getNetworth } = require('skyhelper-networth');
 const getDungeons = require('../../API/stats/dungeons.js');
 const getSkills = require('../../API/stats/skills.js');
@@ -57,7 +56,7 @@ class APIManager {
                             const uuid = await getUUID(username);
                             const skykings_scammer = await Skykings.lookupUUID(uuid);
                             const blacklisted = await Blacklist.checkBlacklist(uuid);
-                            const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
+                            const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
 
                             // Checking the requirements
 
@@ -216,7 +215,7 @@ class APIManager {
 
                             const skykings_scammer = await Skykings.lookupUUID(uuid);
                             const blacklisted = await Blacklist.checkBlacklist(uuid);
-                            const scf_blacklisted = await SCFBlacklist.checkBlacklist(uuid);
+                            const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
 
                             if (skykings_scammer !== true && blacklisted !== true && scf_blacklisted !== true) {
                                 bot.chat(`/guild invite ${username}`);

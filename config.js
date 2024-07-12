@@ -231,5 +231,25 @@ module.exports = {
     longpoll: {
         enabled: true & (!isStandalone),
         provider: "https://sky.dssoftware.ru/longpoll/"
+    },
+    /*
+        Sets default behavior when the feature is disabled by healthcheck:
+
+        FATAL: Crashes the application with a 123 error code (Critical error)
+        REPLACE: Uses alternative if possible, otherwise disables feature
+    */
+    behavior: {
+        // User link service, responsible for correct IGN for discord messages.
+        Link: 'REPLACE', 
+        // Locks user from using bridges. DEPENDS ON LINK SERVICE.
+        Bridgelock: 'REPLACE',
+        // Provides external action API, used for kicks, invites and more.
+        Longpoll: 'REPLACE',
+        // Stops unwanted players from joining.
+        Blacklist: 'REPLACE',
+        // Sends bridge's status to the control server.
+        Status: 'REPLACE',
+        // Mojang Proxy API. CRITICAL - FATAL or REPLACE REQUIRED.
+        Mojang: 'REPLACE'
     }
 };
