@@ -19,6 +19,10 @@ const { getNetworth } = require('skyhelper-networth');
 const getSkills = require('../../../API/stats/skills.js');
 const getSlayer = require('../../../API/stats/slayer.js');
 
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 class StateHandler extends eventHandler {
     constructor(minecraft, command, discord) {
         super();
@@ -50,7 +54,7 @@ class StateHandler extends eventHandler {
         }
 
         if (this.isLobbyJoinMessage(message) && config.discord.other.autoLimbo === true) {
-            console.log("Going to limbo!");
+            await sleep(5000);
             return bot.chat('\u00a7');
         }
 
