@@ -23,7 +23,9 @@ class NetWorthCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
+            console.log("I'm here");
             const data = await getLatestProfile(username, { museum: true });
+            console.log("I'm there!");
 
             username = formatUsername(username, data.profileData?.game_mode);
 
