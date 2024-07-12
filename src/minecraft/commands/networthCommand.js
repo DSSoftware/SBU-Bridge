@@ -79,7 +79,7 @@ class NetWorthCommand extends minecraftCommand {
                 banking_data = `${coop_label} / ${personal_label}`;
             }
 
-            this.send(
+            console.log(
                 `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum} | ${cache_message}`
             );
         } catch (error) {
