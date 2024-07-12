@@ -105,9 +105,13 @@ async function SCFgetUUID(username){
         if(getFeatureStatus('Mojang') == "OPERATIONAL"){
             try{
                 data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
+
+                if (data?.success == true && data?.id != null) {
+                    resolve(data);
+                    return;
+                }
             }
             catch(e){
-                console.log(e?.response?.status);
                 if((e?.response?.status ?? "").toString().startsWith("5")){
                     disableFeature('Mojang');
                 }
@@ -116,11 +120,6 @@ async function SCFgetUUID(username){
                     return;
                 }
             }
-    
-            if (data?.success == true && data?.id !== null) {
-                resolve(data);
-                return;
-            }
         }
 
         if(getFeatureStatus('Mojang') == "REPLACE"){
@@ -128,12 +127,8 @@ async function SCFgetUUID(username){
                 `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
             );
 
-            if (data.errorMessage || data.id === undefined) {
-                reject(data.errorMessage ?? 'Invalid username.');
-            }
-        }
-        
-        resolve(data);
+            resolve(data);
+        }        
     });
 }
 
