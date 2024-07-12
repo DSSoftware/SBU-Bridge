@@ -107,7 +107,7 @@ async function SCFgetUUID(username){
                 data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
 
                 if (data?.success == true && data?.id != null) {
-                    resolve(data);
+                    resolve(data?.data);
                     return;
                 }
             }
@@ -126,8 +126,6 @@ async function SCFgetUUID(username){
             data = await axios.get(
                 `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
             );
-
-            console.log(data?.data);
 
             resolve(data?.data);
         }        
