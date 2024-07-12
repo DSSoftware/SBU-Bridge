@@ -111,7 +111,8 @@ async function SCFgetUUID(username){
                     disableFeature('Mojang');
                 }
                 else{
-                    reject("Invalid username.")
+                    reject("Invalid username.");
+                    return;
                 }
             }
     
@@ -127,7 +128,7 @@ async function SCFgetUUID(username){
             );
 
             if (data.errorMessage || data.id === undefined) {
-                throw data.errorMessage ?? 'Invalid username.';
+                reject(data.errorMessage ?? 'Invalid username.');
             }
         }
         
