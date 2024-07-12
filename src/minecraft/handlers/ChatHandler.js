@@ -12,7 +12,7 @@ const Logger = require('../../Logger.js');
 const axios = require('axios');
 const Skykings = require('../../../API/utils/skykings');
 const Blacklist = require('../../../API/utils/blacklist');
-const scfBlacklist = require('../../../API/utils/scfBlacklist');
+const SCFAPI = require('../../../API/utils/scfAPIHandler');
 const getDungeons = require('../../../API/stats/dungeons.js');
 
 const { getNetworth } = require('skyhelper-networth');
@@ -89,7 +89,7 @@ class StateHandler extends eventHandler {
 
                 const skykings_scammer = await Skykings.lookupUUID(uuid);
                 const blacklisted = await Blacklist.checkBlacklist(uuid);
-                const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
+                const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
 
                 try {
                     let profile = await getLatestProfile(uuid);
@@ -326,7 +326,7 @@ class StateHandler extends eventHandler {
 
             const skykings_scammer = await Skykings.lookupUUID(uuid);
             const blacklisted = await Blacklist.checkBlacklist(uuid);
-            const scf_blacklisted = await scfBlacklist.checkBlacklist(uuid);
+            const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
 
             const statsEmbed = new EmbedBuilder()
                 .setColor(2067276)
