@@ -4,31 +4,31 @@ const axios = require('axios');
 
 const status = {
     Link: {
-        status: true,
+        status: false,
         updated: 0
     },
     Bridgelock: {
-        status: true,
+        status: false,
         updated: 0
     },
     Longpoll: {
-        status: true,
+        status: false,
         updated: 0
     },
     Blacklist: {
-        status: true,
+        status: false,
         updated: 0
     },
     Status: {
-        status: true,
+        status: false,
         updated: 0
     },
     Score: {
-        status: true,
+        status: false,
         updated: 0
     },
     Mojang: {
-        status: true,
+        status: false,
         updated: 0
     }
 };
