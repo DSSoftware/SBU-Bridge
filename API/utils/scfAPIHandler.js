@@ -107,7 +107,7 @@ async function SCFgetUUID(username){
                 data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
             }
             catch(e){
-                if((e?.response?.status ?? "").startsWith("5")){
+                if((e?.response?.status ?? "").toString().startsWith("5")){
                     disableFeature('Mojang');
                 }
                 else{
