@@ -115,7 +115,7 @@ async function SCFgetUUID(username){
                 }
             }
     
-            if (data.success == true && data.id !== null) {
+            if (data?.success == true && data?.id !== null) {
                 resolve(data);
                 return;
             }
