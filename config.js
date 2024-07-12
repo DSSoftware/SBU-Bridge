@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const standaloneOverride = false;
+const standaloneOverride = true;
 const isStandalone = (process.env.standalone == 'true') || standaloneOverride;
 
 if(isStandalone){
