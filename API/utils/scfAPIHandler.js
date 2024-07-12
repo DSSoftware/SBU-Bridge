@@ -127,6 +127,8 @@ async function SCFgetUUID(username){
                 `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
             );
 
+            console.log(data);
+
             resolve(data);
         }        
     });
