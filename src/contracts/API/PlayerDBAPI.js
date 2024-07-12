@@ -1,6 +1,7 @@
 const axios = require('axios');
 const config = require('../../../config');
 const Logger = require('../../Logger');
+const SCFAPI = require('../../../API/utils/scfAPIHandler');
 
 const cache = new Map();
 
@@ -27,30 +28,9 @@ async function getUUID(username, full = false) {
             return data.id;
         }
 
-        let uuid = null;
-        let ign = null;
-
-        if (config.minecraft.API.mojang_resolver) {
-            const { data } = await axios.get(
-                `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
-            );
-
-            if (data.errorMessage || data.id === undefined) {
-                throw data.errorMessage ?? 'Invalid username.';
-            }
-
-            uuid = data.id;
-            ign = data.name;
-        } else {
-            const { data } = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
-
-            if (data.success == false || data.id === null) {
-                throw 'Invalid username.';
-            }
-
-            uuid = data.id;
-            ign = data.name;
-        }
+        const response = await SCFAPI.SCFgetUUID(username);
+        let uuid = response.id;
+        let ign = response.name;
 
         if (uuid == null || ign == null) {
             throw 'Invalid username.';

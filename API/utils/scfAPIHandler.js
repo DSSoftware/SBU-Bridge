@@ -98,7 +98,45 @@ async function SCFCheckBlacklist(uuid){
     });
 }
 
+async function SCFgetUUID(username){
+    return new Promise(async (resolve, reject) => {
+        let data = null;
+        
+        if(getFeatureStatus('Mojang') == "OPERATIONAL"){
+            try{
+                data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
+            }
+            catch(e){
+                if((e?.response?.status ?? "").startsWith("5")){
+                    disableFeature('Mojang');
+                }
+                else{
+                    reject("Invalid username.")
+                }
+            }
+    
+            if (data.success == true && data.id !== null) {
+                resolve(data);
+                return;
+            }
+        }
+
+        if(getFeatureStatus('Mojang') == "REPLACE"){
+            data = await axios.get(
+                `https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`
+            );
+
+            if (data.errorMessage || data.id === undefined) {
+                throw data.errorMessage ?? 'Invalid username.';
+            }
+        }
+        
+        resolve(data);
+    });
+}
+
 module.exports = {
     status: status,
-    checkBlacklist: SCFCheckBlacklist
+    checkBlacklist: SCFCheckBlacklist,
+    SCFgetUUID: SCFgetUUID
 };
