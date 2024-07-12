@@ -1,4 +1,4 @@
-import Logger from '../../src/Logger';
+const Logger = require('../../src/Logger');
 const config = require('../../config.js');
 const axios = require('axios');
 
