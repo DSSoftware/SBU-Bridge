@@ -31,14 +31,14 @@ const ADM_PERMS = {
 
 const MOD_PERMS = {
     manage_roles: false,
-    blacklist: true,
-    mc_demote: true,
+    blacklist: false,
+    mc_demote: false,
     execute: false,
     invite: true,
     kick: true,
     mute: true,
-    mc_promote: true,
-    restart: true,
+    mc_promote: false,
+    restart: false,
     unmute: true,
     debug: false
 };
