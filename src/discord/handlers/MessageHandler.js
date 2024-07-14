@@ -99,6 +99,7 @@ class MessageHandler {
                 let bypassCheck = false;
                 try{
                     sender_data = await this.getSenderData(message.author.id);
+                    console.log(sender_data);
                 }
                 catch(e){
                     if(!config.discord.other.discordFallback){

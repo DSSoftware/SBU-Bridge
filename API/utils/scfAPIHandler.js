@@ -182,7 +182,6 @@ async function SCFgetLinked(discord_id) {
         }
 
         resolve(response);
-        console.log(response);
     });
 }
 
