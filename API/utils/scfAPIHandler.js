@@ -147,9 +147,15 @@ async function SCFgetUUID(username) {
             }
         }
 
-        data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+        try{
+            data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
 
-        resolve(data?.data);
+            resolve(data?.data);
+        }
+        catch(e){
+            reject('Invalid username.');
+            return;
+        }        
     });
 }
 
