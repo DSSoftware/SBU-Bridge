@@ -131,7 +131,7 @@ async function SCFgetUUID(username) {
 
         if (getFeatureStatus('Mojang') == 'OPERATIONAL') {
             try {
-                data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`).data;
+                data = (await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`)).data;
 
                 if (data?.success == true && data?.id != null) {
                     resolve(data);
@@ -155,7 +155,7 @@ async function SCFgetUUID(username) {
         catch(e){
             reject('Invalid username.');
             return;
-        }        
+        }
     });
 }
 
