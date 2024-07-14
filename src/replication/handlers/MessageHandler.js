@@ -3,13 +3,15 @@ const { demojify } = require('discord-emoji-converter');
 const config = require('../../../config.js');
 const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
+const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 
 const sender_cache = new Map();
 
 class MessageHandler {
-    constructor(discord) {
+    constructor(discord, command) {
         this.discord = discord;
+        this.command = command;
     }
 
     async cacheSender(discord_id) {
@@ -19,11 +21,12 @@ class MessageHandler {
             nick: undefined
         };
         try {
-            let player_info = await Promise.all([
-                axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
-                )
-            ]).catch((error) => {});
+            let player_info = await SCFAPI.getLinked(discord_id).catch(()=>{
+                throw {
+                    "name": "Failed to obtain API Data.",
+                    "doNotHandle": true
+                };
+            });
 
             player_info = player_info?.[0]?.data ?? {};
 
@@ -64,6 +67,9 @@ class MessageHandler {
                 data: response
             };
         } catch (e) {
+            if(e?.doNotHandle == true){
+                throw e;
+            }
             console.log(e);
         }
     }
@@ -90,37 +96,58 @@ class MessageHandler {
             let sender_data = undefined;
 
             if(config.minecraft.API.SCF.enabled){
-                sender_data = await this.getSenderData(message.author.id);
-
-                if (sender_data?.data?.nick == undefined && !message.author.bot) {
-                    if (message.channel.id == config.discord.channels.officerChannel) {
+                let bypassCheck = false;
+                try{
+                    sender_data = await this.getSenderData(message.author.id);
+                }
+                catch(e){
+                    if(!config.discord.other.discordFallback){
+                        replication_client.channels.cache.get(message.channel.id).send({
+                            content: `<@${message.author.id}>`,
+                            embeds: [
+                                {
+                                    color: 15548997,
+                                    description:
+                                        'Failed to obtain your link status. This may happen due to API being down. Please let admins know.'
+                                }
+                            ]
+                        });
+                        return;
+                    }
+                    bypassCheck = true;
+                }
+                
+                if(!bypassCheck){
+                    if (sender_data?.data?.nick == undefined && !message.author.bot) {
+                        if (message.channel.id == config.discord.replication.channels.officer) {
+                            message.react('❌').catch((e) => {});
+                            return;
+                        }
+                        replication_client.channels.cache.get(message.channel.id).send({
+                            content: `<@${message.author.id}>`,
+                            embeds: [
+                                {
+                                    color: 15548997,
+                                    description:
+                                        'In order to use bridge, please use `' +
+                                        `/${config.minecraft.bot.replication_prefix}` +
+                                        'link' +
+                                        '` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.'
+                                }
+                            ]
+                        });
+                        return;
+                    }
+    
+                    const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
+                    if (isBridgeLocked) {
                         message.react('❌').catch((e) => {});
                         return;
                     }
-                    client.channels.cache.get(message.channel.id).send({
-                        content: `<@${message.author.id}>`,
-                        embeds: [
-                            {
-                                color: 15548997,
-                                description:
-                                    'In order to use bridge, please use `' +
-                                    `/${config.minecraft.bot.guild_prefix}` +
-                                    'link' +
-                                    '` command.\nThis way the messages will be sent with your Minecraft IGN.\nKeep in mind, your messages will **NOT** be sent otherwise.'
-                            }
-                        ]
-                    });
-                    return;
-                }
-
-                const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
-                if (isBridgeLocked) {
-                    message.react('❌').catch((e) => {});
-                    return;
                 }
             }
 
-            let real_username = sender_data?.data?.nick ?? (message.author.nickname ?? message.author.username);
+            let real_username = sender_data?.data?.nick ?? (message.member.displayName ?? message.author.username);
 
             let content = this.stripDiscordContent(message).trim();
             if (content.length === 0 && message?.attachments?.size == 0) {
@@ -131,6 +158,7 @@ class MessageHandler {
             if (message.channel.id == config.discord.replication.channels.debug) {
                 chat = 'Debug';
             }
+
             if (message.channel.id == config.discord.replication.channels.officer) {
                 chat = 'Officer/Replication';
             }
@@ -150,8 +178,8 @@ class MessageHandler {
             this.saveGuildMessage(real_username, sender_data?.data?.uuid, sender_data?.data?.guild_id ?? '');
 
             const messageData = {
-                member: message.member.user,
                 chat: chat,
+                member: message.member.user,
                 channel: message.channel.id,
                 username: real_username,
                 message: content,
@@ -214,8 +242,13 @@ class MessageHandler {
             let mentionedUserID = message?.mentions?.repliedUser?.id;
             if (mentionedUserID != undefined) {
                 let repliedUserObject = await message.guild.members.cache.get(mentionedUserID);
-
-                let sender_data = await this.getSenderData(mentionedUserID);
+                let sender_data = undefined;
+                try{
+                    sender_data = await this.getSenderData(mentionedUserID);
+                }
+                catch(e){
+                    // Do nothing.
+                }
                 mentionedUserName = sender_data?.data?.nick ?? repliedUserObject?.user?.username;
             }
 

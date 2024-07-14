@@ -98,33 +98,6 @@ async function SCFCheckBlacklist(uuid) {
     });
 }
 
-async function SCFCheckBridgelock(uuid) {
-    return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
-            resolve(false);
-            return;
-        }
-
-        let isLocked = false;
-
-        if (getFeatureStatus('Bridgelock') == 'OPERATIONAL') {
-            let player_banned = await Promise.all([
-                axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
-                )
-            ]).catch((error) => {
-                disableFeature('Bridgelock');
-                resolve(false);
-            });
-
-            player_banned = player_banned?.[0]?.data ?? {};
-            isLocked = player_banned?.data?.locked === true;
-        }
-
-        resolve(isLocked);
-    });
-}
-
 async function SCFgetUUID(username) {
     return new Promise(async (resolve, reject) => {
         let data = null;
@@ -159,33 +132,56 @@ async function SCFgetUUID(username) {
     });
 }
 
-async function SCFgetLinked(username) {
+async function SCFCheckBridgelock(uuid) {
     return new Promise(async (resolve, reject) => {
-        let data = null;
-
-        if (getFeatureStatus('Mojang') == 'OPERATIONAL') {
-            try {
-                data = await axios.get(`https://mojang.dssoftware.ru/?nick=${username}`);
-
-                if (data?.success == true && data?.id != null) {
-                    resolve(data?.data);
-                    return;
-                }
-            } catch (e) {
-                if ((e?.response?.status ?? '').toString().startsWith('5')) {
-                    disableFeature('Mojang');
-                } else {
-                    reject('Invalid username.');
-                    return;
-                }
-            }
+        if (!config.minecraft.API.SCF.enabled) {
+            resolve(false);
+            return;
         }
 
-        if (getFeatureStatus('Mojang') == 'REPLACE') {
-            data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
+        let isLocked = false;
 
-            resolve(data?.data);
+        if (getFeatureStatus('Bridgelock') == 'OPERATIONAL') {
+            let player_banned = await Promise.all([
+                axios.get(
+                    `https://sky.dssoftware.ru/api.php?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                )
+            ]).catch((error) => {
+                disableFeature('Bridgelock');
+                resolve(false);
+            });
+
+            player_banned = player_banned?.[0]?.data ?? {};
+            isLocked = player_banned?.data?.locked === true;
         }
+
+        resolve(isLocked);
+    });
+}
+
+async function SCFgetLinked(discord_id) {
+    return new Promise(async (resolve, reject) => {
+        let response = undefined;
+
+        if (getFeatureStatus('Link') == 'OPERATIONAL') {
+            let player_info = await Promise.all([
+                axios.get(
+                    `https://sky.dssoftware.ru/api.php?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
+                )
+            ]).catch((error) => {
+                disableFeature('Link');
+                reject("Failed to obtain API response.");
+            });
+
+            player_info = player_info?.[0]?.data ?? {};
+            response = player_info;
+        }
+        else{
+            reject("Failed to obtain API response.");
+            return;
+        }
+
+        resolve(response);
     });
 }
 
@@ -194,5 +190,5 @@ module.exports = {
     checkBlacklist: SCFCheckBlacklist,
     checkBridgelock: SCFCheckBridgelock,
     getUUID: SCFgetUUID,
-    
+    getLinked: SCFgetLinked
 };
