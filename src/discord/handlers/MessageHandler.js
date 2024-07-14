@@ -28,8 +28,6 @@ class MessageHandler {
                 };
             });
 
-            player_info = player_info?.[0]?.data ?? {};
-
             if (!player_info?.data?.exists) {
                 return response;
             }
@@ -99,7 +97,6 @@ class MessageHandler {
                 let bypassCheck = false;
                 try{
                     sender_data = await this.getSenderData(message.author.id);
-                    console.log(sender_data);
                 }
                 catch(e){
                     if(!config.discord.other.discordFallback){

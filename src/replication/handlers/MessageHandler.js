@@ -28,8 +28,6 @@ class MessageHandler {
                 };
             });
 
-            player_info = player_info?.[0]?.data ?? {};
-
             if (!player_info?.data?.exists) {
                 return response;
             }
