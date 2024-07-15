@@ -985,12 +985,12 @@ class StateHandler extends eventHandler {
     }
 
     async saveGuildMessage(nick, guild, message = undefined) {
-        if (username == undefined) {
+        if (nick == undefined) {
             return;
         }
         let uuid;
         try {
-            uuid = await getUUID(username);
+            uuid = await getUUID(nick);
         } catch (e) {
             return;
         }
