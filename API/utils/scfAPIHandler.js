@@ -5,45 +5,72 @@ const axios = require('axios');
 const status = {
     Link: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Bridgelock: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Longpoll: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Blacklist: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Status: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Score: {
         status: false,
+        disableCounter: 0,
         updated: 0
     },
     Mojang: {
         status: false,
+        disableCounter: 0,
         updated: 0
     }
 };
 
 function disableFeature(feature) {
-    Logger.warnMessage(`[FEATURES] Disabled feature ${feature}.`);
+    let disable_ctr = (status?.[feature].disableCounter ?? 0) + 1;
+    let disable_updated = Date.now();
+    let permanent_disable = false;
+
+    Logger.warnMessage(`[FEATURES] Disabled feature ${feature} (Disable #${disable_ctr}).`);
+
+    if(disable_ctr >= 10){
+        Logger.errorMessage(`[FEATURES] Permanently disabled feature ${feature} (Disable #${disable_ctr}).`);
+        disable_updated += 7 * 24 * 60 * 60 * 1000;
+    }
+
     status[feature] = {
         status: false,
-        updated: Date.now()
+        disableCounter: disable_ctr,
+        updated: disable_updated
     };
+
+    if(!permanent_disable){
+        process.send({
+            event_id: 'exceptionCaught',
+            exception: 'Service Permanently Disabled',
+            stack: `Permanently disabled service ${feature} due to health check. (Disable #${disable_ctr})`
+        });
+        return;
+    }
 
     process.send({
         event_id: 'exceptionCaught',
-        exception: 'Service disabled',
-        stack: `Disabled service ${feature} due to health check.`
+        exception: 'Service Disabled',
+        stack: `Disabled service ${feature} due to health check. (Disable #${disable_ctr})`
     });
 }
 
@@ -51,6 +78,7 @@ function enableFeature(feature) {
     Logger.warnMessage(`[FEATURES] Enabled feature ${feature}.`);
     status[feature] = {
         status: true,
+        disableCounter: 0,
         updated: Date.now()
     };
 }
@@ -60,7 +88,7 @@ function getFeatureStatus(feature) {
     if (data.status) {
         return 'OPERATIONAL';
     }
-    if (data.updated + 600000 > Date.now()) {
+    if (data.updated + 5*60*60*1000*(data.disableCounter+1) > Date.now()) {
         let status = config.behavior?.[feature] ?? 'REPLACE';
         if (status == 'FATAL') {
             Logger.errorMessage(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
@@ -84,7 +112,7 @@ async function SCFCheckBlacklist(uuid) {
         if (getFeatureStatus('Blacklist') == 'OPERATIONAL') {
             let player_banned = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                    `${config.minecraft.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
                 disableFeature('Blacklist');
@@ -144,7 +172,7 @@ async function SCFCheckBridgelock(uuid) {
         if (getFeatureStatus('Bridgelock') == 'OPERATIONAL') {
             let player_banned = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                    `${config.minecraft.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
                 disableFeature('Bridgelock');
@@ -166,7 +194,7 @@ async function SCFgetLinked(discord_id) {
         if (getFeatureStatus('Link') == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
+                    `${config.minecraft.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
                 disableFeature('Link');
@@ -185,10 +213,32 @@ async function SCFgetLinked(discord_id) {
     });
 }
 
+async function SCFsaveMessage(source, nick, uuid, guild) {
+    return new Promise(async (resolve, reject) => {
+        if (uuid == undefined) {
+            resolve(false);
+            return;
+        }
+
+        if (getFeatureStatus('Score') == 'OPERATIONAL') {
+            let message_send = await Promise.all([
+                axios.get(
+                    `${config.minecraft.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.minecraft.API.SCF.key}&nick=${nick}&guild_id=${guild}`
+                )
+            ]).catch((error) => {
+                disableFeature('Score');
+            });
+        }
+
+        resolve(true);
+    });
+}
+
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
     checkBridgelock: SCFCheckBridgelock,
     getUUID: SCFgetUUID,
-    getLinked: SCFgetLinked
+    getLinked: SCFgetLinked,
+    saveMessage: SCFsaveMessage
 };

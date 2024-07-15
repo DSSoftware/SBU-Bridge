@@ -215,17 +215,8 @@ class MessageHandler {
         }
     }
 
-    async saveGuildMessage(username, uuid, guild) {
-        if (uuid == undefined) {
-            return;
-        }
-        let message_send = await Promise.all([
-            axios.get(
-                `https://sky.dssoftware.ru/api.php?method=saveGuildMessage&uuid=${uuid}&source=SBU&api=${config.minecraft.API.SCF.key}&nick=${username}&guild_id=${guild}`
-            )
-        ]).catch((error) => {});
-
-        return;
+    async saveGuildMessage(nick, uuid, guild) {        
+        SCFAPI.saveMessage("replica", nick, uuid, guild);
     }
 
     async fetchReply(message) {

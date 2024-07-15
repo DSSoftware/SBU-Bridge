@@ -984,7 +984,7 @@ class StateHandler extends eventHandler {
         }
     }
 
-    async saveGuildMessage(username, guild, message = undefined) {
+    async saveGuildMessage(nick, guild, message = undefined) {
         if (username == undefined) {
             return;
         }
@@ -995,17 +995,7 @@ class StateHandler extends eventHandler {
             return;
         }
 
-        if (uuid == undefined) {
-            return;
-        }
-
-        let message_send = await Promise.all([
-            axios.get(
-                `https://sky.dssoftware.ru/api.php?method=saveGuildMessage&uuid=${uuid}&source=minecraft&api=${config.minecraft.API.SCF.key}&nick=${username}&guild_id=${guild}&content=${encodeURIComponent(message)}`
-            )
-        ]).catch((error) => {});
-
-        return;
+        SCFAPI.saveMessage("minecraft", nick, uuid, guild);
     }
 
     isDiscordMessage(message) {

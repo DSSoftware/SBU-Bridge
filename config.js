@@ -55,6 +55,7 @@ module.exports = {
             },
 
             SCF: {
+                provider: "https://sky.dssoftware.ru/api.php",
                 enabled: (process.env.scf_enabled === 'true') & (!isStandalone),
                 key: process.env.scf_api,
                 fail_webhook: process.env.scf_fail_webhook,
