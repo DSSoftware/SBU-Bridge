@@ -11,7 +11,7 @@ if (cluster.isPrimary) {
     function messageHandler(message) {
         if (message.event_id && message.event_id === 'exceptionCaught') {
             var params = {
-                content: "@here",
+                content: "@everyone",
                 embeds: [
                     {
                         title: 'Bot Failed',
