@@ -50,6 +50,7 @@ function disableFeature(feature) {
     if(disable_ctr >= 10){
         Logger.errorMessage(`[FEATURES] Permanently disabled feature ${feature} (Disable #${disable_ctr}).`);
         disable_updated += 7 * 24 * 60 * 60 * 1000;
+        permanent_disable = true;
     }
 
     status[feature] = {
@@ -58,7 +59,7 @@ function disableFeature(feature) {
         updated: disable_updated
     };
 
-    if(!permanent_disable){
+    if(permanent_disable){
         process.send({
             event_id: 'exceptionCaught',
             exception: 'Service Permanently Disabled',
