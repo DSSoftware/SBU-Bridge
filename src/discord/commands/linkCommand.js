@@ -28,7 +28,7 @@ module.exports = {
             throw new HypixelDiscordChatBridgeError('Invalid IGN.');
         }
 
-        let data = (await SCFAPI.saveLinked(user.id, uuid, user.user.username)).catch((error) => {
+        let data = await SCFAPI.saveLinked(user.id, uuid, user.user.username).catch((error) => {
             console.log(error);
             throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
         });
