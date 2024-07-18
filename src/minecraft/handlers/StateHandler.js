@@ -39,6 +39,12 @@ class StateHandler extends eventHandler {
     onKicked(reason) {
         Logger.warnMessage(`Minecraft bot has been kicked from the server for "${reason}"`);
 
+        process.send({
+            event_id: 'exceptionCaught',
+            exception: "Bot got kicked.",
+            stack: reason
+        });
+
         this.loginAttempts++;
         if (this.loginAttempts >= 5) {
             process.exit(123);
