@@ -3,6 +3,8 @@ const { EmbedBuilder } = require('discord.js');
 const config = require('../../../config.js');
 const axios = require('axios');
 const AuthProvider = require('../AuthProvider.js');
+const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
+const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
 module.exports = {
     name: `${config.minecraft.bot.guild_prefix}` + 'link',
@@ -20,20 +22,19 @@ module.exports = {
         const user = interaction.member;
 
         const minecraft_nick = interaction.options.getString('nick');
+        const uuid = await playerAPI.getUUID(minecraft_nick);
 
-        let data = await Promise.all([
-            axios.get(
-                `https://sky.dssoftware.ru/api.php?method=saveLinked&discord_id=${user.id}&nick=${minecraft_nick}&api=${config.minecraft.API.SCF.key}&tag=${user.user.username}`
-            )
-        ]).catch((error) => {
+        if(uuid == null){
+            throw new HypixelDiscordChatBridgeError('Invalid IGN.');
+        }
+
+        let data = (await SCFAPI.saveLinked(user.id, uuid, user.user.username)).catch((error) => {
             console.log(error);
-            throw new HypixelDiscordChatBridgeError('Failed to connect to API. Let admins know, or try again later.');
+            throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
         });
 
-        let result = data[0].data ?? {};
-
-        if ((result?.response ?? 'FAULT') == 'FAULT') {
-            throw new HypixelDiscordChatBridgeError(result?.info ?? 'Failed to connect to API.');
+        if ((data?.response ?? 'FAULT') == 'FAULT') {
+            throw new HypixelDiscordChatBridgeError(data?.info ?? 'Failed to connect to API.');
         }
 
         const embed = new EmbedBuilder()

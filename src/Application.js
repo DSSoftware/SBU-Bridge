@@ -2,6 +2,7 @@ const DiscordManager = require('./discord/DiscordManager.js');
 const MinecraftManager = require('./minecraft/MinecraftManager.js');
 const apiManager = require('./api/APIManager.js');
 const ReplicationManager = require('./replication/ReplicationManager.js');
+const SCFAPI = require('./../API/utils/scfAPIHandler.js');
 const Logger = require('./Logger.js');
 const config = require('../config.js');
 const axios = require('axios');
@@ -73,16 +74,7 @@ class Application {
                 fail_checks = 0;
             }
 
-            let statusURL = `https://sky.dssoftware.ru/api.php?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
-
-            axios
-                .get(statusURL)
-                .then(function (response) {
-                    // Successfully sent bot status.
-                })
-                .catch(function (error) {
-                    // Failed to send bot status...
-                });
+            SCFAPI.saveStatus(botConnected, commit_version);
 
             if (fail_checks >= 5) {
                 Logger.errorMessage(`Bot will reboot, as it failed the max amount of failchecks (5/5).`);

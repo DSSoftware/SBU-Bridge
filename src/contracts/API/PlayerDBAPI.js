@@ -73,7 +73,7 @@ async function getUUID(username, full = false) {
 
 async function getUsername(uuid) {
     try {
-        const { data } = await axios.get(`https://mojang.dssoftware.ru/?uuid=${uuid}`);
+        const data = await SCFAPI.getUsername(uuid);
         return data.name ?? "N/A";
     } catch (error) {
         console.log(error);
