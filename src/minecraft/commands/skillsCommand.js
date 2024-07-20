@@ -52,7 +52,6 @@ class SkillsCommand extends minecraftCommand {
                     }
 
                     if (skill == 'taming') {
-                        console.log(data.v2.profile?.pets_data);
                         let taming_cap = (data.v2.profile?.pets_data?.pet_care?.pet_types_sacrificed ?? []).length;
                         if (taming_cap == undefined) {
                             skill_cap = 50;
