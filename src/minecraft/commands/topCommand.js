@@ -101,7 +101,7 @@ class topCommand extends minecraftCommand {
 
             const player_uuid = await getUUID(username);
 
-            let placement_info = await SCFAPI.getMessagesSent(player_uuid, 1);
+            let placement_info = await SCFAPI.getMessagesSent(player_uuid, overall_flag);
 
             if (placement_info.data.place == null || placement_info.data.place == undefined) {
                 return this.send(
