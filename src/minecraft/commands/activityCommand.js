@@ -3,6 +3,7 @@ const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const axios = require('axios');
 const config = require('../../../config.js');
 const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
+const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
 class topCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -45,13 +46,7 @@ class topCommand extends minecraftCommand {
 
             gexp = player.weeklyExperience || 0;
 
-            let placement_info = await Promise.all([
-                axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getMessagesSent&uuid=${player_uuid}&api=${config.minecraft.API.SCF.key}&overall=1`
-                )
-            ]).catch((error) => {});
-
-            placement_info = placement_info[0].data ?? {};
+            let placement_info = await SCFAPI.getMessagesSent(player_uuid, 1);
 
             score = placement_info.data.count ?? 0;
 

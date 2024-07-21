@@ -302,7 +302,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&tag=${tag}`
+                    `${config.minecraft.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&tag=${tag}`
                 )
             ]).catch((error) => {
                 disableFeature(require_service);
@@ -317,6 +317,58 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
     });
 }
 
+async function SCFgetMessagesSent(uuid, overall) {
+    const require_service = "InternalAPI";
+    return new Promise(async (resolve, reject) => {
+        if (!config.minecraft.API.SCF.enabled) {
+            resolve({});
+            return;
+        }
+
+        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            let player_info = await Promise.all([
+                axios.get(
+                    `${config.minecraft.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&overall=${overall}`
+                )
+            ]).catch((error) => {
+                disableFeature(require_service);
+                resolve({});
+            });
+
+            player_info = player_info?.[0]?.data ?? {};
+            resolve(player_info);
+        }
+
+        resolve({});
+    });
+}
+
+async function SCFgetMessagesTop(guild_id) {
+    const require_service = "InternalAPI";
+    return new Promise(async (resolve, reject) => {
+        if (!config.minecraft.API.SCF.enabled) {
+            resolve({});
+            return;
+        }
+
+        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            let player_info = await Promise.all([
+                axios.get(
+                    `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${guild_id}`
+                )
+            ]).catch((error) => {
+                disableFeature(require_service);
+                resolve({});
+            });
+
+            player_info = player_info?.[0]?.data ?? {};
+            resolve(player_info);
+        }
+
+        resolve({});
+    });
+}
+
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
@@ -326,5 +378,7 @@ module.exports = {
     getLinked: SCFgetLinked,
     saveMessage: SCFsaveMessage,
     saveStatus: SCFsaveStatus,
-    saveLinked: SCFsaveLinked
+    saveLinked: SCFsaveLinked,
+    getMessagesSent: SCFgetMessagesSent,
+    getMessagesTop: SCFgetMessagesTop
 };

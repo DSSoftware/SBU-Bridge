@@ -411,34 +411,6 @@ class StateHandler extends eventHandler {
                 .trim()
                 .split(/ +/g)[0];
 
-            if (config.minecraft.API.SCF.enabled) {
-                const https = require('https');
-
-                const scf_api_key = config.minecraft.API.SCF.key;
-
-                const api_url = `https://sky.dssoftware.ru/discord/handler.php?api=${scf_api_key}&action=guild_kick&nick=${username}`;
-
-                https
-                    .get(api_url, (resp) => {
-                        this.minecraft.broadcastHeadedEmbed({
-                            message: 'Successfully unverified ' + username,
-                            title: `Member Unverification`,
-                            icon: `https://mc-heads.net/avatar/${username}`,
-                            color: 15548997,
-                            channel: 'Logger'
-                        });
-                    })
-                    .on('error', (err) => {
-                        this.minecraft.broadcastHeadedEmbed({
-                            message: 'Unable to unverify ' + username,
-                            title: `Member Unverification`,
-                            icon: `https://mc-heads.net/avatar/${username}`,
-                            color: 15548997,
-                            channel: 'Logger'
-                        });
-                    });
-            }
-
             return [
                 this.minecraft.broadcastHeadedEmbed({
                     message: replaceVariables(messages.leaveMessage, { username }),
@@ -462,34 +434,6 @@ class StateHandler extends eventHandler {
                 .replace(/\[(.*?)\]/g, '')
                 .trim()
                 .split(/ +/g)[0];
-
-            if (config.minecraft.API.SCF.enabled) {
-                const https = require('https');
-
-                const scf_api_key = config.minecraft.API.SCF.key;
-
-                const api_url = `https://sky.dssoftware.ru/discord/handler.php?api=${scf_api_key}&action=guild_kick&nick=${username}`;
-
-                https
-                    .get(api_url, (resp) => {
-                        this.minecraft.broadcastHeadedEmbed({
-                            message: 'Successfully unverified ' + username,
-                            title: `Member Unverification`,
-                            icon: `https://mc-heads.net/avatar/${username}`,
-                            color: 15548997,
-                            channel: 'Logger'
-                        });
-                    })
-                    .on('error', (err) => {
-                        this.minecraft.broadcastHeadedEmbed({
-                            message: 'Unable to unverify ' + username,
-                            title: `Member Unverification`,
-                            icon: `https://mc-heads.net/avatar/${username}`,
-                            color: 15548997,
-                            channel: 'Logger'
-                        });
-                    });
-            }
 
             return [
                 this.minecraft.broadcastHeadedEmbed({

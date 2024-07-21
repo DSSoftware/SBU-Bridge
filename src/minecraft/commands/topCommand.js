@@ -4,6 +4,7 @@ const axios = require('axios');
 const config = require('../../../config.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
 class topCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -36,13 +37,7 @@ class topCommand extends minecraftCommand {
                 if (!config.minecraft.commands.integrate_images && config.minecraft.API.useImgur) {
                     return this.send(`/${channel} This sub-command was disabled!`);
                 }
-                let top_data = await Promise.all([
-                    axios.get(
-                        `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${config.minecraft.guild.guildId}`
-                    )
-                ]).catch((error) => {});
-
-                let top_info = top_data?.[0]?.data ?? {};
+                let top_info = await SCFAPI.getMessagesSent(config.minecraft.guild.guildId);
 
                 if (top_info?.data == undefined || top_info?.data?.length == 0) {
                     return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
@@ -106,13 +101,7 @@ class topCommand extends minecraftCommand {
 
             const player_uuid = await getUUID(username);
 
-            let placement_info = await Promise.all([
-                axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getMessagesSent&uuid=${player_uuid}&api=${config.minecraft.API.SCF.key}&overall=${overall_flag}`
-                )
-            ]).catch((error) => {});
-
-            placement_info = placement_info[0].data ?? {};
+            let placement_info = await SCFAPI.getMessagesSent(player_uuid, 1);
 
             if (placement_info.data.place == null || placement_info.data.place == undefined) {
                 return this.send(
