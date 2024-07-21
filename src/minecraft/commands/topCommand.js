@@ -37,9 +37,7 @@ class topCommand extends minecraftCommand {
                 if (!config.minecraft.commands.integrate_images && config.minecraft.API.useImgur) {
                     return this.send(`/${channel} This sub-command was disabled!`);
                 }
-                let top_info = await SCFAPI.getMessagesSent(config.minecraft.guild.guildId);
-
-                console.log(top_info);
+                let top_info = await SCFAPI.getMessagesTop(config.minecraft.guild.guildId);
 
                 if (top_info?.data == undefined || top_info?.data?.length == 0) {
                     return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
