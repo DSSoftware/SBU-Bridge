@@ -39,6 +39,8 @@ class topCommand extends minecraftCommand {
                 }
                 let top_info = await SCFAPI.getMessagesSent(config.minecraft.guild.guildId);
 
+                console.log(top_info);
+
                 if (top_info?.data == undefined || top_info?.data?.length == 0) {
                     return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
                 }
