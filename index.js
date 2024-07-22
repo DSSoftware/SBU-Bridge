@@ -134,13 +134,13 @@ if (cluster.isPrimary) {
             Logger.warnMessage('The bot is deploying the new version...');
             process.exit();
         }
-        console.log(`Fork exited with exit code ${code}.`);
+        Logger.infoMessage(`Fork exited with exit code ${code}.`);
     });
 }
 
 if (cluster.isWorker) {
     process.on('uncaughtException', (error) => {
-        console.log(error);
+        Logger.infoMessage(error);
         process.send({
             event_id: 'exceptionCaught',
             exception: error.message,

@@ -1,9 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const config = require('../../../config.js');
 const { EmbedBuilder } = require('discord.js');
-const app = require('../../Application.js');
 const AuthProvider = require('../AuthProvider.js');
-const { spawn } = require('child_process');
 const { exec } = require('child_process');
 
 module.exports = {
@@ -44,9 +42,6 @@ module.exports = {
                     console.log(stdout);
                     exec('git reset --hard', (error, stdout, stderr) => {
                         console.log(stdout);
-                        spawn(process.argv[0], process.argv.slice(1), {
-                            stdio: 'ignore'
-                        }).unref();
 
                         process.exit(5);
                     });

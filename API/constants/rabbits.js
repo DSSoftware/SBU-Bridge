@@ -1,8 +1,10 @@
+const Logger = require("../../src/Logger");
+
 function getRabbitRarity(rabbit) {
     let rabbit_rarity = rabbits[rabbit];
 
     if (rabbit_rarity == undefined) {
-        console.log(`Found unknown rabbit: ${rabbit}`);
+        Logger.warnMessage(`Found unknown rabbit: ${rabbit}`);
         return 'UNKNOWN';
     }
     return rabbit_rarity;

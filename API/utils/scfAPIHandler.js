@@ -13,11 +13,6 @@ const status = {
         disableCounter: 0,
         updated: 0
     },
-    Longpoll: {
-        status: false,
-        disableCounter: 0,
-        updated: 0
-    },
     Blacklist: {
         status: false,
         disableCounter: 0,
@@ -39,6 +34,11 @@ const status = {
         updated: 0
     },
     InternalAPI: {
+        status: false,
+        disableCounter: 0,
+        updated: 0
+    },
+    Logging: {
         status: false,
         disableCounter: 0,
         updated: 0
@@ -369,6 +369,26 @@ async function SCFgetMessagesTop(guild_id) {
     });
 }
 
+async function SCFsaveLogging(type, message) {
+    const require_service = "Logging";
+    return new Promise(async (resolve, reject) => {
+        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            let loggingURL = `${config.minecraft.API.SCF.provider}?method=saveLogging&api=${config.minecraft.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
+
+            axios.get(loggingURL)
+                .then(function (response) {
+                    resolve(true);
+                })
+                .catch(function (error) {
+                    // NOT DISABLING THE SERVICE, OR IT WILL BASICALLY CAUSE A CHAIN REACTION
+                    resolve(false);
+                });
+        }
+
+        resolve(true);
+    });
+}
+
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
@@ -380,5 +400,6 @@ module.exports = {
     saveStatus: SCFsaveStatus,
     saveLinked: SCFsaveLinked,
     getMessagesSent: SCFgetMessagesSent,
-    getMessagesTop: SCFgetMessagesTop
+    getMessagesTop: SCFgetMessagesTop,
+    saveLogging: SCFsaveLogging
 };

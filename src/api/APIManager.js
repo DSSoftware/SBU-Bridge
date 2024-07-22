@@ -11,6 +11,7 @@ const getDungeons = require('../../API/stats/dungeons.js');
 const getSkills = require('../../API/stats/skills.js');
 const getSlayer = require('../../API/stats/slayer.js');
 const { getLatestProfile } = require('../../API/functions/getLatestProfile.js');
+const { exec } = require('child_process');
 
 let isActionRunning = false;
 
@@ -223,11 +224,29 @@ class APIManager {
 
                             completed = true;
                         }
+                        if (act_type == 'deploy') {
+                            function updateCode() {
+                                exec('git pull', (error, stdout, stderr) => {
+                                    console.log(stdout);
+                                    exec('git fetch --all', (error, stdout, stderr) => {
+                                        console.log(stdout);
+                                        exec('git reset --hard', (error, stdout, stderr) => {
+                                            console.log(stdout);
+                    
+                                            process.exit(5);
+                                        });
+                                    });
+                                });
+                            }
 
+                            completed = true;
+                        }
 
                         if(completed){
                             let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
-                            await axios.get(confirm_url);
+                            await axios.get(confirm_url).catch(e => {
+                                // Do nothing.
+                            });
                         }
                         await new Promise(resolve => setTimeout(resolve, 500));
                     } catch (e) {

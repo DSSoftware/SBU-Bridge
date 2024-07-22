@@ -37,7 +37,7 @@ if (config.minecraft.skyblockEventsNotifications.enabled) {
 
                 const cTime = getCustomTime(customTime, event);
                 if (cTime.length !== 0 && cTime.includes(minutes.toString())) {
-                    eventBOT.send(`/gc [EVENT] ${eventData.name}${extraInfo}: ${minutes}m`);
+                    eventBOT.send(`/gc [EVENT] ${eventData.name}${extraInfo}: Starting in ${minutes}m`);
                     await delay(1500);
                 }
             }
