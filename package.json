@@ -12,6 +12,9 @@
         "prettier:fix": "npx prettier --write .",
         "nodemon": "nodemon index"
     },
+    "imports": {
+        "#root/*.js": "./*.js"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/DuckySoLucky/hypixel-discord-chat-bridge.git"
