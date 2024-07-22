@@ -140,6 +140,7 @@ if (cluster.isPrimary) {
 
 if (cluster.isWorker) {
     process.on('uncaughtException', (error) => {
+        console.log(error);
         Logger.infoMessage(error);
         process.send({
             event_id: 'exceptionCaught',
@@ -149,6 +150,7 @@ if (cluster.isWorker) {
         process.exit(1);
     });
     process.on('unhandledRejection', function(err, promise) {
+        console.log(error);
         console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
         process.send({
             event_id: 'exceptionCaught',
