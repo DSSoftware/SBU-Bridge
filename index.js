@@ -38,6 +38,50 @@ if (cluster.isPrimary) {
     let process_state = false;
     let forced_shutdown = false;
 
+    setInterval(startEmergencyLongpoll, 30000);
+    async function startEmergencyLongpoll() {
+        if (!config.longpoll.enabled) return;
+
+            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF.key}`;
+
+            try {
+                let response = await axios.get(request_url).catch(e => {
+                    // Do nothing
+                });
+                for (let action of Object.values(response?.data?.requests ?? {})) {
+                    try {
+                        let act_rid = action?.rid ?? 'NONE';
+                        let act_type = action?.action ?? 'NONE';
+                        let act_data = action?.data ?? {};
+                        let completed = false;
+
+                        if (act_type == 'forceReboot') {
+                            process_state = false;
+                            forced_shutdown = false;
+
+                            for (const id in cluster.workers) {
+                                cluster.workers[id].kill();
+                            }
+
+                            completed = true;
+                        }
+
+                        if(completed){
+                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
+                            await axios.get(confirm_url).catch(e => {
+                                // Do nothing.
+                            });
+                        }
+                    } catch (e) {
+                        Logger.warnMessage(action);
+                        Logger.warnMessage(e);
+                    }
+                }
+            } catch (e) {
+                Logger.warnMessage(e);
+            }        
+    }
+
     function reforkProcess() {
         cluster.fork();
 
