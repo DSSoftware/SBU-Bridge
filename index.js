@@ -36,6 +36,7 @@ if (cluster.isPrimary) {
     }
 
     let process_state = false;
+    let forced_shutdown = false;
 
     function reforkProcess() {
         cluster.fork();
