@@ -36,7 +36,6 @@ if (cluster.isPrimary) {
     }
 
     let process_state = false;
-    let forced_shutdown = false;
 
     function reforkProcess() {
         cluster.fork();
@@ -99,10 +98,6 @@ if (cluster.isPrimary) {
             forced_shutdown = true;
 
             Logger.errorMessage('The bot was shut down! Continuing to run the parent process...');
-
-            for (const id in cluster.workers) {
-                cluster.workers[id].kill();
-            }
         }
 
         if (code == 124) {

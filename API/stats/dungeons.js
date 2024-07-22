@@ -2,7 +2,7 @@ const calcSkill = require('../constants/skills.js');
 const { titleCase } = require('../constants/functions.js');
 const Logger = require('#root/src/Logger.js');
 
-module.exports = (player, profile) => {
+module.exports = (profile, profilev2=undefined) => {
     try {
         const dungeons = profile?.dungeons;
         const catacombs = dungeons?.dungeon_types?.catacombs;
@@ -69,7 +69,7 @@ module.exports = (player, profile) => {
 
         return {
             selected_class: titleCase(dungeons?.selected_dungeon_class),
-            secrets_found: player?.achievements?.skyblock_treasure_hunter || 0,
+            secrets_found: profilev2?.dungeons?.secrets || 0,
             classes: {
                 healer: calcSkill('dungeoneering', dungeons?.player_classes?.healer?.experience || 0),
                 mage: calcSkill('dungeoneering', dungeons?.player_classes?.mage?.experience || 0),

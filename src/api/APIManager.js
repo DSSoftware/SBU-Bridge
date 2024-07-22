@@ -29,7 +29,9 @@ class APIManager {
             isActionRunning = true;
 
             try {
-                let response = await axios.get(request_url);
+                let response = await axios.get(request_url).catch(e => {
+                    // Do nothing
+                });
                 for (let action of Object.values(response?.data?.requests ?? {})) {
                     try {
                         let act_rid = action?.rid ?? 'NONE';
@@ -100,7 +102,7 @@ class APIManager {
                                 let profile = await getLatestProfile(uuid);
 
                                 const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-                                const dungeonsStats = getDungeons(profile.playerRes, profile.profile);
+                                const dungeonsStats = getDungeons(profile.profile, undefined);
                                 const catacombsLevel = Math.round(
                                     dungeonsStats?.catacombs?.skill?.levelWithProgress || 0
                                 );
@@ -238,6 +240,9 @@ class APIManager {
                                     });
                                 });
                             }
+
+                            let timeout = (act_data.timeout ?? 0) * 30000;
+                            setTimeout(updateCode, timeout);
 
                             completed = true;
                         }

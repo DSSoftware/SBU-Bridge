@@ -39,7 +39,7 @@ class SkyblockCommand extends minecraftCommand {
                     onlyNetworth: true
                 }),
                 getWeight(data.profile),
-                getDungeons(data.player, data.profile),
+                getDungeons(data.profile, data.v2.profile),
                 getTalismans(data.profile)
             ]);
 
