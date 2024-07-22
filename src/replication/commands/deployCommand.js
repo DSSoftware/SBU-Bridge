@@ -1,7 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const config = require('../../../config.js');
 const { EmbedBuilder } = require('discord.js');
-const app = require('../../Application.js');
+const Logger = require('#root/src/Logger.js');
 const AuthProvider = require('../AuthProvider.js');
 const { spawn } = require('child_process');
 const { exec } = require('child_process');
@@ -39,11 +39,11 @@ module.exports = {
 
         function updateCode() {
             exec('git pull', (error, stdout, stderr) => {
-                console.log(stdout);
+                Logger.warnMessage(stdout);
                 exec('git fetch --all', (error, stdout, stderr) => {
-                    console.log(stdout);
+                    Logger.warnMessage(stdout);
                     exec('git reset --hard', (error, stdout, stderr) => {
-                        console.log(stdout);
+                        Logger.warnMessage(stdout);
                         spawn(process.argv[0], process.argv.slice(1), {
                             stdio: 'ignore'
                         }).unref();

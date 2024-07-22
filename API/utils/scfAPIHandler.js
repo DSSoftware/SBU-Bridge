@@ -371,6 +371,10 @@ async function SCFgetMessagesTop(guild_id) {
 async function SCFsaveLogging(type, message) {
     const require_service = "Logging";
     return new Promise(async (resolve, reject) => {
+        if(!config.discord.other.logExtensively){
+            resolve(true);
+            return;
+        }
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let loggingURL = `${config.minecraft.API.SCF.provider}?method=saveLogging&api=${config.minecraft.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
 

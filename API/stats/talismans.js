@@ -1,4 +1,5 @@
 const { decodeData } = require('../../src/contracts/helperFunctions.js');
+const Logger = require('#root/src/Logger.js');
 
 module.exports = async (profile) => {
     try {
@@ -40,7 +41,7 @@ module.exports = async (profile) => {
             return null;
         }
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
         return null;
     }
 };

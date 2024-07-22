@@ -314,14 +314,14 @@ class StateHandler extends eventHandler {
             try {
                 username = username.trim();
             } catch (e) {
-                console.log(e);
+                Logger.warnMessage(e);
             }
 
             let uuid;
             try {
                 uuid = await getUUID(username);
             } catch (e) {
-                console.log(e);
+                Logger.warnMessage(e);
             }
 
             const skykings_scammer = await Skykings.lookupUUID(uuid);

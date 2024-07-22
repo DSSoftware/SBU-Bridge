@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const axios = require('axios');
-const config = require('../../../config.js');
+const Logger = require('#root/src/Logger.js');
 
 class topCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -64,7 +64,7 @@ class topCommand extends minecraftCommand {
                 `/${channel} ${username}'s Farming Weight: ${weight}. Farming weight leaderboard position: ${position}.`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

@@ -5,6 +5,7 @@ const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js
 const getPets = require('../../../API/stats/pets.js');
 const config = require('../../../config.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 class RenderCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -56,7 +57,7 @@ class RenderCommand extends minecraftCommand {
 
             return this.send(`/${channel} ${username}'s Active Pet: ${upload.data.link ?? 'Something went Wrong..'}`);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

@@ -1,6 +1,7 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const helperFunctions = require('./helperFunctions.js');
 const config = require('../../config.js');
+const Logger = require('#root/src/Logger.js');
 
 class minecraftCommand {
     constructor(minecraft) {
@@ -42,7 +43,7 @@ class minecraftCommand {
                     });
                 }
                 catch(e){
-                    console.log(e);
+                    Logger.warnMessage(e);
                 }
             }
             
@@ -52,13 +53,13 @@ class minecraftCommand {
         try {
             await client.channels.cache.get(followup_channel).send(content);
         } catch (e) {
-            console.log(e);
+            Logger.warnMessage(e);
         }
 
         try {
             await replication_client.channels.cache.get(replica_channel).send(content);
         } catch (e) {
-            console.log(e);
+            Logger.warnMessage(e);
         }
     }
 

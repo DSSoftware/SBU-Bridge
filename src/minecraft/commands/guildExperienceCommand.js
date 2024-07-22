@@ -1,6 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 class GuildExperienceCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -38,7 +39,7 @@ class GuildExperienceCommand extends minecraftCommand {
                 `/${channel} ${username}'s Weekly Guild Experience: ${player.weeklyExperience.toLocaleString()}. Guild: "${guild?.name ?? "N/A"}"`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(
                 `/${channel} [ERROR] ${error
                     .toString()

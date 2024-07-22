@@ -5,6 +5,7 @@ const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 const sender_cache = new Map();
 
@@ -68,7 +69,7 @@ class MessageHandler {
             if(e?.doNotHandle == true){
                 throw e;
             }
-            console.log(e);
+            Logger.warnMessage(e);
         }
     }
 
@@ -211,7 +212,7 @@ class MessageHandler {
 
             this.discord.broadcastMessage(messageData);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
         }
     }
 
@@ -269,7 +270,7 @@ class MessageHandler {
 
             return mentionedUserName ?? null;
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             return null;
         }
     }

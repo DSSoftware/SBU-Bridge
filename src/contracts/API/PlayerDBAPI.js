@@ -1,5 +1,3 @@
-const axios = require('axios');
-const config = require('../../../config');
 const Logger = require('../../Logger');
 const SCFAPI = require('../../../API/utils/scfAPIHandler');
 
@@ -53,7 +51,7 @@ async function getUUID(username, full = false) {
         }
         return correct_uuid;
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
         const err = error?.response?.status ?? 'Invalid username.';
         if (err == 404) {
             throw 'Invalid username.';
@@ -76,7 +74,7 @@ async function getUsername(uuid) {
         const data = await SCFAPI.getUsername(uuid);
         return data.name ?? "N/A";
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
     }
 }
 
@@ -84,7 +82,7 @@ async function resolveUsernameOrUUID(username) {
     try {
         return getUUID(username, true);
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
     }
 }
 

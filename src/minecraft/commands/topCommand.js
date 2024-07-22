@@ -1,6 +1,6 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
-const axios = require('axios');
+const Logger = require('#root/src/Logger.js');
 const config = require('../../../config.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
@@ -113,7 +113,7 @@ class topCommand extends minecraftCommand {
                 `/${channel} ${username}'s place: ${placement_info.data.place} | Weekly Score: ${placement_info.data.count} ${display_flag}`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

@@ -2,6 +2,7 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getNetworth } = require('skyhelper-networth');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
+const Logger = require('#root/src/Logger.js');
 
 class NetWorthCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -83,7 +84,7 @@ class NetWorthCommand extends minecraftCommand {
                 `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum} | ${cache_message}`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

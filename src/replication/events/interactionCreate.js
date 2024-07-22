@@ -19,7 +19,7 @@ module.exports = {
                 await command.execute(interaction);
             }
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
 
             const errrorMessage =
                 error instanceof HypixelDiscordChatBridgeError === false

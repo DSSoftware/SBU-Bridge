@@ -5,6 +5,7 @@ const config = require('../../../config.js');
 const { formatUsername } = require('../../contracts/helperFunctions.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 function formatNumber(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
@@ -216,7 +217,7 @@ class MedalsCommand extends minecraftCommand {
 
             this.send(`/${channel} ${username}'s HOTM stats: ${upload.data.link}.`);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

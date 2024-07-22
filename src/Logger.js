@@ -41,7 +41,6 @@ async function errorMessage(message) {
 }
 
 async function broadcastMessage(message, location) {
-    SCFAPI.saveLogging("broadcast", message);
     return console.log(chalk.inverse(`[${await getCurrentTime()}] ${location} Broadcast >`) + ' ' + message);
 }
 

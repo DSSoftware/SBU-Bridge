@@ -4,6 +4,7 @@ const config = require('../../../config.js');
 const { formatUsername } = require('../../contracts/helperFunctions.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 class TrophyFishCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -219,7 +220,7 @@ class TrophyFishCommand extends minecraftCommand {
 
             this.send(`/${channel} ${username}'s Trophy Fish stats: ${upload.data.link}`);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

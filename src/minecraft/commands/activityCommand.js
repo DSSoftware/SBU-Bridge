@@ -1,6 +1,6 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
-const axios = require('axios');
+const Logger = require('#root/src/Logger.js');
 const config = require('../../../config.js');
 const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
@@ -56,7 +56,7 @@ class topCommand extends minecraftCommand {
                 `/${channel} ${username}'s Activity Points: ${aps.toLocaleString()} (GEXP: ${gexp.toLocaleString()}, Score: ${score.toLocaleString()})`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(
                 `/${channel} [ERROR] ${error
                     .toString()

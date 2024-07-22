@@ -1,8 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const { EmbedBuilder } = require('discord.js');
 const config = require('../../../config.js');
-const axios = require('axios');
-const AuthProvider = require('../AuthProvider.js');
+const Logger = require('#root/src/Logger.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
@@ -29,7 +28,7 @@ module.exports = {
         }
 
         let data = await SCFAPI.saveLinked(user.id, uuid, user.user.username).catch((error) => {
-            console.log(error);
+            Logger.warnMessage(error);
             throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
         });
 

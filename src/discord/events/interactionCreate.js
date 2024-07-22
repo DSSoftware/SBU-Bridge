@@ -14,7 +14,7 @@ module.exports = {
         try {
             if (interaction.isChatInputCommand()) {
                 await interaction.deferReply({ ephemeral: false }).catch((e) => {
-                    console.log(e);
+                    Logger.warnMessage(e);
                 });
 
                 const command = interaction.client.commands.get(interaction.commandName);
@@ -36,7 +36,7 @@ module.exports = {
                 await command.execute(interaction);
             }
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             try {
                 const errrorMessage =
                     error instanceof HypixelDiscordChatBridgeError
@@ -63,7 +63,7 @@ module.exports = {
                     });
                 }
             } catch (e) {
-                console.log(
+                Logger.warnMessage(
                     "Failed to respond to interaction and wasn't able to send an error. Probably error with bot permissions."
                 );
             }

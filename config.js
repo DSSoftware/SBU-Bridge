@@ -229,7 +229,8 @@ module.exports = {
             filterWords: ['dox', 'doxx', 'doxed', 'doxxed', 'doxing', 'doxxing', 'doxes', 'doxxes', 'ez', 'ip'],
             joinMessage: true,
             autoLimbo: true,
-            discordFallback: false
+            discordFallback: false,
+            logExtensively: true
         }
     },
     longpoll: {

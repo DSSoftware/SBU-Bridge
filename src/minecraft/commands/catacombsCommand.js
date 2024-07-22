@@ -2,6 +2,7 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const getDungeons = require('../../../API/stats/dungeons.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
+const Logger = require('#root/src/Logger.js');
 
 class CatacombsCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -57,7 +58,7 @@ class CatacombsCommand extends minecraftCommand {
                 }T) | Secrets: ${formatNumber(dungeons.secrets_found ?? 0, 1)} (${SR} S/R)`
             );
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
 
             this.send(`/${channel} [ERROR] ${error}`);
         }

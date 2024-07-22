@@ -2,6 +2,7 @@ const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js
 const { formatUsername } = require('../../contracts/helperFunctions.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getBestiary } = require('../../../API/stats/bestiary.js');
+const Logger = require('#root/src/Logger.js');
 
 class BestiaryCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -71,7 +72,7 @@ class BestiaryCommand extends minecraftCommand {
                 this.send(`/${channel} Closest to level up: ${topFiveMobs.join(', ')}`);
             }
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

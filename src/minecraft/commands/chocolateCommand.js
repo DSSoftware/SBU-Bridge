@@ -6,6 +6,7 @@ const rabbits_handler = require('../../../API/constants/rabbits.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
+const Logger = require('#root/src/Logger.js');
 
 function convertPrestige(prestige) {
     const prestiges = {
@@ -231,7 +232,7 @@ class topCommand extends minecraftCommand {
 
             this.send(`/${channel} ${username}'s Chocolate Factory stats: ${upload.data.link}.`);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

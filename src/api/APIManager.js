@@ -195,7 +195,7 @@ class APIManager {
                                 skill_requirements = passed_requirements && masteries_passed;
                             } catch (e) {
                                 // Failed to lookup player data.
-                                console.log(e);
+                                Logger.warnMessage(e);
                             }
                             //
 
@@ -227,11 +227,11 @@ class APIManager {
                         if (act_type == 'deploy') {
                             function updateCode() {
                                 exec('git pull', (error, stdout, stderr) => {
-                                    console.log(stdout);
+                                    Logger.warnMessage(stdout);
                                     exec('git fetch --all', (error, stdout, stderr) => {
-                                        console.log(stdout);
+                                        Logger.warnMessage(stdout);
                                         exec('git reset --hard', (error, stdout, stderr) => {
-                                            console.log(stdout);
+                                            Logger.warnMessage(stdout);
                     
                                             process.exit(5);
                                         });
@@ -250,12 +250,12 @@ class APIManager {
                         }
                         await new Promise(resolve => setTimeout(resolve, 500));
                     } catch (e) {
-                        console.log(action);
-                        console.log(e);
+                        Logger.warnMessage(action);
+                        Logger.warnMessage(e);
                     }
                 }
             } catch (e) {
-                console.log(e);
+                Logger.warnMessage(e);
             }
 
             isActionRunning = false;

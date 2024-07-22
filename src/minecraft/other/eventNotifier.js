@@ -3,6 +3,7 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const config = require('../../../config.js');
 const axios = require('axios');
+const Logger = require('#root/src/Logger.js');
 
 if (config.minecraft.skyblockEventsNotifications.enabled) {
     const { notifiers, customTime } = config.minecraft.skyblockEventsNotifications;
@@ -42,7 +43,7 @@ if (config.minecraft.skyblockEventsNotifications.enabled) {
                 }
             }
         } catch (e) {
-            console.log(e);
+            Logger.warnMessage(e);
             /* empty */
         }
     }, 60000);

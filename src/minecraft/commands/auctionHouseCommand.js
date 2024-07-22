@@ -7,6 +7,7 @@ const axios = require('axios');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { formatNumber } = require('../../contracts/helperFunctions.js');
+const Logger = require('#root/src/Logger.js');
 
 class AuctionHouseCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -127,7 +128,7 @@ class AuctionHouseCommand extends minecraftCommand {
 
             this.send(`/${channel} ${`${nick}'s Active Auctions: ${string}`}`);
         } catch (error) {
-            console.log(error);
+            Logger.warnMessage(error);
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }

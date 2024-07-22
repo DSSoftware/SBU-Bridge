@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const Rss = require('rss-parser');
 const axios = require('axios');
 const parser = new Rss();
+const Logger = require('#root/src/Logger.js');
 
 if (config.minecraft.hypixelUpdates.enabled === true) {
     if (config.minecraft.hypixelUpdates.hypixelNews === true) {
@@ -52,7 +53,7 @@ async function checkForIncidents() {
             }
         }
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
     }
 }
 
@@ -93,7 +94,7 @@ async function checkForHypixelUpdates(firstTime = false) {
             }
         }
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
     }
 }
 
@@ -114,6 +115,6 @@ async function checkForSkyblockVersion() {
             skyblockVersion = data.version;
         }
     } catch (error) {
-        console.log(error);
+        Logger.warnMessage(error);
     }
 }

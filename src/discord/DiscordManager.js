@@ -201,7 +201,7 @@ class DiscordManager extends CommunicationBridge {
             }
         }
         catch(e){
-            console.log(e);
+            Logger.warnMessage(e);
         }
     }
 

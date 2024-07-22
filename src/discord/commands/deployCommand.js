@@ -3,6 +3,7 @@ const config = require('../../../config.js');
 const { EmbedBuilder } = require('discord.js');
 const AuthProvider = require('../AuthProvider.js');
 const { exec } = require('child_process');
+const Logger = require('#root/src/Logger.js');
 
 module.exports = {
     name: `${config.minecraft.bot.guild_prefix}` + 'deploy',
@@ -37,11 +38,11 @@ module.exports = {
 
         function updateCode() {
             exec('git pull', (error, stdout, stderr) => {
-                console.log(stdout);
+                Logger.warnMessage(stdout);
                 exec('git fetch --all', (error, stdout, stderr) => {
-                    console.log(stdout);
+                    Logger.warnMessage(stdout);
                     exec('git reset --hard', (error, stdout, stderr) => {
-                        console.log(stdout);
+                        Logger.warnMessage(stdout);
 
                         process.exit(5);
                     });
