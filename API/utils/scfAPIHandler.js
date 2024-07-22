@@ -1,4 +1,3 @@
-const Logger = require('../../src/Logger');
 const config = require('../../config.js');
 const axios = require('axios');
 
@@ -50,10 +49,10 @@ function disableFeature(feature) {
     let disable_updated = Date.now();
     let permanent_disable = false;
 
-    Logger.warnMessage(`[FEATURES] Disabled feature ${feature} (Disable #${disable_ctr}).`);
+    console.log(`[FEATURES] Disabled feature ${feature} (Disable #${disable_ctr}).`);
 
     if(disable_ctr >= 10){
-        Logger.errorMessage(`[FEATURES] Permanently disabled feature ${feature} (Disable #${disable_ctr}).`);
+        console.log(`[FEATURES] Permanently disabled feature ${feature} (Disable #${disable_ctr}).`);
         disable_updated += 7 * 24 * 60 * 60 * 1000;
         permanent_disable = true;
     }
@@ -81,7 +80,7 @@ function disableFeature(feature) {
 }
 
 function enableFeature(feature) {
-    Logger.warnMessage(`[FEATURES] Enabled feature ${feature}.`);
+    console.log(`[FEATURES] Enabled feature ${feature}.`);
     status[feature] = {
         status: true,
         disableCounter: 0,
@@ -97,7 +96,7 @@ function getFeatureStatus(feature) {
     if (data.updated + 5*60*60*1000*(data.disableCounter+1) > Date.now()) {
         let status = config.behavior?.[feature] ?? 'REPLACE';
         if (status == 'FATAL') {
-            Logger.errorMessage(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
+            console.log(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
             process.exit(123);
         }
         return status;
