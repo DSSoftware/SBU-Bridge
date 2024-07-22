@@ -241,7 +241,7 @@ class APIManager {
                                 });
                             }
 
-                            let timeout = (act_data.timeout ?? 0) * 30000;
+                            let timeout = (act_data.timeout ?? 0) * 10000;
                             setTimeout(updateCode, timeout);
 
                             completed = true;
