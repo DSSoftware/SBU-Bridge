@@ -417,6 +417,27 @@ class StateHandler extends eventHandler {
                     .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
             }
 
+            let request_res = await SCFAPI.handleLeave(username);
+
+            if(request_res){
+                this.minecraft.broadcastHeadedEmbed({
+                    message: 'Successfully unverified ' + username,
+                    title: `Member Unverification`,
+                    icon: `https://mc-heads.net/avatar/${username}`,
+                    color: 15548997,
+                    channel: 'Logger'
+                });
+            }
+            else{
+                this.minecraft.broadcastHeadedEmbed({
+                    message: 'Failed to unverify ' + username,
+                    title: `Member Unverification`,
+                    icon: `https://mc-heads.net/avatar/${username}`,
+                    color: 15548997,
+                    channel: 'Logger'
+                });
+            }
+
             return [
                 this.minecraft.broadcastHeadedEmbed({
                     message: replaceVariables(messages.leaveMessage, { username }),
@@ -445,6 +466,27 @@ class StateHandler extends eventHandler {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
                     .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
+            }
+
+            let request_res = await SCFAPI.handleLeave(username);
+
+            if(request_res){
+                this.minecraft.broadcastHeadedEmbed({
+                    message: 'Successfully unverified ' + username,
+                    title: `Member Unverification`,
+                    icon: `https://mc-heads.net/avatar/${username}`,
+                    color: 15548997,
+                    channel: 'Logger'
+                });
+            }
+            else{
+                this.minecraft.broadcastHeadedEmbed({
+                    message: 'Failed to unverify ' + username,
+                    title: `Member Unverification`,
+                    icon: `https://mc-heads.net/avatar/${username}`,
+                    color: 15548997,
+                    channel: 'Logger'
+                });
             }
 
             return [

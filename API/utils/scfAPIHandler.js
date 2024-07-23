@@ -392,6 +392,25 @@ async function SCFsaveLogging(type, message) {
     });
 }
 
+async function SCFhandleLeave(username){
+    return new Promise(async (resolve, reject) => {
+        if (!config.minecraft.API.SCF.enabled) {
+            resolve(true);
+            return;
+        }
+        
+        let player_info = await Promise.all([
+            axios.get(
+                `https://sky.dssoftware.ru/discord/handler.php?api=${config.minecraft.API.SCF.key}&action=guild_kick&nick=${username}`
+            )
+        ]).catch((error) => {
+            resolve(false);
+        });
+
+        resolve(true);
+    });
+}
+
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
@@ -404,5 +423,6 @@ module.exports = {
     saveLinked: SCFsaveLinked,
     getMessagesSent: SCFgetMessagesSent,
     getMessagesTop: SCFgetMessagesTop,
-    saveLogging: SCFsaveLogging
+    saveLogging: SCFsaveLogging,
+    handleLeave: SCFhandleLeave
 };
