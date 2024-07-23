@@ -441,6 +441,12 @@ class StateHandler extends eventHandler {
                 .trim()
                 .split(/ +/g)[0];
 
+            if (process.env.notify_enabled === 'true') {
+                await client.channels.cache
+                    .get(`${config.discord.channels.loggingChannel}`)
+                    .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
+            }
+
             return [
                 this.minecraft.broadcastHeadedEmbed({
                     message: replaceVariables(messages.kickMessage, { username }),
@@ -945,7 +951,7 @@ class StateHandler extends eventHandler {
             return;
         }
 
-        SCFAPI.saveMessage("minecraft", nick, uuid, guild);
+        SCFAPI.saveMessage('minecraft', nick, uuid, guild);
     }
 
     isDiscordMessage(message) {
