@@ -384,7 +384,7 @@ class StateHandler extends eventHandler {
             if (process.env.notify_enabled === 'true') {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${process.env.notify_content}\n${username} has joined the guild!`);
+                    .send(`${process.env.notify_content}\n:inbox_tray: ${username} has joined the guild!`);
             }
 
             return [
@@ -410,6 +410,12 @@ class StateHandler extends eventHandler {
                 .replace(/\[(.*?)\]/g, '')
                 .trim()
                 .split(/ +/g)[0];
+
+            if (process.env.notify_enabled === 'true') {
+                await client.channels.cache
+                    .get(`${config.discord.channels.loggingChannel}`)
+                    .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
+            }
 
             return [
                 this.minecraft.broadcastHeadedEmbed({
