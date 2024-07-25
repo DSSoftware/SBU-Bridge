@@ -118,14 +118,14 @@ if (cluster.isPrimary) {
         process_state = false;
         if (code == 123) {
             var params = {
-                content: `<@&${config.discord.commands.notifyRole}>`,
+                content: `@everyone`,
                 embeds: [
                     {
                         title: 'Bot Stopped',
                         fields: [
                             {
                                 name: 'Exception Data',
-                                value: `Something bad has happened to the bot, maybe it's banned or muted. The app will shut down.`
+                                value: `Something bad has happened to the bot, maybe it's banned or muted. The app will shut down.\n\nInstance: \`${config.minecraft.bot.unique_id}\``
                             }
                         ]
                     }
@@ -147,14 +147,14 @@ if (cluster.isPrimary) {
 
         if (code == 124) {
             var params = {
-                content: `<@&${config.discord.commands.notifyRole}>`,
+                content: `@everyone`,
                 embeds: [
                     {
                         title: 'Bot Rebooted',
                         fields: [
                             {
                                 name: 'Exception Data',
-                                value: `Bot failed to connect to Hypixel, so it rebooted.`
+                                value: `Bot failed to connect to Hypixel, so it rebooted.\n\nInstance: \`${config.minecraft.bot.unique_id}\``
                             }
                         ]
                     }
