@@ -121,6 +121,7 @@ async function SCFCheckBlacklist(uuid) {
                     `${config.minecraft.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 resolve(false);
             });
@@ -147,6 +148,7 @@ async function SCFgetUUID(username) {
                 }
             } catch (e) {
                 if ((e?.response?.status ?? '').toString().startsWith('5')) {
+                    this.SCFsaveLogging("error", `${e}`);
                     disableFeature(require_service);
                 } else {
                     reject('Invalid username.');
@@ -178,6 +180,7 @@ async function SCFgetUsername(uuid) {
                 resolve(data);
                 return;
             } catch(e){
+                this.SCFsaveLogging("error", `${e}`);
                 disableFeature(require_service);
             }
         }
@@ -209,6 +212,7 @@ async function SCFCheckBridgelock(uuid) {
                     `${config.minecraft.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 resolve(false);
             });
@@ -232,6 +236,7 @@ async function SCFgetLinked(discord_id) {
                     `${config.minecraft.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 reject("Failed to obtain API response.");
             });
@@ -262,6 +267,7 @@ async function SCFsaveMessage(source, nick, uuid, guild) {
                     `${config.minecraft.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.minecraft.API.SCF.key}&nick=${nick}&guild_id=${guild}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
             });
         }
@@ -281,6 +287,7 @@ async function SCFsaveStatus(botConnected, commit_version) {
                     resolve(true);
                 })
                 .catch(function (error) {
+                    this.SCFsaveLogging("error", `${error}`);
                     disableFeature(require_service);
                     resolve(false);
                 });
@@ -304,6 +311,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
                     `${config.minecraft.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&tag=${tag}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 reject(error);
             });
@@ -330,6 +338,7 @@ async function SCFgetMessagesSent(uuid, overall) {
                     `${config.minecraft.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&overall=${overall}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 resolve({});
             });
@@ -356,6 +365,7 @@ async function SCFgetMessagesTop(guild_id) {
                     `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${guild_id}`
                 )
             ]).catch((error) => {
+                this.SCFsaveLogging("error", `${error}`);
                 disableFeature(require_service);
                 resolve({});
             });
@@ -404,6 +414,7 @@ async function SCFhandleLeave(username){
                 `https://sky.dssoftware.ru/discord/handler.php?api=${config.minecraft.API.SCF.key}&action=guild_kick&nick=${username}`
             )
         ]).catch((error) => {
+            this.SCFsaveLogging("error", `${error}`);
             resolve(false);
         });
 

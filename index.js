@@ -190,6 +190,7 @@ if (cluster.isWorker) {
     });
     process.on('unhandledRejection', function(err, promise) {
         console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
+        Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
         process.send({
             event_id: 'exceptionCaught',
             exception: "Unhandled rejection. Check logs.",
