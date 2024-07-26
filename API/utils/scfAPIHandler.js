@@ -4,47 +4,71 @@ const axios = require('axios');
 const status = {
     Link: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Bridgelock: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Blacklist: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Status: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Score: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Mojang: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     InternalAPI: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     },
     Logging: {
         status: false,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: 0
     }
 };
 
+setInterval(() => {
+    for(const service of Object.keys(status)){
+        if(status[service].errorsCounter != 0){
+            this.SCFsaveLogging("health", `Service ${service} had ${status[service].errorsCounter} errors in the past 5 minutes.`);
+        }
+        status[service].errorsCounter = 0;
+    }
+}, 5*60*1000);
+
+
 function disableFeature(feature) {
+    status[feature].errorsCounter += 1;
+
+    if((status[feature].errorsCounter < 5) && (status[feature].disableCounter == 0)){
+        return;
+    }
+
     let disable_ctr = (status?.[feature].disableCounter ?? 0) + 1;
     let disable_updated = Date.now();
     let permanent_disable = false;
@@ -59,6 +83,7 @@ function disableFeature(feature) {
 
     status[feature] = {
         status: false,
+        errorsCounter: status[feature].errorsCounter,
         disableCounter: disable_ctr,
         updated: disable_updated
     };
@@ -83,6 +108,7 @@ function enableFeature(feature) {
     console.log(`[FEATURES] Enabled feature ${feature}.`);
     status[feature] = {
         status: true,
+        errorsCounter: 0,
         disableCounter: 0,
         updated: Date.now()
     };
@@ -93,7 +119,7 @@ function getFeatureStatus(feature) {
     if (data.status) {
         return 'OPERATIONAL';
     }
-    if (data.updated + 5*60*60*1000*(data.disableCounter+1) > Date.now()) {
+    if (data.updated + 5*60*1000*(data.disableCounter+1) > Date.now()) {
         let status = config.behavior?.[feature] ?? 'REPLACE';
         if (status == 'FATAL') {
             console.log(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
@@ -125,6 +151,7 @@ async function SCFCheckBlacklist(uuid) {
                 disableFeature(require_service);
                 resolve(false);
             });
+            
             player_banned = player_banned?.[0]?.data ?? {};
             isBanned = player_banned.data === true;
         }
