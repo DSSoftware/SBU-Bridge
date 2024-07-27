@@ -193,7 +193,7 @@ if (cluster.isWorker) {
         Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
         process.send({
             event_id: 'exceptionCaught',
-            exception: "Unhandled rejection. Check logs.",
+            exception: "Unhandled rejection. Check logs. (" + promise + ")",
             stack: "Cannot fit rejection message here, check logs."
         });
         process.exit(1);
