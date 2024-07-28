@@ -175,7 +175,8 @@ module.exports = {
                     '1048690255903072342',
                     '1220104308767588503',
                     '1061976889570369538', // SCF ADMINS
-                    process.env.guild_admin_id // GUILD ADMINS
+                    '1266856339406192700', // GUILD ADMINS
+                    process.env.guild_admin_id // CUSTOM GUILD ADMINS
                 ],
                 ownerIDs: [
                     process.env.guildmaster_id,
@@ -203,7 +204,8 @@ module.exports = {
                     '924332988743966751',
                     '801634222577156097', // SBU MODS
                     '1048690255903072339',
-                    '1048690255903072340' // SCF MODS
+                    '1048690255903072340', // SCF MODS
+                    '1261265160140754954', // Guild Staff
                 ],
                 admin: [
                     '808070562046935060',
@@ -213,7 +215,8 @@ module.exports = {
                     '1048690255903072342',
                     '1220104308767588503',
                     '1061976889570369538', // SCF ADMINS
-                    process.env.guild_admin_id // GUILD ADMINS
+                    '1266856339406192700', // GUILD ADMINS
+                    process.env.guild_admin_id // CUSTOM GUILD ADMINS
                 ],
                 ownerIDs: [
                     process.env.guildmaster_id,
