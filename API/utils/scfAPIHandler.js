@@ -413,6 +413,7 @@ async function SCFsaveLogging(type, message) {
             return;
         }
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            message = encodeURIComponent(JSON.stringify(message)); 
             let loggingURL = `${config.minecraft.API.SCF.provider}?method=saveLogging&api=${config.minecraft.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
 
             axios.get(loggingURL)
