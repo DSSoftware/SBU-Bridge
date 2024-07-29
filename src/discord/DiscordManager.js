@@ -253,7 +253,7 @@ class DiscordManager extends CommunicationBridge {
                             }
                         }
                     ]
-                });
+                }).catch(e => console.log(e));
                 break;
             case 'webhook':
                 message = this.cleanMessage(message);
@@ -271,7 +271,7 @@ class DiscordManager extends CommunicationBridge {
                             description: `${message}`
                         }
                     ]
-                });
+                }).catch(e => console.log(e));;
 
                 break;
             case 'minecraft':
@@ -281,7 +281,7 @@ class DiscordManager extends CommunicationBridge {
                             name: `${username}.png`
                         })
                     ]
-                });
+                }).catch(e => console.log(e));;
                 break;
             default:
                 throw new Error('Invalid message mode: must be bot or webhook');

@@ -260,7 +260,7 @@ class ReplicationManager extends CommunicationBridge {
                             }
                         }
                     ]
-                });
+                }).catch(e => console.log(e));;
                 break;
             case 'webhook':
                 message = this.cleanMessage(message);
@@ -278,7 +278,7 @@ class ReplicationManager extends CommunicationBridge {
                             description: `${message}`
                         }
                     ]
-                });
+                }).catch(e => console.log(e));;
 
                 break;
             case 'minecraft':
@@ -288,7 +288,7 @@ class ReplicationManager extends CommunicationBridge {
                             name: `${username}.png`
                         })
                     ]
-                });
+                }).catch(e => console.log(e));;
                 break;
             default:
                 throw new Error('Invalid message mode: must be bot or webhook');
