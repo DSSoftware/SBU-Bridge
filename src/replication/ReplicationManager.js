@@ -129,7 +129,7 @@ class ReplicationManager extends CommunicationBridge {
             if (chat == 'Officer') {
                 channel
                     .send({
-                        content: `[OFFICER]@${username}@${message}`
+                        content: `[OFFICER]|@|${username}|@|${message}`
                     })
                     .then(
                         (message_officer) => {
