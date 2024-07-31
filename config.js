@@ -147,7 +147,7 @@ module.exports = {
             loggingChannel: process.env.channel_logging,
             debugMode: true,
             debugChannel: process.env.channel_debug,
-            allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417']
+            allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417', '1268311020816826398']
         },
         replication: {
             enabled: process.env.replica_enabled == 'true',
