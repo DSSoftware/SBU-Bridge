@@ -152,7 +152,7 @@ class MedalsCommand extends minecraftCommand {
                 throw 'Player has no HOTM data.';
             }
 
-            let hotm_exp = hotm_data?.experience;
+            let hotm_exp = Math.floor(hotm_data?.experience);
             let hotm_level_data = await this.getHOTMLevel(hotm_exp);
 
             let Name = `§6${username}'s HOTM Stats:`;
