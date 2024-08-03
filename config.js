@@ -68,17 +68,7 @@ module.exports = {
             autoAccept: process.env.req_autoaccept == 'true',
             requirements: {
                 skyblockLevel: parseInt(process.env.req_sb_lvl) || 0,
-                catacombsLevel: parseInt(process.env.req_cata) || 0,
-                masteries: {
-                    masteriesEnabled: process.env.masteries_enabled,
-                    maximumFailed: parseInt(process.env.max_failed_masteries) || 0,
-
-                    networth: parseInt(process.env.mastery_networth) || 0,
-                    skyblockLevel: parseInt(process.env.mastery_sb_lvl) || 0,
-                    skillAverage: parseInt(process.env.mastery_sa) || 0,
-                    slayerEXP: parseInt(process.env.mastery_slayers) || 0,
-                    catacombsLevel: parseInt(process.env.mastery_cata) || 0
-                }
+                catacombsLevel: parseInt(process.env.req_cata) || 0
             }
         },
         skyblockEventsNotifications: {

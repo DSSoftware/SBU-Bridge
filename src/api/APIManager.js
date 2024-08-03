@@ -63,40 +63,7 @@ class APIManager {
 
                             // Checking the requirements
 
-                            let skill_requirements = false;
-
-                            let masteries_data = {
-                                passed: 5,
-                                required: 5 - config.minecraft.guildRequirements.requirements.masteries.maximumFailed,
-                                masteries: {
-                                    skyblockLevel: {
-                                        current: 0,
-                                        required:
-                                            config.minecraft.guildRequirements.requirements.masteries.skyblockLevel
-                                    },
-                                    catacombsLevel: {
-                                        current: 0,
-                                        required:
-                                            config.minecraft.guildRequirements.requirements.masteries.catacombsLevel
-                                    },
-                                    networth: {
-                                        current: 0,
-                                        required: config.minecraft.guildRequirements.requirements.masteries.networth
-                                    },
-                                    skillAverage: {
-                                        current: 0,
-                                        required: config.minecraft.guildRequirements.requirements.masteries.skillAverage
-                                    },
-                                    slayerEXP: {
-                                        current: 0,
-                                        required: config.minecraft.guildRequirements.requirements.masteries.slayerEXP
-                                    }
-                                }
-                            };
-
                             let passed_requirements = true;
-                            let masteries_failed = 0;
-                            let masteries_passed = false;
 
                             try {
                                 let profile = await getLatestProfile(uuid);
@@ -116,85 +83,6 @@ class APIManager {
                                 }
                                 // MAIN REQS
 
-                                if (
-                                    config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled ===
-                                    'true'
-                                ) {
-                                    const networthCalculated = await getNetworth(
-                                        profile.profile,
-                                        profile.profileData?.banking?.balance || 0,
-                                        {
-                                            onlyNetworth: true,
-                                            museumData: profile.museum
-                                        }
-                                    );
-
-                                    const calculatedSkills = getSkills(profile.profile);
-
-                                    const skillAverage =
-                                        Object.keys(calculatedSkills)
-                                            .filter((skill) => !['runecrafting', 'social'].includes(skill))
-                                            .map((skill) => calculatedSkills[skill].levelWithProgress || 0)
-                                            .reduce((a, b) => a + b, 0) /
-                                        (Object.keys(calculatedSkills).length - 2);
-
-                                    const calculatedSlayers = getSlayer(profile.profile);
-                                    let slayerXP = 0;
-                                    Object.keys(calculatedSlayers).reduce((acc, slayer) => {
-                                        slayerXP += calculatedSlayers[slayer].xp ?? 0;
-                                    });
-
-                                    // MASTERIES
-                                    masteries_data.masteries.skyblockLevel.current = skyblockLevel;
-                                    masteries_data.masteries.catacombsLevel.current = catacombsLevel;
-                                    masteries_data.masteries.networth.current = networthCalculated.networth;
-                                    masteries_data.masteries.skillAverage.current = skillAverage;
-                                    masteries_data.masteries.slayerEXP.current = slayerXP;
-
-                                    if (
-                                        skyblockLevel <
-                                        config.minecraft.guildRequirements.requirements.masteries.skyblockLevel
-                                    ) {
-                                        masteries_failed += 1;
-                                    }
-                                    if (
-                                        catacombsLevel <
-                                        config.minecraft.guildRequirements.requirements.masteries.catacombsLevel
-                                    ) {
-                                        masteries_failed += 1;
-                                    }
-                                    if (
-                                        (networthCalculated.networth ?? 0) <
-                                        config.minecraft.guildRequirements.requirements.masteries.networth
-                                    ) {
-                                        masteries_failed += 1;
-                                    }
-                                    if (
-                                        skillAverage <
-                                        config.minecraft.guildRequirements.requirements.masteries.skillAverage
-                                    ) {
-                                        masteries_failed += 1;
-                                    }
-                                    if (
-                                        slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP
-                                    ) {
-                                        masteries_failed += 1;
-                                    }
-
-                                    masteries_data.passed -= masteries_failed;
-
-                                    if (
-                                        masteries_failed <=
-                                        config.minecraft.guildRequirements.requirements.masteries.maximumFailed
-                                    ) {
-                                        masteries_passed = true;
-                                    }
-                                    // MASTERIES
-                                } else {
-                                    masteries_passed = true;
-                                }
-
-                                skill_requirements = passed_requirements && masteries_passed;
                             } catch (e) {
                                 // Failed to lookup player data.
                                 Logger.warnMessage(e);
@@ -205,7 +93,7 @@ class APIManager {
                                 skykings_scammer !== true &&
                                 blacklisted !== true &&
                                 scf_blacklisted !== true &&
-                                skill_requirements === true
+                                passed_requirements === true
                             ) {
                                 bot.chat(`/guild invite ${username}`);
                             }

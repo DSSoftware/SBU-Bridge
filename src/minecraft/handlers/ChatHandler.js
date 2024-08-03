@@ -63,7 +63,7 @@ class StateHandler extends eventHandler {
                 bot.chat(`/oc Somehow bot failed trim the player's IGN. Accept the invite manually!`);
                 return;
             }
-            var is_banned = false;
+
             let uuid;
             try {
                 uuid = await getUUID(username);
@@ -77,14 +77,9 @@ class StateHandler extends eventHandler {
 
             if (config.minecraft.guildRequirements.enabled) {
                 // Checking the requirements
-                let skill_requirements = false;
-                let skyblockLevel, catacombsLevel, calcNetworth, slayerXP, skillAverage;
-                calcNetworth = 'N/A';
-                slayerXP = 'N/A';
-                skillAverage = 'N/A';
+                let skyblockLevel = 0;
+                let catacombsLevel = 0;
                 let passed_requirements = true;
-                let masteries_failed = 0;
-                let masteries_passed = false;
                 let meetRequirements = false;
 
                 const skykings_scammer = await Skykings.lookupUUID(uuid);
@@ -107,62 +102,6 @@ class StateHandler extends eventHandler {
                     }
                     // MAIN REQS
 
-                    if (config.minecraft.guildRequirements.requirements.masteries.masteriesEnabled === 'true') {
-                        calcNetworth, slayerXP, (skillAverage = 0), 0, 0;
-
-                        const networthCalculated = await getNetworth(
-                            profile.profile,
-                            profile.profileData?.banking?.balance || 0,
-                            {
-                                onlyNetworth: true,
-                                museumData: profile.museum
-                            }
-                        );
-                        calcNetworth = networthCalculated.networth ?? 0;
-
-                        const calculatedSkills = getSkills(profile.profile);
-
-                        skillAverage =
-                            Object.keys(calculatedSkills)
-                                .filter((skill) => !['runecrafting', 'social'].includes(skill))
-                                .map((skill) => calculatedSkills[skill].levelWithProgress || 0)
-                                .reduce((a, b) => a + b, 0) /
-                            (Object.keys(calculatedSkills).length - 2);
-
-                        const calculatedSlayers = getSlayer(profile.profile);
-                        slayerXP = 0;
-                        Object.keys(calculatedSlayers).reduce((acc, slayer) => {
-                            slayerXP += calculatedSlayers[slayer].xp ?? 0;
-                        });
-
-                        // MASTERIES
-                        if (skyblockLevel < config.minecraft.guildRequirements.requirements.masteries.skyblockLevel) {
-                            masteries_failed += 1;
-                        }
-                        if (catacombsLevel < config.minecraft.guildRequirements.requirements.masteries.catacombsLevel) {
-                            masteries_failed += 1;
-                        }
-                        if (calcNetworth < config.minecraft.guildRequirements.requirements.masteries.networth) {
-                            masteries_failed += 1;
-                        }
-                        if (skillAverage < config.minecraft.guildRequirements.requirements.masteries.skillAverage) {
-                            masteries_failed += 1;
-                        }
-                        if (slayerXP < config.minecraft.guildRequirements.requirements.masteries.slayerEXP) {
-                            masteries_failed += 1;
-                        }
-
-                        if (
-                            masteries_failed <= config.minecraft.guildRequirements.requirements.masteries.maximumFailed
-                        ) {
-                            masteries_passed = true;
-                        }
-                        // MASTERIES
-                    } else {
-                        masteries_passed = true;
-                    }
-
-                    skill_requirements = passed_requirements && masteries_passed;
                 } catch (e) {
                     bot.chat(`/oc Couldn't check ${username}'s stats. Please, check manually.`);
                     return;
@@ -185,23 +124,8 @@ class StateHandler extends eventHandler {
                             inline: true
                         },
                         {
-                            name: 'Networth',
-                            value: `\`${calcNetworth.toLocaleString()}\``,
-                            inline: true
-                        },
-                        {
-                            name: 'SA',
-                            value: `\`${skillAverage.toLocaleString()}\``,
-                            inline: true
-                        },
-                        {
-                            name: 'Slayer XP',
-                            value: `\`${slayerXP.toLocaleString()}\``,
-                            inline: true
-                        },
-                        {
                             name: 'Passed Skill Requirements',
-                            value: skill_requirements ? ':white_check_mark:' : ':x:',
+                            value: passed_requirements ? ':white_check_mark:' : ':x:',
                             inline: true
                         },
                         {
@@ -231,7 +155,7 @@ class StateHandler extends eventHandler {
                     .send({ embeds: [statsEmbed] });
 
                 if (
-                    skill_requirements &&
+                    passed_requirements &&
                     skykings_scammer !== true &&
                     blacklisted !== true &&
                     scf_blacklisted !== true
@@ -251,12 +175,7 @@ class StateHandler extends eventHandler {
                                 color: 15548997,
                                 channel: 'Logger'
                             });
-
-                            await delay(10000);
-
-                            bot.chat(
-                                `/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`
-                            );
+                            
                             return;
                         } catch (e) {
                             bot.chat(`/oc Something went wrong while trying to kick a banned player...`);
