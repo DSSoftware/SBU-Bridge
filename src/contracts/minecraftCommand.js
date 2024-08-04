@@ -8,6 +8,12 @@ class minecraftCommand {
         this.minecraft = minecraft;
     }
 
+    getCommandType(message) {
+        const args = message.split(' ');
+
+        return (args[0] ?? "").toLowerCase();
+    }
+
     getArgs(message) {
         const args = message.split(' ');
 

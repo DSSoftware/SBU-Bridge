@@ -11,7 +11,7 @@ class topCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'top';
-        this.aliases = [];
+        this.aliases = ['pos'];
         this.description = 'Sends your placement in messages sent leaderboard.';
         this.options = [
             {
@@ -31,6 +31,29 @@ class topCommand extends minecraftCommand {
         try {
             if (!config.minecraft.API.SCF.enabled) {
                 return this.send(`/${channel} This command was disabled!`);
+            }
+
+            if(this.getCommandType(message).slice(1) == `pos`){
+                const spot = parseInt(this.getArgs(message)[0]);
+                if(spot > 10 || spot < 1){
+                    return this.send(`/${channel} [ERROR] Position argument must be in a range from 1 to 10!`);
+                }
+
+                let top_info = await SCFAPI.getMessagesTop(config.minecraft.guild.guildId);
+
+                if (top_info?.data == undefined || top_info?.data?.length == 0) {
+                    return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
+                }
+
+                let member = top_info?.data?.[spot-1] ?? {};
+                if(member?.uuid == undefined){
+                    return this.send(`/${channel} [ERROR] There is no player at that position!`);
+                }
+
+                let nick = member?.nick ?? "N/A";
+                let messages = member?.count ?? "N/A";
+
+                return this.send(`/${channel} Top ${spot} is ${nick} with ${messages} score.`);
             }
 
             if (this.getArgs(message)[0] == 'weekly') {
