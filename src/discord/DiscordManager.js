@@ -126,16 +126,18 @@ class DiscordManager extends CommunicationBridge {
             }
     
             if (chat == 'Officer') {
-                channel
-                    .send({
-                        content: `[OFFICER]|@|${username}|@|${message}`
-                    })
-                    .then(
-                        (message_officer) => {
-                            message_officer.delete();
-                        },
-                        () => {}
-                    );
+                if(bot.username != username){
+                    channel
+                        .send({
+                            content: `[OFFICER]|@|${username}|@|${message}`
+                        })
+                        .then(
+                            (message_officer) => {
+                                message_officer.delete();
+                            },
+                            () => {}
+                        );
+                }
             }
     
             switch (mode) {
@@ -156,15 +158,7 @@ class DiscordManager extends CommunicationBridge {
                             }
                         ]
                     });
-    
-                    try {
-                        const links = message.match(/https?:\/\/[^\s]+/g).join('\n');
-    
-                        channel.send(links);
-                    } catch (e) {
-                        // Failed to embed links, noone cares about this, right?
-                    }
-    
+
                     break;
     
                 case 'webhook':
