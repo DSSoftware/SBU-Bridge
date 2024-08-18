@@ -166,6 +166,7 @@ module.exports = {
                     '1220104308767588503',
                     '1061976889570369538', // SCF ADMINS
                     '1266856339406192700', // GUILD ADMINS
+                    '1273749696296386581', // SCF Star Role
                     process.env.guild_admin_id // CUSTOM GUILD ADMINS
                 ],
                 ownerIDs: [
@@ -207,6 +208,7 @@ module.exports = {
                     '1220104308767588503',
                     '1061976889570369538', // SCF ADMINS
                     '1266856339406192700', // GUILD ADMINS
+                    '1273749696296386581', // SCF Star Role
                     process.env.guild_admin_id ?? "" // CUSTOM GUILD ADMINS
                 ],
                 ownerIDs: [
