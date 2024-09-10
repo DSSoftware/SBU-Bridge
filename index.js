@@ -11,7 +11,7 @@ if (cluster.isPrimary) {
     function messageHandler(message) {
         if (message.event_id && message.event_id === 'exceptionCaught') {
             var params = {
-                content: "@everyone",
+                content: config.discord.commands.errorContent,
                 embeds: [
                     {
                         title: 'Bot Failed',
@@ -118,7 +118,7 @@ if (cluster.isPrimary) {
         process_state = false;
         if (code == 123) {
             var params = {
-                content: `@everyone`,
+                content: config.discord.commands.errorContent,
                 embeds: [
                     {
                         title: 'Bot Stopped',
@@ -147,7 +147,7 @@ if (cluster.isPrimary) {
 
         if (code == 124) {
             var params = {
-                content: `@everyone`,
+                content: config.discord.commands.errorContent,
                 embeds: [
                     {
                         title: 'Bot Rebooted',
