@@ -100,7 +100,7 @@ class MessageHandler {
                     sender_data = await this.getSenderData(message.author.id);
                 }
                 catch(e){
-                    if(!config.discord.other.discordFallback){
+                    if(!(config.discord.other.discordFallback || message.author.bot)){
                         client.channels.cache.get(message.channel.id).send({
                             content: `<@${message.author.id}>`,
                             embeds: [
