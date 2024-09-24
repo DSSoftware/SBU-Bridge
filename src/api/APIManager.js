@@ -115,18 +115,23 @@ class APIManager {
                             completed = true;
                         }
                         if (act_type == 'deploy') {
-                            function updateCode() {
-                                exec('git pull', (error, stdout, stderr) => {
-                                    Logger.warnMessage(stdout);
-                                    exec('git fetch --all', (error, stdout, stderr) => {
-                                        Logger.warnMessage(stdout);
-                                        exec('git reset --hard', (error, stdout, stderr) => {
+                            async function updateCode() {
+                                async function asyncExec(cmd){
+                                    return new Promise((resolve) => {
+                                        exec(cmd, (error, stdout, stderr) => {
                                             Logger.warnMessage(stdout);
-                    
-                                            process.exit(5);
+                                            resolve(true);
                                         });
                                     });
-                                });
+                                }
+
+                                await asyncExec('git pull');
+                                await asyncExec('git fetch --all');
+                                await asyncExec('git reset --hard');
+                                await asyncExec('npm install');
+                                await asyncExec('npm update');
+
+                                process.exit(5);
                             }
 
                             let timeout = (act_data.timeout ?? 0) * 10000;
