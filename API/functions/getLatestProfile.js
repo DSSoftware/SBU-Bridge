@@ -5,7 +5,6 @@ const axios = require('axios');
 const { getUUID } = require('../../src/contracts/API/PlayerDBAPI.js');
 
 const cache = new Map();
-const v2cache = new Map();
 
 async function getLatestProfile(uuid, options = { museum: false }) {
     if (!isUuid(uuid)) {
@@ -22,31 +21,26 @@ async function getLatestProfile(uuid, options = { museum: false }) {
         }
     }
 
-    const [{ data: profileRes }, { data: profileResv2 }] = await Promise.all([
-        axios.get(`https://api.hypixel.net/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`),
+    const [{ data: profileResv2 }] = await Promise.all([
         axios.get(`https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
     ]).catch((error) => {
         throw error?.response?.data?.cause ?? 'Request to Hypixel API failed. Please try again!';
     });
 
     if (
-        profileRes.profiles == null ||
-        profileRes.profiles.length == 0 ||
         profileResv2.profiles == null ||
         profileResv2.profiles.length == 0
     ) {
         throw 'Player has no SkyBlock profiles.';
     }
 
-    const profileData = profileRes.profiles.find((a) => a.selected) || null;
     const profileDatav2 = profileResv2.profiles.find((a) => a.selected) || null;
-    if (profileData == null || profileDatav2 == null) {
+    if (profileDatav2 == null) {
         throw 'Player does not have selected profile.';
     }
 
-    const profile = profileData.members[uuid];
     const profilev2 = profileDatav2.members[uuid];
-    if (profile === null || profilev2 == null) {
+    if (profilev2 == null) {
         throw 'Uh oh, this player is not in this Skyblock profile.';
     }
 
@@ -57,11 +51,11 @@ async function getLatestProfile(uuid, options = { museum: false }) {
             profile: profilev2,
             profileData: profileDatav2
         },
-        profiles: profileRes.profiles,
-        profile: profile,
-        profileData: profileData,
+        profiles: profileResv2.profiles,
+        profile: profilev2,
+        profileData: profileDatav2,
         uuid: uuid,
-        ...(options.museum ? await getMuseum(profileData.profile_id, uuid) : {})
+        ...(options.museum ? await getMuseum(profileDatav2.profile_id, uuid) : {})
     };
 
     cache.set(uuid, output);
