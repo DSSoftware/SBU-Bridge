@@ -38,7 +38,7 @@ class SkillsCommand extends minecraftCommand {
 
             const skillsFormatted = Object.keys(profile)
                 .map((skill) => {
-                    const level = skill.level;
+                    const level = Math.floor(profile[skill].levelWithProgress ?? 0);
 
                     if (skill != 'runecrafting' && skill != 'social') {
                         sa_points += level;
