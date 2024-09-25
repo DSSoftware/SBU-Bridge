@@ -38,27 +38,7 @@ class SkillsCommand extends minecraftCommand {
 
             const skillsFormatted = Object.keys(profile)
                 .map((skill) => {
-                    let skill_cap = 100;
-
-                    if (skill == 'farming') {
-                        let farming_info = data.profile?.jacobs_contest?.perks?.farming_level_cap;
-                        if (farming_info == undefined) {
-                            skill_cap = 50;
-                        } else {
-                            skill_cap = 50 + farming_info;
-                        }
-                    }
-
-                    if (skill == 'taming') {
-                        let taming_cap = (data.v2.profile?.pets_data?.pet_care?.pet_types_sacrificed ?? []).length + 50;
-                        if (taming_cap == undefined) {
-                            skill_cap = 50;
-                        } else {
-                            skill_cap = taming_cap;
-                        }
-                    }
-
-                    const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
+                    
 
                     if (skill != 'runecrafting' && skill != 'social') {
                         sa_points += level;

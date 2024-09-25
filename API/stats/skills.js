@@ -16,16 +16,16 @@ module.exports = function getSkills(profile) {
     };
 
     return {
-        farming: calcSkill('farming', skill_experience['farming']),
-        mining: calcSkill('mining', skill_experience['mining']),
-        combat: calcSkill('combat', skill_experience['combat']),
-        foraging: calcSkill('foraging', skill_experience['foraging']),
-        fishing: calcSkill('fishing', skill_experience['fishing']),
-        enchanting: calcSkill('enchanting', skill_experience['enchanting']),
-        alchemy: calcSkill('alchemy', skill_experience['alchemy']),
-        carpentry: calcSkill('carpentry', skill_experience['carpentry']),
-        runecrafting: calcSkill('runecrafting', skill_experience['runecrafting']),
-        social: calcSkill('social', skill_experience['social']),
-        taming: calcSkill('taming', skill_experience['taming'])
+        farming: calcSkill('farming', skill_experience['farming'], profile),
+        mining: calcSkill('mining', skill_experience['mining'], profile),
+        combat: calcSkill('combat', skill_experience['combat'], profile),
+        foraging: calcSkill('foraging', skill_experience['foraging'], profile),
+        fishing: calcSkill('fishing', skill_experience['fishing'], profile),
+        enchanting: calcSkill('enchanting', skill_experience['enchanting'], profile),
+        alchemy: calcSkill('alchemy', skill_experience['alchemy'], profile),
+        carpentry: calcSkill('carpentry', skill_experience['carpentry'], profile),
+        runecrafting: calcSkill('runecrafting', skill_experience['runecrafting'], profile),
+        social: calcSkill('social', skill_experience['social'], profile),
+        taming: calcSkill('taming', skill_experience['taming'], profile)
     };
 };

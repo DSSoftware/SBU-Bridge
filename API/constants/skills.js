@@ -1,11 +1,32 @@
 //CREDIT: https://github.com/SkyCrypt/SkyCryptWebsite (Modified)
 const xp_tables = require('./xp_tables.js');
 
-module.exports = function calcSkill(skill, experience, type) {
+module.exports = function calcSkill(skill, experience, profile=false) {
     let table = 'normal';
     if (skill === 'runecrafting') table = 'runecrafting';
     if (skill === 'social') table = 'social';
     if (skill === 'dungeoneering') table = 'catacombs';
+    let skill_cap = 100;
+
+    if(profile){
+        if (skill === 'farming') {
+            let farming_info = profile?.jacobs_contest?.perks?.farming_level_cap;
+            if (farming_info == undefined) {
+                skill_cap = 50;
+            } else {
+                skill_cap = 50 + farming_info;
+            }
+        }
+
+        if (skill == 'taming') {
+            let taming_cap = (profile?.pets_data?.pet_care?.pet_types_sacrificed ?? []).length + 50;
+            if (taming_cap == undefined) {
+                skill_cap = 50;
+            } else {
+                skill_cap = taming_cap;
+            }
+        }
+    }
 
     if (experience <= 0) {
         return {
@@ -52,6 +73,11 @@ module.exports = function calcSkill(skill, experience, type) {
 
     progress = level >= maxLevel && skill !== 'dungeoneering' ? 0 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
+    //const level = Math.min(Math.floor(profile[skill].levelWithProgress ?? 0), skill_cap);
+
+    level = Math.min(level, skill_cap);
+    levelWithProgress = Math.min(level + progress || 0, skill_cap);
+
     return {
         totalXp,
         xp,
@@ -59,6 +85,6 @@ module.exports = function calcSkill(skill, experience, type) {
         xpCurrent,
         xpForNext,
         progress,
-        levelWithProgress: level + progress || 0
+        levelWithProgress: levelWithProgress
     };
 };
