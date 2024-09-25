@@ -67,8 +67,9 @@ class DuelsStatsCommand extends minecraftCommand {
             const player = await hypixel.getPlayer(uuid);
 
             if (!duel) {
+                //[${player.stats.duels.division}]
                 this.send(
-                    `/${channel} [Duels] [${player.stats.duels.division}] ${username} Wins: ${formatNumber(
+                    `/${channel} [Duels] ${username} Wins: ${formatNumber(
                         player.stats.duels.wins
                     )} | CWS: ${player.stats.duels.winstreak} | BWS: ${player.stats.duels.bestWinstreak} | WLR: ${
                         player.stats.duels.WLRatio
@@ -89,13 +90,14 @@ class DuelsStatsCommand extends minecraftCommand {
                 );
             }
         } catch (error) {
-            this.send(
+            /*this.send(
                 `/${channel} ${error
                     .toString()
                     .replace('[hypixel-api-reborn] ', '')
                     .replace('For help join our Discord Server https://discord.gg/NSEBNMM', '')
                     .replace('Error:', '[ERROR]')}`
-            );
+            );*/
+            this.send(`/${channel} [ERROR] Player has never played BedWars.`);
         }
     }
 }

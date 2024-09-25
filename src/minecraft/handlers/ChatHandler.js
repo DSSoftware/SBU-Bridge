@@ -89,9 +89,13 @@ class StateHandler extends eventHandler {
                 try {
                     let profile = await getLatestProfile(uuid);
 
-                    skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-                    const dungeonsStats = getDungeons(profile.profile, undefined);
-                    catacombsLevel = Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0);
+                    for(let unique_profile of profile.profiles){
+                        let unique_player = unique_profile.members[uuid];
+
+                        skyblockLevel = Math.max((unique_player?.leveling?.experience || 0) / 100 ?? 0, skyblockLevel);
+                        const dungeonsStats = getDungeons(unique_player, undefined);
+                        catacombsLevel = Math.max(Math.round(dungeonsStats?.catacombs?.skill?.levelWithProgress || 0), catacombsLevel);
+                    }
 
                     // MAIN REQS
                     if (skyblockLevel < config.minecraft.guildRequirements.requirements.skyblockLevel) {

@@ -27,7 +27,9 @@ class FairySoulsCommand extends minecraftCommand {
 
             const total = data.profileData.game_mode === 'island' ? 5 : 247;
 
-            const { fairy_souls_collected } = data.profile;
+            const { fairy_soul } = data.profile;
+
+            const fairy_souls_collected = fairy_soul.total_collected;
 
             this.send(
                 `/${channel} ${username}'s Fairy Souls: ${fairy_souls_collected}/${total} | Progress: ${(

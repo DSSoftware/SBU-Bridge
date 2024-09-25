@@ -58,13 +58,14 @@ class BedwarsCommand extends minecraftCommand {
                 this.send(`/${channel} Invalid mode. Valid modes: overall, solo, doubles, threes, fours, 4v4`);
             }
         } catch (error) {
-            this.send(
+            /*this.send(
                 `/${channel} ${error
                     .toString()
                     .replace('[hypixel-api-reborn] ', '')
                     .replace('For help join our Discord Server https://discord.gg/NSEBNMM', '')
                     .replace('Error:', '[ERROR]')}`
-            );
+            );*/
+            this.send(`/${channel} [ERROR] Player has never played BedWars.`);
         }
     }
 }

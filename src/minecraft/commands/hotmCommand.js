@@ -142,6 +142,7 @@ class MedalsCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
+            throw "Command outdated. It will be updated at a later date";
             username = this.getArgs(message)[0] || username;
             const data = await getLatestProfile(username);
             username = formatUsername(username, data.profileData?.game_mode);

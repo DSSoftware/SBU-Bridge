@@ -28,8 +28,6 @@ class SkillsCommand extends minecraftCommand {
             const uuid = await getUUID(username);
 
             const data = await getLatestProfile(uuid);
-            const hypixel_data = await hypixel.getPlayer(uuid);
-            const achievements = hypixel_data?.achievements;
 
             username = formatUsername(username, data.profileData.cute_name);
 
@@ -43,7 +41,7 @@ class SkillsCommand extends minecraftCommand {
                     let skill_cap = 100;
 
                     if (skill == 'farming') {
-                        let farming_info = data.profile?.jacob2?.perks?.farming_level_cap;
+                        let farming_info = data.profile?.jacobs_contest?.perks?.farming_level_cap;
                         if (farming_info == undefined) {
                             skill_cap = 50;
                         } else {

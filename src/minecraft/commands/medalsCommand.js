@@ -84,7 +84,7 @@ class MedalsCommand extends minecraftCommand {
 
             username = formatUsername(username, data.profileData?.game_mode);
 
-            let jacob_data = data?.profile?.jacob2;
+            let jacob_data = data?.profile?.jacobs_contest;
             if (jacob_data == undefined) {
                 throw "Player hasn't participated in any Jacob's Contests.";
             }

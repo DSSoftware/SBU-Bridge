@@ -28,11 +28,11 @@ class RenderCommand extends minecraftCommand {
 
             required_ign = formatUsername(required_ign, profile.profileData?.game_mode);
 
-            if (!profile.profile.inv_contents?.data) {
+            if (!profile.profile.inventory?.inv_contents?.data) {
                 return this.send(`/${channel} This player has an Inventory API off.`);
             }
 
-            const inventoryData = (await decodeData(Buffer.from(profile.profile.inv_contents.data, 'base64'))).i;
+            const inventoryData = (await decodeData(Buffer.from(profile.profile.inventory.inv_contents.data, 'base64'))).i;
 
             let inventory = `${required_ign}'s inventory:`;
             let inventory2 = ``;
