@@ -130,6 +130,7 @@ class APIManager {
                                 await asyncExec('git reset --hard');
                                 await asyncExec('npm install');
                                 await asyncExec('npm update');
+                                await asyncExec('npm outdated');
 
                                 process.exit(5);
                             }
