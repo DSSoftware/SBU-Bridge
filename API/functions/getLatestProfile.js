@@ -44,6 +44,22 @@ async function getLatestProfile(uuid, options = { museum: false }) {
         throw 'Uh oh, this player is not in this Skyblock profile.';
     }
 
+    // Remapping new points to old system
+    profilev2.inv_armor = profilev2?.inventory?.inv_armor;
+    profilev2.equipment_contents = profilev2?.inventory?.equipment_contents;
+    profilev2.wardrobe_contents = profilev2?.inventory?.wardrobe_contents;
+    profilev2.inv_contents = profilev2?.inventory?.inv_contents;
+    profilev2.ender_chest_contents = profilev2?.inventory?.ender_chest_contents;
+    profilev2.personal_vault_contents = profilev2?.inventory?.personal_vault_contents;
+    
+    profilev2.talisman_bag = profilev2?.inventory?.bag_contents?.talisman_bag;
+    profilev2.fishing_bag = profilev2?.inventory?.bag_contents?.fishing_bag;
+    profilev2.potion_bag = profilev2?.inventory?.bag_contents?.potion_bag;
+    profilev2.sacks_bag = profilev2?.inventory?.bag_contents?.sacks_bag;
+    
+    profilev2.candy_inventory_contents = profilev2?.shared_inventory?.candy_inventory_contents;
+    profilev2.carnival_mask_inventory_contents = profilev2?.shared_inventory?.carnival_mask_inventory_contents;
+
     const output = {
         last_save: Date.now(),
         v2: {

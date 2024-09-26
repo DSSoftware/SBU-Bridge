@@ -28,14 +28,6 @@ class NetWorthCommand extends minecraftCommand {
 
             username = formatUsername(username, data.profileData?.game_mode);
 
-            let should_cache = true;
-            let cache_message = 'Cached';
-
-            if (this.getArgs(message)[1] == 'force') {
-                should_cache = false;
-                cache_message = 'Refreshed';
-            }
-
             let personal_bank = data?.v2?.profile?.profile?.bank_account;
 
             let coop_bank = data.profileData?.banking?.balance || 0;
@@ -43,7 +35,6 @@ class NetWorthCommand extends minecraftCommand {
             let coins_total = coop_bank + (personal_bank || 0);
 
             const profile = await getNetworth(data.profile, coins_total, {
-                cache: should_cache,
                 onlyNetworth: true,
                 museumData: data.museum
             });
@@ -81,7 +72,7 @@ class NetWorthCommand extends minecraftCommand {
             }
 
             this.send(
-                `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum} | ${cache_message}`
+                `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum}`
             );
         } catch (error) {
             Logger.warnMessage(error);
