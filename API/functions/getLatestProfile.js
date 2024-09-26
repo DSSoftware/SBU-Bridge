@@ -54,6 +54,9 @@ async function getLatestProfile(uuid, options = { museum: false }) {
     profilev2.ender_chest_contents = profilev2?.inventory?.ender_chest_contents;
     profilev2.personal_vault_contents = profilev2?.inventory?.personal_vault_contents;
 
+    profilev2.backpack_icons = profilev2?.inventory?.backpack_icons;
+    profilev2.backpack_contents = profilev2?.inventory?.backpack_contents;
+
     profilev2.talisman_bag = profilev2?.inventory?.bag_contents?.talisman_bag;
     profilev2.fishing_bag = profilev2?.inventory?.bag_contents?.fishing_bag;
     profilev2.potion_bag = profilev2?.inventory?.bag_contents?.potion_bag;
