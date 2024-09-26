@@ -45,13 +45,15 @@ async function getLatestProfile(uuid, options = { museum: false }) {
     }
 
     // Remapping new points to old system
+    profilev2.coin_purse = profilev2?.inventory?.coin_purse;
+
     profilev2.inv_armor = profilev2?.inventory?.inv_armor;
     profilev2.equipment_contents = profilev2?.inventory?.equipment_contents;
     profilev2.wardrobe_contents = profilev2?.inventory?.wardrobe_contents;
     profilev2.inv_contents = profilev2?.inventory?.inv_contents;
     profilev2.ender_chest_contents = profilev2?.inventory?.ender_chest_contents;
     profilev2.personal_vault_contents = profilev2?.inventory?.personal_vault_contents;
-    
+
     profilev2.talisman_bag = profilev2?.inventory?.bag_contents?.talisman_bag;
     profilev2.fishing_bag = profilev2?.inventory?.bag_contents?.fishing_bag;
     profilev2.potion_bag = profilev2?.inventory?.bag_contents?.potion_bag;
