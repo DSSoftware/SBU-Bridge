@@ -45,7 +45,7 @@ async function getLatestProfile(uuid, options = { museum: false }) {
     }
 
     // Remapping new points to old system
-    profilev2.coin_purse = profilev2?.inventory?.coin_purse;
+    profilev2.coin_purse = profilev2?.currencies?.coin_purse;
 
     profilev2.inv_armor = profilev2?.inventory?.inv_armor;
     profilev2.equipment_contents = profilev2?.inventory?.equipment_contents;
