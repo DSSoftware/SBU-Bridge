@@ -22,7 +22,7 @@ class NetWorthCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            throw "Command outdated. It will be updated at a later date";
+            //throw "Command outdated. It will be updated at a later date";
             username = this.getArgs(message)[0] || username;
 
             const data = await getLatestProfile(username, { museum: true });
