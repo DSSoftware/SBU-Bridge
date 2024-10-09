@@ -176,6 +176,11 @@ module.exports = {
                 dev: ['819237478073499648']
             }
         },
+        IGC: {
+            enabled: process.env.igc_enabled == 'true', // Enable or disable IGC
+            endpoint: "https://sky.dssoftware.ru/IGC/",
+            collectorID: process.env.igc_collectorid    // Collector IGC Secret
+        },
         GCL: {
             // Guild Cross Link Settings
             // WARNING! Make sure to add required bridges to config.discord.channels.allowedBots, otherwise it wont work.

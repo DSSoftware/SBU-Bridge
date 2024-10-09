@@ -49,6 +49,33 @@ class StateHandler extends eventHandler {
             });
         }
 
+        if (this.isDirectMessage(message) && config.discord.IGC.enabled === true) {
+            let raw_message = replaceAllRanks(message);
+            raw_message = raw_message.replace("From ", "");
+            let raw_components = string.split(': ');
+            const [igc_username, igc_message] = [raw_components.shift(), components.join(': ')];
+
+            if(igc_message.startsWith("[IGC]")){
+                igc_message = igc_message.replace("[IGC] ", "");
+
+                let uuid = undefined;
+                try {
+                    uuid = await getUUID(igc_username);
+                    if (uuid == undefined) {
+                        throw 'Failed to obtain UUID';
+                    }
+                } catch (e) {
+                    return;
+                }
+
+                if(uuid == undefined){
+                    return;
+                }
+
+                SCFAPI.sendIGCMessage(uuid, igc_message);
+            }
+        }
+
         if (this.isLobbyJoinMessage(message) && config.discord.other.autoLimbo === true) {
             return bot.chat("/limbo");
         }
@@ -1152,6 +1179,10 @@ class StateHandler extends eventHandler {
 
     isGuildLevelUpMessage(message) {
         return message.includes('The guild has reached Level') && !message.includes(':');
+    }
+
+    isDirectMessage(message) {
+        return (message.startsWith('From '));
     }
 
     minecraftChatColorToHex(color) {

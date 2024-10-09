@@ -101,7 +101,7 @@ class MessageHandler {
                 }
                 catch(e){
                     if(!(config.discord.other.discordFallback || message.author.bot)){
-                        client.channels.cache.get(message.channel.id).send({
+                        message.reply({
                             content: `<@${message.author.id}>`,
                             embeds: [
                                 {
@@ -122,7 +122,7 @@ class MessageHandler {
                             message.react('❌').catch((e) => {});
                             return;
                         }
-                        client.channels.cache.get(message.channel.id).send({
+                        message.reply({
                             content: `<@${message.author.id}>`,
                             embeds: [
                                 {

@@ -430,6 +430,23 @@ async function SCFsaveLogging(type, message) {
     });
 }
 
+async function SCFSendIGCMessage(uuid, message) {
+    return new Promise(async (resolve, reject) => {
+
+        axios.post(config.discord.IGC.endpoint, {
+            message: message,
+            uuid: uuid, 
+            collector: config.discord.IGC.collectorID
+        }).then(function (response) {
+            resolve(true);
+        })
+        .catch(function (error) {
+            resolve(false);
+        });
+
+    });
+}
+
 async function SCFhandleLeave(username){
     return new Promise(async (resolve, reject) => {
         if (!config.minecraft.API.SCF.enabled) {
@@ -463,5 +480,6 @@ module.exports = {
     getMessagesSent: SCFgetMessagesSent,
     getMessagesTop: SCFgetMessagesTop,
     saveLogging: SCFsaveLogging,
-    handleLeave: SCFhandleLeave
+    handleLeave: SCFhandleLeave,
+    sendIGCMessage: SCFSendIGCMessage
 };
