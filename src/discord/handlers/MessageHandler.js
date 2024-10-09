@@ -102,7 +102,6 @@ class MessageHandler {
                 catch(e){
                     if(!(config.discord.other.discordFallback || message.author.bot)){
                         message.reply({
-                            content: `<@${message.author.id}>`,
                             embeds: [
                                 {
                                     color: 15548997,
@@ -123,7 +122,6 @@ class MessageHandler {
                             return;
                         }
                         message.reply({
-                            content: `<@${message.author.id}>`,
                             embeds: [
                                 {
                                     color: 15548997,
