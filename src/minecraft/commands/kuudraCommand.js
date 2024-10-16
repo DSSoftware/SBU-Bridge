@@ -51,7 +51,7 @@ class MedalsCommand extends minecraftCommand {
             let kuudra_runs = basic_runs + hot_runs + burning_runs + fiery_runs + infernal_runs;
 
             this.send(
-                `/${channel} ${username} Kuudra Runs: ${kuudra_runs}, ${kuudra_score} Score (Ba: ${basic_runs} | H: ${hot_runs} | Bu: ${burning_runs} | F: ${fiery_runs} | I: ${infernal_runs}). Highest Infernal Wave: ${infernal_wave}.`
+                `/${channel} ${username} Kuudra Runs: ${kuudra_runs} | ${kuudra_score} Score (Ba: ${basic_runs} | H: ${hot_runs} | Bu: ${burning_runs} | F: ${fiery_runs} | I: ${infernal_runs}). Highest Infernal Wave: ${infernal_wave}.`
             );
         } catch (error) {
             Logger.warnMessage(error);
