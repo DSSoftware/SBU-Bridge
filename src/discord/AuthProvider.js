@@ -35,7 +35,7 @@ const MOD_PERMS = {
     mc_demote: false,
     execute: false,
     invite: true,
-    kick: false,
+    kick: true,
     mute: true,
     mc_promote: false,
     restart: false,
