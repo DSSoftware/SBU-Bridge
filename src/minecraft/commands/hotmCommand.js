@@ -157,7 +157,7 @@ class MedalsCommand extends minecraftCommand {
             let gemstone_powder = await this.getPowderInfo('gemstone', 'Gemstone', '§d', hotm_data, true);
             let glacite_powder = await this.getPowderInfo('glacite', 'Glacite', '§b', hotm_data, true);
 
-            let xp_left = `(${formatNumber(hotm_exp)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP)`;
+            let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_exp)} EXP)`;
             if(hotm_level_data?.next_level == null){
                 xp_left = "(MAX)";
             }
