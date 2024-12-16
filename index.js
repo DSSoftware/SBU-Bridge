@@ -7,7 +7,7 @@ const webhook_url = config.minecraft.API.SCF.fail_webhook;
 
 const fetch = require('node-fetch');
 
-/*if (cluster.isPrimary) {
+if (cluster.isPrimary) {
     function messageHandler(message) {
         if (message.event_id && message.event_id === 'exceptionCaught') {
             var params = {
@@ -176,17 +176,17 @@ const fetch = require('node-fetch');
         }
         Logger.infoMessage(`Fork exited with exit code ${code}.`);
     });
-}*/
+}
 
-/*if (cluster.isWorker) {*/
+if (cluster.isWorker) {
     process.on('uncaughtException', (error) => {
         console.log(error);
         Logger.infoMessage(error);
-        /*process.send({
+        process.send({
             event_id: 'exceptionCaught',
             exception: error.message,
             stack: error.stack
-        });*/
+        });
         process.exit(1);
     });
     process.on('unhandledRejection', function(err, promise) {
@@ -210,4 +210,4 @@ const fetch = require('node-fetch');
         .catch((error) => {
             console.error(error);
         });
-//}
+}
