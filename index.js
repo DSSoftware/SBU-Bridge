@@ -181,21 +181,21 @@ const fetch = require('node-fetch');
 /*if (cluster.isWorker) {*/
     process.on('uncaughtException', (error) => {
         Logger.infoMessage(error);
-        process.send({
+        /*process.send({
             event_id: 'exceptionCaught',
             exception: error.message,
             stack: error.stack
-        });
+        });*/
         process.exit(1);
     });
     process.on('unhandledRejection', function(err, promise) {
         console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
         Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
-        process.send({
+        /*process.send({
             event_id: 'exceptionCaught',
             exception: "Unhandled rejection. Check logs. (" + promise + ")",
             stack: "Cannot fit rejection message here, check logs."
-        });
+        });*/
         process.exit(1);
     });
     const app = require('./src/Application.js');
