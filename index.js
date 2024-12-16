@@ -180,6 +180,7 @@ const fetch = require('node-fetch');
 
 /*if (cluster.isWorker) {*/
     process.on('uncaughtException', (error) => {
+        console.log(error);
         Logger.infoMessage(error);
         /*process.send({
             event_id: 'exceptionCaught',
@@ -189,7 +190,7 @@ const fetch = require('node-fetch');
         process.exit(1);
     });
     process.on('unhandledRejection', function(err, promise) {
-        console.error('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
+        console.log('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
         Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
         /*process.send({
             event_id: 'exceptionCaught',
