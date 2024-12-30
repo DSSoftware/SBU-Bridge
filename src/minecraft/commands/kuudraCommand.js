@@ -39,13 +39,13 @@ class MedalsCommand extends minecraftCommand {
                 throw 'Player has no Kuudra runs!';
             }
 
-            let basic_runs = parseInt(kuudra_data.none);
-            let hot_runs = parseInt(kuudra_data.hot);
-            let burning_runs = parseInt(kuudra_data.burning);
-            let fiery_runs = parseInt(kuudra_data.fiery);
-            let infernal_runs = parseInt(kuudra_data.infernal);
+            let basic_runs = parseInt(kuudra_data.none) || 0;
+            let hot_runs = parseInt(kuudra_data.hot) || 0;
+            let burning_runs = parseInt(kuudra_data.burning) || 0;
+            let fiery_runs = parseInt(kuudra_data.fiery) || 0;
+            let infernal_runs = parseInt(kuudra_data.infernal) || 0;
 
-            let infernal_wave = parseInt(kuudra_data.highest_wave_infernal);
+            let infernal_wave = parseInt(kuudra_data.highest_wave_infernal) || "N/A";
 
             let kuudra_score = basic_runs + 2 * hot_runs + 3 * burning_runs + 4 * fiery_runs + 5 * infernal_runs;
             let kuudra_runs = basic_runs + hot_runs + burning_runs + fiery_runs + infernal_runs;
