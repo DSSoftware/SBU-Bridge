@@ -20,7 +20,7 @@ module.exports = {
             prefix: '!',
             messageFormat: '{username} » {message}',
             messageRepeatBypassLength: 28,
-            unique_id: process.env.unique_id,
+            unique_id: process.env.unique_id + " | Prefix: " + process.env.guild_prefix,
             guild_prefix: process.env.guild_prefix,
             replication_prefix: process.env.replica_prefix
         },
@@ -57,7 +57,7 @@ module.exports = {
             SCF: {
                 provider: "https://sky.dssoftware.ru/api.php",
                 mojang: "https://mojang.dssoftware.ru/",
-                enabled: (process.env.scf_enabled === 'true') & (!isStandalone),
+                enabled: (process.env.scf_enabled === 'true') && (!isStandalone),
                 key: process.env.scf_api,
                 fail_webhook: process.env.scf_fail_webhook,
                 logo: process.env.scf_logo
@@ -236,7 +236,7 @@ module.exports = {
         }
     },
     longpoll: {
-        enabled: true & (!isStandalone),
+        enabled: true && (!isStandalone),
         provider: "https://sky.dssoftware.ru/longpoll/"
     },
     /*
