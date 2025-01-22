@@ -21,7 +21,7 @@ module.exports = (profile) => {
 
     if (!('pets_data' in profile)) return output;
 
-    for (const pet of profile.pets_data) {
+    for (const pet of profile.pets_data.pets) {
         if (!('tier' in pet)) {
             continue;
         }
