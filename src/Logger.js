@@ -35,7 +35,7 @@ async function warnMessage(message) {
     SCFAPI.saveLogging("warn", message);
     console.log(chalk.bgYellow.black(`[${await getCurrentTime()}] Warning >`) + ' ' + chalk.yellow(message));
     if(config.logging.verbose){
-        console.trace("Warning message verbose logging."); 
+        console.log(message);
     }
 }
 
@@ -43,7 +43,7 @@ async function errorMessage(message) {
     SCFAPI.saveLogging("error", message);
     console.log(chalk.bgRedBright.black(`[${await getCurrentTime()}] Error >`) + ' ' + chalk.redBright(message));
     if(config.logging.verbose){
-        console.trace("Error message verbose logging.");
+        console.log(message);
     }
 }
 
