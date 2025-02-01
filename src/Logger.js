@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const config = require('../config.js');
 const SCFAPI = require('../API/utils/scfAPIHandler');
 
 async function infoMessage(message) {
@@ -32,12 +33,22 @@ async function webMessage(message) {
 
 async function warnMessage(message) {
     SCFAPI.saveLogging("warn", message);
-    return console.log(chalk.bgYellow.black(`[${await getCurrentTime()}] Warning >`) + ' ' + chalk.yellow(message));
+    console.log(chalk.bgYellow.black(`[${await getCurrentTime()}] Warning >`) + ' ' + chalk.yellow(message));
+    if(config.logging.verbose){
+        const stack = new Error("Debug trace.").stack();
+        SCFAPI.saveLogging("warn", stack);
+        console.log(stack);
+    }
 }
 
 async function errorMessage(message) {
     SCFAPI.saveLogging("error", message);
-    return console.log(chalk.bgRedBright.black(`[${await getCurrentTime()}] Error >`) + ' ' + chalk.redBright(message));
+    console.log(chalk.bgRedBright.black(`[${await getCurrentTime()}] Error >`) + ' ' + chalk.redBright(message));
+    if(config.logging.verbose){
+        const stack = new Error("Debug trace.").stack();
+        SCFAPI.saveLogging("error", stack);
+        console.log(stack);
+    }
 }
 
 async function broadcastMessage(message, location) {

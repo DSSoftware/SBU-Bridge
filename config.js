@@ -239,6 +239,9 @@ module.exports = {
         enabled: true && (!isStandalone),
         provider: "https://sky.dssoftware.ru/longpoll/"
     },
+    logging: {
+        verbose: true
+    },
     /*
         Sets default behavior when the feature is disabled by healthcheck:
 
