@@ -39,6 +39,7 @@ class unscrambleCommand extends minecraftCommand {
     }
 
     async onCommand(username, message, channel = 'gc') {
+        return;
         try {
             const userUsername = username;
             const length = this.getArgs(message)[0];

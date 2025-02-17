@@ -23,6 +23,7 @@ class QuickMathsCommand extends minecraftCommand {
     }
 
     async onCommand(username, message, channel = 'gc') {
+        return;
         try {
             const userUsername = username;
             const operands = [Math.floor(Math.random() * 25), Math.floor(Math.random() * 25)];
