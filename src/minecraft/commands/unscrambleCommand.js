@@ -21,6 +21,9 @@ const getAnswer = (message, answer) => {
 
 const cooldowns = new Map();
 
+let last_used = 0;
+let notification = false;
+
 class unscrambleCommand extends minecraftCommand {
     constructor(minecraft) {
         super(minecraft);
@@ -35,11 +38,17 @@ class unscrambleCommand extends minecraftCommand {
                 required: false
             }
         ];
-        this.cooldown = 30 * 1000;
+        this.cooldown = 5 * 60 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
-        return;
+        if(last_used + this.cooldown >= (new Date()).getTime()){
+            if(notification) return;
+            return this.send(`/${channel} You can only use !unscramble command once every 5 minutes :(`);
+        }
+        last_used = (new Date()).getTime();
+        notification = false;
+
         try {
             const userUsername = username;
             const length = this.getArgs(message)[0];

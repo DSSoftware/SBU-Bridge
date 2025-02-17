@@ -12,6 +12,9 @@ const getAnswer = (message, answer) => {
     return false;
 };
 
+let last_used = 0;
+let notification = false;
+
 class QuickMathsCommand extends minecraftCommand {
     constructor(minecraft) {
         super(minecraft);
@@ -20,10 +23,18 @@ class QuickMathsCommand extends minecraftCommand {
         this.aliases = ['qm'];
         this.description = 'Solve the equation in less than 10 seconds! Test your math skills!';
         this.options = [];
+
+        this.cooldown = 5 * 60 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
-        return;
+        if(last_used + this.cooldown >= (new Date()).getTime()){
+            if(notification) return;
+            return this.send(`/${channel} You can only use !quickmaths command once every 5 minutes :(`);
+        }
+        last_used = (new Date()).getTime();
+        notification = false;
+
         try {
             const userUsername = username;
             const operands = [Math.floor(Math.random() * 25), Math.floor(Math.random() * 25)];
