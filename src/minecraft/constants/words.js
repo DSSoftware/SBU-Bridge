@@ -82,7 +82,6 @@ const words = [
     'Grass',
     'Guardian',
     'Guitar',
-    'Gypsy',
     'Happy',
     'Harmony',
     'HayBale',
