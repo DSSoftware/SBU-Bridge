@@ -333,7 +333,7 @@ class MessageHandler {
             message.webhookId === null
                 ? true
                 : false;
-        const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0);
+        const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
         const validChannelIds = [
             config.discord.replication.channels.guild,
             config.discord.replication.channels.officer,
