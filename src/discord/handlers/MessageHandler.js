@@ -94,6 +94,9 @@ class MessageHandler {
 
             if (config.discord.IGC.enabled) {
                 if (message.webhookId !== null && config.discord.IGC.settings.listening == message.channel.id) {
+                    if(message.author.id == config.discord.IGC.settings.webhook_self){
+                        return;
+                    }
                     console.log(message);
                 }
             }
