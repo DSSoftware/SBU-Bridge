@@ -22,10 +22,10 @@ class MessageHandler {
             nick: undefined
         };
         try {
-            let player_info = await SCFAPI.getLinked(discord_id).catch(()=>{
+            let player_info = await SCFAPI.getLinked(discord_id).catch(() => {
                 throw {
-                    "name": "Failed to obtain API Data.",
-                    "doNotHandle": true
+                    name: 'Failed to obtain API Data.',
+                    doNotHandle: true
                 };
             });
 
@@ -66,7 +66,7 @@ class MessageHandler {
                 data: response
             };
         } catch (e) {
-            if(e?.doNotHandle == true){
+            if (e?.doNotHandle == true) {
                 throw e;
             }
             Logger.warnMessage(e);
@@ -95,13 +95,12 @@ class MessageHandler {
 
             let sender_data = undefined;
 
-            if(config.minecraft.API.SCF.enabled){
+            if (config.minecraft.API.SCF.enabled) {
                 let bypassCheck = false;
-                try{
+                try {
                     sender_data = await this.getSenderData(message.author.id);
-                }
-                catch(e){
-                    if(!(config.discord.other.discordFallback || message.author.bot)){
+                } catch (e) {
+                    if (!(config.discord.other.discordFallback || message.author.bot)) {
                         message.reply({
                             embeds: [
                                 {
@@ -115,8 +114,8 @@ class MessageHandler {
                     }
                     bypassCheck = true;
                 }
-                
-                if(!bypassCheck){
+
+                if (!bypassCheck) {
                     if (sender_data?.data?.nick == undefined && !message.author.bot) {
                         if (message.channel.id == config.discord.channels.officerChannel) {
                             message.react('❌').catch((e) => {});
@@ -136,7 +135,7 @@ class MessageHandler {
                         });
                         return;
                     }
-    
+
                     const isBridgeLocked = await scfBridgeLock.checkBridgelock(sender_data?.data?.uuid);
                     if (isBridgeLocked) {
                         message.react('❌').catch((e) => {});
@@ -145,7 +144,7 @@ class MessageHandler {
                 }
             }
 
-            let real_username = sender_data?.data?.nick ?? (message.member.displayName ?? message.author.username);
+            let real_username = sender_data?.data?.nick ?? message.member.displayName ?? message.author.username;
 
             let content = this.stripDiscordContent(message).trim();
             if (content.length === 0 && message?.attachments?.size == 0) {
@@ -215,8 +214,8 @@ class MessageHandler {
         }
     }
 
-    async saveGuildMessage(nick, uuid, guild) {        
-        SCFAPI.saveMessage("discord", nick, uuid, guild);
+    async saveGuildMessage(nick, uuid, guild) {
+        SCFAPI.saveMessage('discord', nick, uuid, guild);
     }
 
     async fetchReply(message) {
@@ -232,10 +231,9 @@ class MessageHandler {
             if (mentionedUserID != undefined) {
                 let repliedUserObject = await message.guild.members.cache.get(mentionedUserID);
                 let sender_data = undefined;
-                try{
+                try {
                     sender_data = await this.getSenderData(mentionedUserID);
-                }
-                catch(e){
+                } catch (e) {
                     // Do nothing.
                 }
                 mentionedUserName = sender_data?.data?.nick ?? repliedUserObject?.user?.username;
@@ -322,7 +320,9 @@ class MessageHandler {
 
     shouldBroadcastMessage(message) {
         const isBot =
-            message.author.bot && config.discord.channels.allowedBots.includes(message.author.id) === false
+            message.author.bot &&
+            config.discord.channels.allowedBots.includes(message.author.id) === false &&
+            message.webhookId === null
                 ? true
                 : false;
         const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0);
