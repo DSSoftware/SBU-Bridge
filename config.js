@@ -137,7 +137,7 @@ module.exports = {
             loggingChannel: process.env.channel_logging,
             debugMode: true,
             debugChannel: process.env.channel_debug,
-            allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417', '1268311020816826398']
+            allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417']
         },
         replication: {
             enabled: process.env.replica_enabled == 'true',
@@ -177,19 +177,21 @@ module.exports = {
             }
         },
         IGC: {
-            enabled: process.env.igc_enabled == 'true', // Enable or disable IGC
-            endpoint: "https://sky.dssoftware.ru/IGC/",
-            collectorID: process.env.igc_collectorid    // Collector IGC Secret
-        },
-        GCL: {
-            // Guild Cross Link Settings
-            // WARNING! Make sure to add required bridges to config.discord.channels.allowedBots, otherwise it wont work.
-            enabled: process.env.gcl_enabled == 'true',
+            // Inter Guild Chat
+            enabled: process.env.igc_enabled == 'true',
             settings: {
-                console: process.env.gcl_console,
+                listening: process.env.igc_listening,
+                webhook: process.env.igc_webhook,
+                webhook_self: process.env.igc_self_id,
                 channels: {
-                    guild: process.env.gcl_link_guild == 'true',
-                    officer: process.env.gcl_link_officer == 'true'
+                    guild: {
+                        prefix: process.env.igc_guild_prefix,
+                        commands: process.env.igc_guild_commands == "true"
+                    },
+                    officer: {
+                        prefix: process.env.igc_officer_prefix,
+                        commands: process.env.igc_officer_commands == "true"
+                    },
                 }
             }
         },

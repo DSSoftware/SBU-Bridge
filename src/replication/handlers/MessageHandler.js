@@ -87,6 +87,7 @@ class MessageHandler {
     }
 
     async onMessage(message) {
+        console.log(message);
         try {
             if (message.author.id === replication_client.user.id || !this.shouldBroadcastMessage(message)) {
                 return;
@@ -328,7 +329,8 @@ class MessageHandler {
         const validChannelIds = [
             config.discord.replication.channels.guild,
             config.discord.replication.channels.officer,
-            config.discord.replication.channels.debug
+            config.discord.replication.channels.debug,
+            config.discord.IGC.settings.listening
         ];
 
         return isValid && validChannelIds.includes(message.channel.id);

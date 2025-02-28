@@ -88,6 +88,7 @@ class MessageHandler {
 
     async onMessage(message) {
         try {
+            console.log(message);
             if (message.author.id === client.user.id || !this.shouldBroadcastMessage(message)) {
                 return;
             }
@@ -328,7 +329,8 @@ class MessageHandler {
         const validChannelIds = [
             config.discord.channels.officerChannel,
             config.discord.channels.guildChatChannel,
-            config.discord.channels.debugChannel
+            config.discord.channels.debugChannel,
+            config.discord.IGC.settings.listening
         ];
 
         return isValid && validChannelIds.includes(message.channel.id);
