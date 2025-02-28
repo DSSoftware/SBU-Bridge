@@ -185,10 +185,12 @@ module.exports = {
                 webhook_self: process.env.igc_self_id,
                 channels: {
                     guild: {
+                        enabled: process.env.igc_guild_enabled == "true",
                         prefix: process.env.igc_guild_prefix,
                         commands: process.env.igc_guild_commands == "true"
                     },
                     officer: {
+                        enabled: process.env.igc_officer_enabled == "true",
                         prefix: process.env.igc_officer_prefix,
                         commands: process.env.igc_officer_commands == "true"
                     },

@@ -88,9 +88,14 @@ class MessageHandler {
 
     async onMessage(message) {
         try {
-            console.log(message);
             if (message.author.id === client.user.id || !this.shouldBroadcastMessage(message)) {
                 return;
+            }
+
+            if (config.discord.IGC.enabled) {
+                if (message.webhookId !== null && config.discord.IGC.settings.listening == message.channel.id) {
+                    console.log(message);
+                }
             }
 
             let sender_data = undefined;

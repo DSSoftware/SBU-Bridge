@@ -1,7 +1,7 @@
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { demojify } = require('discord-emoji-converter');
 const config = require('../../../config.js');
-const axios = require("axios");
+const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
@@ -87,10 +87,15 @@ class MessageHandler {
     }
 
     async onMessage(message) {
-        console.log(message);
         try {
             if (message.author.id === replication_client.user.id || !this.shouldBroadcastMessage(message)) {
                 return;
+            }
+
+            if (config.discord.IGC.enabled) {
+                if (message.webhookId !== null && config.discord.IGC.settings.listening == message.channel.id) {
+                    console.log(message);
+                }
             }
 
             let sender_data = undefined;
