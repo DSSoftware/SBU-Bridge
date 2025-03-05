@@ -49,7 +49,7 @@ class StateHandler extends eventHandler {
             });
         }
 
-        if (this.isDirectMessage(message) && config.discord.IGC.enabled === true) {
+        /*if (this.isDirectMessage(message) && config.discord.IGC.enabled === true) {
             let raw_message = replaceAllRanks(message);
             raw_message = raw_message.replace("From ", "");
             let raw_components = string.split(': ');
@@ -74,7 +74,7 @@ class StateHandler extends eventHandler {
 
                 SCFAPI.sendIGCMessage(uuid, igc_message);
             }
-        }
+        }*/
 
         if (this.isLobbyJoinMessage(message) && config.discord.other.autoLimbo === true) {
             return bot.chat("/limbo");

@@ -92,14 +92,18 @@ class MessageHandler {
                 return;
             }
 
-            if (config.discord.IGC.enabled) {
-                if (message.webhookId !== null && config.discord.IGC.settings.listening == message.channel.id) {
+            // Handle specific cases IGC message sender.
+            if (config.discord.IGC.enabled && config.discord.IGC.settings.listening == message.channel.id) {
+                if (message.webhookId !== null) {
                     if(message.author.id == config.discord.IGC.settings.webhook_self){
                         return;
                     }
                     console.log(message);
                 }
+                return;
             }
+
+            // Handle usual messages sent via normal chat.
 
             let sender_data = undefined;
 
