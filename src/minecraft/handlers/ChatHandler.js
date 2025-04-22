@@ -334,7 +334,7 @@ class StateHandler extends eventHandler {
             if (process.env.notify_enabled === 'true') {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${process.env.notify_content}\n:inbox_tray: ${username} has joined the guild!`);
+                    .send(`${config.discord.commands.notifyContent}\n:inbox_tray: ${username} has joined the guild!`);
             }
 
             return [
@@ -364,7 +364,7 @@ class StateHandler extends eventHandler {
             if (process.env.notify_enabled === 'true') {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
+                    .send(`${config.discord.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
             }
 
             let request_res = await SCFAPI.handleLeave(username);
@@ -415,7 +415,7 @@ class StateHandler extends eventHandler {
             if (process.env.notify_enabled === 'true') {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${process.env.notify_content}\n:outbox_tray: ${username} has left the guild!`);
+                    .send(`${config.discord.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
             }
 
             let request_res = await SCFAPI.handleLeave(username);

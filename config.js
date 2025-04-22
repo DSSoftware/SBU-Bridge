@@ -226,7 +226,7 @@ module.exports = {
                 ],
                 dev: ['819237478073499648']
             },
-            notifyRole: process.env.notify_role,
+            notifyContent: process.env.notify_content,
             errorContent: "<@&1249416749334396959>"
         },
         other: {
