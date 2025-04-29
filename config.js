@@ -65,7 +65,6 @@ module.exports = {
         },
         guildRequirements: {
             enabled: process.env.req_enabled == 'true',
-            autoAccept: process.env.req_autoaccept == 'true',
             requirements: {
                 skyblockLevel: parseInt(process.env.req_sb_lvl) || 0,
                 catacombsLevel: parseInt(process.env.req_cata) || 0

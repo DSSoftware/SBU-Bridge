@@ -31,7 +31,7 @@ module.exports = {
                     value: `Bot Username: \`${bot.username}\`\nPrefix: \`${config.minecraft.bot.prefix}\`\nSkyBlock Events: \`${
                         config.minecraft.skyblockEventsNotifications.enabled ? 'enabled' : 'disabled'
                     }\`\nAuto Accept: \`${
-                        config.minecraft.guildRequirements.autoAccept ? 'enabled' : 'disabled'
+                        config.minecraft.guildRequirements.enabled ? 'enabled' : 'disabled'
                     }\`\nGuild Experience Requirement: \`${config.minecraft.guild.guildExp.toLocaleString()}\`\nUptime: Online since <t:${Math.floor(
                         (Date.now() - client.uptime) / 1000
                     )}:R>\nVersion: \`${require('../../../package.json').version}\`\n`,

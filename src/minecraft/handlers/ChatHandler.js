@@ -223,7 +223,7 @@ class StateHandler extends eventHandler {
                 await delay(1000);
 
                 if (meetRequirements === true) {
-                    if (config.minecraft.guildRequirements.autoAccept === true) {
+                    if (config.minecraft.guildRequirements.enabled === true) {
                         bot.chat(`/guild accept ${username}`);
                     }
                 }
