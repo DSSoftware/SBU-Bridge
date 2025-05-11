@@ -36,7 +36,7 @@ class MessageHandler {
             let uuid = player_info?.data?.uuid;
 
             let hypixel_info = await Promise.all([
-                axios.get(`https://api.hypixel.net/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
+                axios.get(`https://api.hypixel.net/v2/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
             ]).catch((error) => {});
 
             hypixel_info = hypixel_info?.[0]?.data ?? {};
@@ -49,7 +49,7 @@ class MessageHandler {
             response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
 
             let guild_info = await Promise.all([
-                axios.get(`https://api.hypixel.net/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)
+                axios.get(`https://api.hypixel.net/v2/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)
             ]).catch((error) => {});
 
             guild_info = guild_info?.[0]?.data ?? {};

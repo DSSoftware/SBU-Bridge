@@ -103,7 +103,7 @@ checkForHypixelUpdates(true);
 let skyblockVersion;
 async function checkForSkyblockVersion() {
     try {
-        const { data } = await axios.get('https://api.hypixel.net/resources/skyblock/skills');
+        const { data } = await axios.get('https://api.hypixel.net/v2/resources/skyblock/skills');
 
         if (skyblockVersion !== data.version) {
             if (skyblockVersion !== undefined) {
