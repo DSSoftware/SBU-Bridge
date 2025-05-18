@@ -33,6 +33,7 @@ class StateHandler extends eventHandler {
     }
 
     async onMessage(event) {
+        console.log(event);
         const message = event.toString();
         const colouredMessage = event.toMotd();
 
