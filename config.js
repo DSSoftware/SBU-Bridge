@@ -7,6 +7,14 @@ if(isStandalone){
     console.warn("[STANDALONE] Running bridge in standalone mode. Custom features will be disabled.")
 }
 
+async function getRemoteEnv(){
+    
+}
+
+async function getEnv(){
+
+}
+
 /*
     Setting bridge to STANDALONE mode means that it will not use any of the
     custom features, such as Cached Mojang Resolver or Player Linking.
