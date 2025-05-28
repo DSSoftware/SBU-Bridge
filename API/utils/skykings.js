@@ -11,7 +11,7 @@ async function lookupUUID(uuid) {
             return;
         }
         try {
-            const response = await axios.get(`https://skykings.net/api/lookup?key=${key}&uuid=${uuid}`);
+            const response = await axios.get(`https://old.skykings.net/api/lookup?key=${key}&uuid=${uuid}`);
             resolve(response.data.entries.length > 0);
         } catch (error) {
             Logger.warnMessage(error);
