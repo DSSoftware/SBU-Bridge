@@ -657,11 +657,12 @@ class StateHandler extends eventHandler {
                 .trim()
                 .split(/ +/g)[2];
             return [
+                /*
                 this.minecraft.broadcastCleanEmbed({
                     message: replaceVariables(messages.onlineInvite, { username }),
                     color: 2067276,
                     channel: 'Guild'
-                }),
+                }),*/
                 this.minecraft.broadcastCleanEmbed({
                     message: replaceVariables(messages.onlineInvite, { username }),
                     color: 2067276,
@@ -677,11 +678,11 @@ class StateHandler extends eventHandler {
                 .split(/ +/g)[6]
                 .match(/\w+/g)[0];
             return [
-                this.minecraft.broadcastCleanEmbed({
+                /*this.minecraft.broadcastCleanEmbed({
                     message: replaceVariables(messages.offlineInvite, { username }),
                     color: 2067276,
                     channel: 'Guild'
-                }),
+                }),*/
                 this.minecraft.broadcastCleanEmbed({
                     message: replaceVariables(messages.offlineInvite, { username }),
                     color: 2067276,
@@ -692,11 +693,11 @@ class StateHandler extends eventHandler {
 
         if (this.isFailedInvite(message)) {
             return [
-                this.minecraft.broadcastCleanEmbed({
+                /*this.minecraft.broadcastCleanEmbed({
                     message: message.replace(/\[(.*?)\]/g, '').trim(),
                     color: 15548997,
                     channel: 'Guild'
-                }),
+                }),*/
                 this.minecraft.broadcastCleanEmbed({
                     message: message.replace(/\[(.*?)\]/g, '').trim(),
                     color: 15548997,
