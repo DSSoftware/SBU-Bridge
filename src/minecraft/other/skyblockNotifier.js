@@ -4,6 +4,7 @@ const Rss = require('rss-parser');
 const axios = require('axios');
 const parser = new Rss();
 const Logger = require('#root/src/Logger.js');
+const { hypixelRequest } = require('../../../API/utils/scfAPIHandler.js');
 
 if (config.minecraft.hypixelUpdates.enabled === true) {
     if (config.minecraft.hypixelUpdates.hypixelNews === true) {
@@ -103,7 +104,7 @@ checkForHypixelUpdates(true);
 let skyblockVersion;
 async function checkForSkyblockVersion() {
     try {
-        const { data } = await axios.get('https://api.hypixel.net/v2/resources/skyblock/skills');
+        const data = await hypixelRequest('https://api.hypixel.net/v2/resources/skyblock/skills');
 
         if (skyblockVersion !== data.version) {
             if (skyblockVersion !== undefined) {

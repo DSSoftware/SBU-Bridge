@@ -7,6 +7,7 @@ const { formatNumber, formatUsername } = require('../../contracts/helperFunction
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const Logger = require('#root/src/Logger.js');
+const { hypixelRequest } = require('../../../API/utils/scfAPIHandler.js');
 
 function convertPrestige(prestige) {
     const prestiges = {
@@ -143,17 +144,15 @@ class topCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            let passed_username = this.getArgs(message)[0];
-            username = passed_username || username;
+            let passed_username = this.getArgs(message)[0];            username = passed_username || username;
             const player_uuid = await getUUID(username);
 
             let player_profile = `https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${player_uuid}`;
 
-            let player_data = await Promise.all([axios.get(player_profile)]).catch((error) => {
+            let player_data = await hypixelRequest(player_profile).catch((error) => {
                 throw 'Player has no SkyBlock profiles.';
             });
 
-            player_data = player_data[0].data ?? {};
             if (!player_data?.success) {
                 throw 'Player has no SkyBlock profiles.';
             }

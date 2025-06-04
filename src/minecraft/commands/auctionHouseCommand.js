@@ -8,6 +8,7 @@ const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { formatNumber } = require('../../contracts/helperFunctions.js');
 const Logger = require('#root/src/Logger.js');
+const { hypixelRequest } = require('../../../API/utils/scfAPIHandler.js');
 
 class AuctionHouseCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -37,12 +38,12 @@ class AuctionHouseCommand extends minecraftCommand {
 
             const { hypixelAPIkey } = config.minecraft.API;
             const [auctionResponse, playerResponse] = await Promise.all([
-                axios.get(`https://api.hypixel.net/v2/skyblock/auction?key=${hypixelAPIkey}&player=${uuid}`),
-                axios.get(`https://api.hypixel.net/v2/player?key=${hypixelAPIkey}&uuid=${uuid}`)
+                hypixelRequest(`https://api.hypixel.net/v2/skyblock/auction?key=${hypixelAPIkey}&player=${uuid}`),
+                hypixelRequest(`https://api.hypixel.net/v2/player?key=${hypixelAPIkey}&uuid=${uuid}`)
             ]);
 
-            const auctions = auctionResponse.data?.auctions || [];
-            const player = playerResponse.data?.player || {};
+            const auctions = auctionResponse?.auctions || [];
+            const player = playerResponse?.player || {};
 
             if (auctions.length === 0) {
                 return this.send(`/${channel} This player has no active auctions.`);
@@ -71,12 +72,11 @@ class AuctionHouseCommand extends minecraftCommand {
                         lore.push(`§7Starting Bid: §6${addCommas(auction.starting_bid)} coins`, `§7`);
                     } else if (auction.bids.length > 0) {
                         const bidderUUID = auction.bids[auction.bids.length - 1].bidder;
-
-                        const bidderResponse = await axios.get(
+                        const bidderResponse = await hypixelRequest(
                             `https://api.hypixel.net/v2/player?key=${hypixelAPIkey}&uuid=${bidderUUID}`
                         );
 
-                        const bidder = bidderResponse.data?.player || {};
+                        const bidder = bidderResponse?.player || {};
                         if (bidder === undefined) {
                             // eslint-disable-next-line no-throw-literal
                             throw `Failed to get bidder for auction ${auction.uuid}`;

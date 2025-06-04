@@ -7,14 +7,6 @@ if(isStandalone){
     console.warn("[STANDALONE] Running bridge in standalone mode. Custom features will be disabled.")
 }
 
-async function getRemoteEnv(){
-    
-}
-
-async function getEnv(){
-
-}
-
 /*
     Setting bridge to STANDALONE mode means that it will not use any of the
     custom features, such as Cached Mojang Resolver or Player Linking.
@@ -271,6 +263,8 @@ module.exports = {
         // Sends bridge's status to the control server.
         Status: 'REPLACE',
         // Mojang Proxy API. CRITICAL - FATAL or REPLACE REQUIRED.
-        Mojang: 'REPLACE'
+        Mojang: 'REPLACE',
+        // Hypixel Proxy API. CRITICAL - FATAL OR REPLACE REQUIRED.
+        Hypixel: 'REPLACE'
     }
 };

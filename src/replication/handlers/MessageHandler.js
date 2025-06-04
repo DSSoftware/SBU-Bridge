@@ -6,6 +6,7 @@ const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
+const { hypixelRequest } = require('../../../API/utils/scfAPIHandler.js');
 
 const sender_cache = new Map();
 
@@ -34,12 +35,8 @@ class MessageHandler {
             }
 
             let uuid = player_info?.data?.uuid;
-
-            let hypixel_info = await Promise.all([
-                axios.get(`https://api.hypixel.net/v2/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
-            ]).catch((error) => {});
-
-            hypixel_info = hypixel_info?.[0]?.data ?? {};
+            let hypixel_info = await hypixelRequest(`https://api.hypixel.net/v2/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
+                .catch((error) => {});
 
             if (!hypixel_info?.success || hypixel_info?.player?.displayname == undefined) {
                 return response;
@@ -48,11 +45,8 @@ class MessageHandler {
             response.uuid = player_info?.data?.uuid;
             response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
 
-            let guild_info = await Promise.all([
-                axios.get(`https://api.hypixel.net/v2/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)
-            ]).catch((error) => {});
-
-            guild_info = guild_info?.[0]?.data ?? {};
+            let guild_info = await hypixelRequest(`https://api.hypixel.net/v2/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)
+                .catch((error) => {});
 
             response.guild_id = guild_info?.guild?._id;
 
@@ -88,7 +82,7 @@ class MessageHandler {
 
     async onMessage(message) {
         try {
-            if (message.author.id === replication_client.user.id || !this.shouldBroadcastMessage(message)) {
+            if (message.author.id === global.replication_client.user.id || !this.shouldBroadcastMessage(message)) {
                 return;
             }
 

@@ -1,56 +1,16 @@
 const config = require('../../config.js');
 const axios = require('axios');
 
-const status = {
-    Link: {
+const status = {};
+
+for(const service of Object.keys(config.behavior)){
+    status[service] = {
         status: false,
         errorsCounter: 0,
         disableCounter: 0,
         updated: 0
-    },
-    Bridgelock: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    Blacklist: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    Status: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    Score: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    Mojang: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    InternalAPI: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    },
-    Logging: {
-        status: false,
-        errorsCounter: 0,
-        disableCounter: 0,
-        updated: 0
-    }
-};
+    };
+}
 
 setInterval(() => {
     for(const service of Object.keys(status)){
@@ -467,6 +427,41 @@ async function SCFhandleLeave(username){
     });
 }
 
+async function SCFHypixelRequest(url){
+    const require_service = "Hypixel";
+    return new Promise(async (resolve, reject) => {
+        let data = null;
+
+        let proxy_url = url.replace("api.hypixel.net", "hypixel.dssoftware.ru");
+
+        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            try {
+                data = (await axios.get(proxy_url)).data;
+
+                resolve(data);
+            } catch (e) {
+                if ((e?.response?.status ?? '').toString().startsWith('5') || (e?.response?.status ?? '').toString() == '429') {
+                    SCFsaveLogging("error", `${e}`);
+                    disableFeature(require_service);
+                } else {
+                    reject('Invalid username.');
+                    return;
+                }
+            }
+        }
+
+        try{
+            data = await axios.get(url);
+
+            resolve(data?.data);
+        }
+        catch(e){
+            reject('Invalid username.');
+            return;
+        }
+    });
+}
+
 module.exports = {
     status: status,
     checkBlacklist: SCFCheckBlacklist,
@@ -481,5 +476,6 @@ module.exports = {
     getMessagesTop: SCFgetMessagesTop,
     saveLogging: SCFsaveLogging,
     handleLeave: SCFhandleLeave,
-    sendIGCMessage: SCFSendIGCMessage
+    sendIGCMessage: SCFSendIGCMessage,
+    hypixelRequest: SCFHypixelRequest,
 };
