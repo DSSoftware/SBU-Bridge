@@ -254,6 +254,10 @@ module.exports = {
     behavior: {
         // User link service, responsible for correct IGN for discord messages.
         Link: 'REPLACE', 
+        // Assigns user a score for speaking in guild chat.
+        Score: 'REPLACE',
+        // Internal SCF API
+        InternalAPI: 'REPLACE',
         // Locks user from using bridges. DEPENDS ON LINK SERVICE.
         Bridgelock: 'REPLACE',
         // Provides external action API, used for kicks, invites and more.
@@ -265,6 +269,8 @@ module.exports = {
         // Mojang Proxy API. CRITICAL - FATAL or REPLACE REQUIRED.
         Mojang: 'REPLACE',
         // Hypixel Proxy API. CRITICAL - FATAL OR REPLACE REQUIRED.
-        Hypixel: 'REPLACE'
+        Hypixel: 'REPLACE',
+        // Logging to Database
+        Logging: 'REPLACE'
     }
 };
