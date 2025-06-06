@@ -1,5 +1,5 @@
 // Credits https://github.com/Altpapier/hypixel-discord-guild-bridge/blob/master/helper/loreRenderer.js
-const Canvas = require('canvas');
+const Canvas = require('@napi-rs/canvas');
 Canvas.registerFont('src/contracts/Fonts/2_Minecraft-Italic.otf', {
     family: 'MinecraftItalic'
 });

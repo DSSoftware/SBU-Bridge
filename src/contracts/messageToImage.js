@@ -1,6 +1,6 @@
 // Credits https://github.com/Altpapier/hypixel-discord-guild-bridge/blob/master/helper/messageToImage.js
 
-const { registerFont, createCanvas, loadImage } = require('canvas');
+const { registerFont, createCanvas, loadImage } = require('@napi-rs/canvas');
 registerFont('src/contracts/Fonts/MinecraftRegular-Bmg3.ttf', {
     family: 'Minecraft'
 });
