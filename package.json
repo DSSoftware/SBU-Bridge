@@ -66,5 +66,16 @@
         "jest": "^29.7.0",
         "nodemon": "^3.0.3",
         "prettier": "^3.2.4"
+    },
+    "pnpm": {
+      "ignoredBuiltDependencies": [
+        "canvas"
+      ],
+      "onlyBuiltDependencies": [
+        "canvas"
+      ]
+    },
+    "engines": {
+      "node": ">=20.18.3"
     }
 }
