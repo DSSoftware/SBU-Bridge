@@ -1,20 +1,10 @@
 // Credits https://github.com/Altpapier/hypixel-discord-guild-bridge/blob/master/helper/loreRenderer.js
 const Canvas = require('@napi-rs/canvas');
-Canvas.registerFont('src/contracts/Fonts/2_Minecraft-Italic.otf', {
-    family: 'MinecraftItalic'
-});
-Canvas.registerFont('src/contracts/Fonts/MinecraftRegular-Bmg3.ttf', {
-    family: 'Minecraft'
-});
-Canvas.registerFont('src/contracts/Fonts/minecraft-bold.otf', {
-    family: 'MinecraftBold'
-});
-Canvas.registerFont('src/contracts/Fonts/unifont.ttf', {
-    family: 'MinecraftUnicode'
-});
-Canvas.registerFont('src/contracts/Fonts/Monocraft.ttf', {
-    family: 'Monocraft'
-});
+Canvas.GlobalFonts.registerFromPath('src/contracts/Fonts/2_Minecraft-Italic.otf', "MinecraftItalic");
+Canvas.GlobalFonts.registerFromPath('src/contracts/Fonts/MinecraftRegular-Bmg3.ttf', "Minecraft");
+Canvas.GlobalFonts.registerFromPath('src/contracts/Fonts/minecraft-bold.otf', "MinecraftBold");
+Canvas.GlobalFonts.registerFromPath('src/contracts/Fonts/unifont.ttf', "MinecraftUnicode");
+Canvas.GlobalFonts.registerFromPath('src/contracts/Fonts/Monocraft.ttf', "Monocraft");
 
 const RGBA_COLOR = {
     0: 'rgba(0,0,0,1)',
@@ -102,7 +92,7 @@ async function renderLore(itemName, lore, monospace = false) {
         }
     }
 
-    return canvas.toBuffer();
+    return canvas.toBuffer("image/png");
 }
 
 module.exports = { renderLore };

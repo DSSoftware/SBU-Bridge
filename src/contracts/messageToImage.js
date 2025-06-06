@@ -1,12 +1,8 @@
 // Credits https://github.com/Altpapier/hypixel-discord-guild-bridge/blob/master/helper/messageToImage.js
 
-const { registerFont, createCanvas, loadImage } = require('@napi-rs/canvas');
-registerFont('src/contracts/Fonts/MinecraftRegular-Bmg3.ttf', {
-    family: 'Minecraft'
-});
-registerFont('src/contracts/Fonts/unifont.ttf', {
-    family: 'MinecraftUnicode'
-});
+const { GlobalFonts, createCanvas, loadImage } = require('@napi-rs/canvas');
+GlobalFonts.registerFromPath('src/contracts/Fonts/MinecraftRegular-Bmg3.ttf', "Minecraft");
+GlobalFonts.registerFromPath('src/contracts/Fonts/unifont.ttf', "MinecraftUnicode");
 
 const RGBA_COLOR = {
     0: 'rgba(0,0,0,1)',
@@ -95,7 +91,7 @@ async function generateMessageImage(message, username) {
         ctx.fillText(currentMessage, width, height);
         width += ctx.measureText(currentMessage).width;
     }
-    return canvas.toBuffer();
+    return canvas.toBuffer("image/png");
 }
 
 module.exports = generateMessageImage;
