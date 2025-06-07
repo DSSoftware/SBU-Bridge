@@ -3,11 +3,22 @@ const axios = require('axios');
 const config = require('./config.js');
 const Logger = require('./src/Logger.js');
 
-const webhook_url = config.minecraft.API.SCF.fail_webhook;
+const error_reporting_url = config.minecraft.API.SCF.error_reporting;
 
 const fetch = require('node-fetch');
 
 if (cluster.isPrimary) {
+    function sendWebhookLog(params) {
+        fetch(error_reporting_url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                "Authorization": config.discord.bot.token
+            },
+            body: JSON.stringify(params)
+        });
+    }
+
     function messageHandler(message) {
         if (message.event_id && message.event_id === 'exceptionCaught') {
             var params = {
@@ -20,18 +31,31 @@ if (cluster.isPrimary) {
                                 name: 'Exception Data',
                                 value: `\`\`\`${message.stack}\`\`\`\`\`\`${message.exception}\`\`\`\nInstance: \`${config.minecraft.bot.unique_id}\``
                             }
-                        ]
+                        ],
+                        color: 0x800000
                     }
                 ]
             };
 
-            fetch(webhook_url, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(params)
-            });
+            sendWebhookLog(params);
+        }
+        if (message.event_id === 'initialized') {
+            var params = {
+                embeds: [
+                    {
+                        title: 'Bot Started',
+                        fields: [
+                            {
+                                name: 'Instance ID',
+                                value: `Instance: \`${config.minecraft.bot.unique_id}\``
+                            }
+                        ],
+                        color: 0x008000
+                    }
+                ]
+            };
+
+            sendWebhookLog(params);
         }
     }
 
@@ -42,44 +66,44 @@ if (cluster.isPrimary) {
     async function startEmergencyLongpoll() {
         if (!config.longpoll.enabled) return;
 
-            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF.key}`;
+        let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF.key}`;
 
-            try {
-                let response = await axios.get(request_url).catch(e => {
-                    // Do nothing
-                });
-                for (let action of Object.values(response?.data?.requests ?? {})) {
-                    try {
-                        let act_rid = action?.rid ?? 'NONE';
-                        let act_type = action?.action ?? 'NONE';
-                        let act_data = action?.data ?? {};
-                        let completed = false;
+        try {
+            let response = await axios.get(request_url).catch(e => {
+                // Do nothing
+            });
+            for (let action of Object.values(response?.data?.requests ?? {})) {
+                try {
+                    let act_rid = action?.rid ?? 'NONE';
+                    let act_type = action?.action ?? 'NONE';
+                    let act_data = action?.data ?? {};
+                    let completed = false;
 
-                        if (act_type == 'forceReboot') {
-                            process_state = false;
-                            forced_shutdown = false;
+                    if (act_type == 'forceReboot') {
+                        process_state = false;
+                        forced_shutdown = false;
 
-                            for (const id in cluster.workers) {
-                                cluster.workers[id].kill();
-                            }
-
-                            completed = true;
+                        for (const id in cluster.workers) {
+                            cluster.workers[id].kill();
                         }
 
-                        if(completed){
-                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
-                            await axios.get(confirm_url).catch(e => {
-                                // Do nothing.
-                            });
-                        }
-                    } catch (e) {
-                        Logger.warnMessage(action);
-                        Logger.warnMessage(e);
+                        completed = true;
                     }
+
+                    if (completed) {
+                        let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
+                        await axios.get(confirm_url).catch(e => {
+                            // Do nothing.
+                        });
+                    }
+                } catch (e) {
+                    Logger.warnMessage(action);
+                    Logger.warnMessage(e);
                 }
-            } catch (e) {
-                Logger.warnMessage(e);
-            }        
+            }
+        } catch (e) {
+            Logger.warnMessage(e);
+        }
     }
 
     function reforkProcess() {
@@ -127,18 +151,13 @@ if (cluster.isPrimary) {
                                 name: 'Exception Data',
                                 value: `Something bad has happened to the bot, maybe it's banned or muted. The app will shut down.\n\nInstance: \`${config.minecraft.bot.unique_id}\``
                             }
-                        ]
+                        ],
+                        color: 0x800000
                     }
                 ]
             };
 
-            fetch(webhook_url, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(params)
-            });
+            sendWebhookLog(params);
 
             forced_shutdown = true;
 
@@ -156,18 +175,13 @@ if (cluster.isPrimary) {
                                 name: 'Exception Data',
                                 value: `Bot failed to connect to Hypixel, so it rebooted.\n\nInstance: \`${config.minecraft.bot.unique_id}\``
                             }
-                        ]
+                        ],
+                        color: 0x800000
                     }
                 ]
             };
 
-            fetch(webhook_url, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(params)
-            });
+            sendWebhookLog(params);
         }
 
         if (code == 5) {
@@ -189,7 +203,7 @@ if (cluster.isWorker) {
         });
         process.exit(1);
     });
-    process.on('unhandledRejection', function(err, promise) {
+    process.on('unhandledRejection', function (err, promise) {
         console.log('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
         Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
         /*process.send({

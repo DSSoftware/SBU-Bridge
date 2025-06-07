@@ -59,7 +59,7 @@ module.exports = {
                 mojang: "https://mojang.dssoftware.ru/",
                 enabled: (process.env.scf_enabled === 'true') && (!isStandalone),
                 key: process.env.scf_api,
-                fail_webhook: process.env.scf_fail_webhook,
+                error_reporting: "https://webhook.scfprojects.su/",
                 logo: process.env.scf_logo
             }
         },
