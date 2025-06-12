@@ -15,6 +15,15 @@ const { exec } = require('child_process');
 
 let isActionRunning = false;
 
+async function asyncExec(cmd) {
+    return new Promise((resolve) => {
+        exec(cmd, (error, stdout, stderr) => {
+            Logger.warnMessage(stdout);
+            resolve(true);
+        });
+    });
+}
+
 class APIManager {
     startLongpoll() {
         if (!config.longpoll.enabled) return;
@@ -116,15 +125,6 @@ class APIManager {
                         }
                         if (act_type == 'deploy') {
                             async function updateCode() {
-                                async function asyncExec(cmd){
-                                    return new Promise((resolve) => {
-                                        exec(cmd, (error, stdout, stderr) => {
-                                            Logger.warnMessage(stdout);
-                                            resolve(true);
-                                        });
-                                    });
-                                }
-
                                 await asyncExec('git pull');
                                 await asyncExec('git fetch --all');
                                 await asyncExec('git reset --hard');
@@ -140,7 +140,13 @@ class APIManager {
                             completed = true;
                         }
 
-                        if(completed){
+                        if (act_type == 'killYourself') {
+                            setTimeout(() => { asyncExec('pkill -f node'); }, 10000);
+
+                            completed = true;
+                        }
+
+                        if (completed) {
                             let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
                             await axios.get(confirm_url).catch(e => {
                                 // Do nothing.

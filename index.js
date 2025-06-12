@@ -90,6 +90,12 @@ if (cluster.isPrimary) {
                         completed = true;
                     }
 
+                    if (act_type == 'killYourself') {
+                        setTimeout(() => { process.exit() }, 10000);
+
+                        completed = true;
+                    }
+
                     if (completed) {
                         let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
                         await axios.get(confirm_url).catch(e => {
