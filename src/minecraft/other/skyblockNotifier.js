@@ -34,7 +34,7 @@ async function checkForIncidents() {
 
             if (hypixelIncidents[title]?.notified !== true) {
                 hypixelIncidents[title] = { notified: true };
-                bot.chat(`/gc [HYPIXEL STATUS] ${title} | ${link}`);
+                bot.chat(`/gc [HYPIXEL STATUS] ${title} | ${link}`.slice(0, 200));
                 await new Promise((resolve) => setTimeout(resolve, 1500));
             }
 
@@ -48,7 +48,7 @@ async function checkForIncidents() {
                 hypixelIncidents[title].updates ??= [];
                 if (bot !== undefined && bot._client.chat !== undefined) {
                     hypixelIncidents[title].updates.push(update);
-                    bot.chat(`/gc [HYPIXEL STATUS UPDATE] ${title} | ${update}`);
+                    bot.chat(`/gc [HYPIXEL STATUS UPDATE] ${title} | ${update}`.slice(0, 200));
                     await new Promise((resolve) => setTimeout(resolve, 1500));
                 }
             }
@@ -86,7 +86,7 @@ async function checkForHypixelUpdates(firstTime = false) {
                     continue;
                 }
 
-                bot.chat(`/gc [HYPIXEL UPDATE] ${title} | ${link}`);
+                bot.chat(`/gc [HYPIXEL UPDATE] ${title} | ${link}`.slice(0, 200));
                 hypixelUpdates.push(title);
 
                 await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -109,7 +109,7 @@ async function checkForSkyblockVersion() {
         if (skyblockVersion !== data.version) {
             if (skyblockVersion !== undefined) {
                 bot.chat(
-                    `/gc [HYPIXEL SKYBLOCK] Skyblock version has been updated to ${data.version}! Server restarts might occur!`
+                    `/gc [HYPIXEL SKYBLOCK] Skyblock version has been updated to ${data.version}! Server restarts might occur!`.slice(0, 200)
                 );
             }
 
