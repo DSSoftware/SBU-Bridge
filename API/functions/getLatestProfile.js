@@ -20,7 +20,8 @@ async function getLatestProfile(uuid, options = { museum: false }) {
         if (data.last_save + 300000 > Date.now()) {
             return data;
         }
-    }    const [profileResv2] = await Promise.all([
+    }
+    const [profileResv2] = await Promise.all([
         hypixelRequest(`https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
     ]).catch((error) => {
         throw error?.response?.data?.cause ?? 'Request to Hypixel API failed. Please try again!';
@@ -60,7 +61,7 @@ async function getLatestProfile(uuid, options = { museum: false }) {
     profilev2.fishing_bag = profilev2?.inventory?.bag_contents?.fishing_bag;
     profilev2.potion_bag = profilev2?.inventory?.bag_contents?.potion_bag;
     profilev2.sacks_bag = profilev2?.inventory?.bag_contents?.sacks_bag;
-    
+
     profilev2.candy_inventory_contents = profilev2?.shared_inventory?.candy_inventory_contents;
     profilev2.carnival_mask_inventory_contents = profilev2?.shared_inventory?.carnival_mask_inventory_contents;
 

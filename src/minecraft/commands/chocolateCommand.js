@@ -147,7 +147,8 @@ class topCommand extends minecraftCommand {
             let passed_username = this.getArgs(message)[0];            username = passed_username || username;
             const player_uuid = await getUUID(username);
 
-            let player_profile = `https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${player_uuid}`;
+            let player_profile = await hypixelRequest(`https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${player_uuid}`)
+                .catch((error) => {});
 
             let player_data = await hypixelRequest(player_profile).catch((error) => {
                 throw 'Player has no SkyBlock profiles.';
