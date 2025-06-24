@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');

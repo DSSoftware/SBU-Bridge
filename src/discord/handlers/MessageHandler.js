@@ -1,6 +1,6 @@
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { demojify } = require('discord-emoji-converter');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');

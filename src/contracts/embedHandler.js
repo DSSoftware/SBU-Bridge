@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 
 /**
  * Constructs a new instance of the class.

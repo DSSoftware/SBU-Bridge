@@ -1,6 +1,6 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const helperFunctions = require('./helperFunctions.js');
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const Logger = require('#root/src/Logger.js');
 
 class minecraftCommand {

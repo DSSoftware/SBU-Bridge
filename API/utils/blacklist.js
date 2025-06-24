@@ -1,4 +1,4 @@
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 
 async function checkBlacklist(uuid) {

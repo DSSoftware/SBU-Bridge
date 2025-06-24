@@ -1,5 +1,5 @@
 /* eslint-disable no-throw-literal */
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 const { hypixelRequest } = require('../utils/scfAPIHandler.js');
 

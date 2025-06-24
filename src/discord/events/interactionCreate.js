@@ -1,7 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 // eslint-disable-next-line no-unused-vars
 const { EmbedBuilder, CommandInteraction } = require('discord.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const Logger = require('../.././Logger.js');
 const { ErrorEmbed } = require('../../contracts/embedHandler.js');
 

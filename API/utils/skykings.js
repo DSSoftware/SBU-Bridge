@@ -1,4 +1,4 @@
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const Logger = require('../../src/Logger.js');
 const axios = require('axios');
 

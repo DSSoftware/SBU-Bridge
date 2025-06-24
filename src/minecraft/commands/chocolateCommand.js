@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const axios = require('axios');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const rabbits_handler = require('../../../API/constants/rabbits.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const { renderLore } = require('../../contracts/renderItem.js');

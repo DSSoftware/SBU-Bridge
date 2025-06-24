@@ -1,6 +1,6 @@
 const { getMuseum } = require('./getMuseum.js');
 const { isUuid } = require('../utils/uuid.js');
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 const { getUUID } = require('../../src/contracts/API/PlayerDBAPI.js');
 const { hypixelRequest } = require('../utils/scfAPIHandler.js');

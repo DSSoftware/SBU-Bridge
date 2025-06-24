@@ -1,4 +1,4 @@
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const cheerio = require('cheerio');
 const Rss = require('rss-parser');
 const axios = require('axios');

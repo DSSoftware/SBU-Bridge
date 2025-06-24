@@ -4,7 +4,7 @@ const apiManager = require('./api/APIManager.js');
 const ReplicationManager = require('./replication/ReplicationManager.js');
 const SCFAPI = require('./../API/utils/scfAPIHandler.js');
 const Logger = require('./Logger.js');
-const config = require('#/config.js').getConfig();('../config.js');
+const config = require('#/config.js').getConfig();
 const axios = require('axios');
 const fs = require('fs').promises;
 

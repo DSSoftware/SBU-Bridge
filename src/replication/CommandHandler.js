@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/extensions
 const { Routes } = require('discord-api-types/v9');
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const { REST } = require('@discordjs/rest');
 const fs = require('fs');
 

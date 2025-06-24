@@ -1,6 +1,6 @@
 const { Collection } = require('discord.js');
 const Logger = require('../Logger.js');
-const config = require('#/config.js').getConfig();('../../config.js');
+const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 const fs = require('fs');
 

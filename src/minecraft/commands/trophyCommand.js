@@ -1,6 +1,6 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const { formatUsername } = require('../../contracts/helperFunctions.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');

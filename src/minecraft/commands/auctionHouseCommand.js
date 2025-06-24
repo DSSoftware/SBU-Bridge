@@ -1,4 +1,4 @@
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const { addCommas, timeSince } = require('../../contracts/helperFunctions.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { renderLore } = require('../../contracts/renderItem.js');

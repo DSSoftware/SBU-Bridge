@@ -1,5 +1,5 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const { EmbedBuilder } = require('discord.js');
 const app = require('../../Application.js');
 const AuthProvider = require('../AuthProvider.js');

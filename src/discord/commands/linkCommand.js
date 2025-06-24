@@ -1,6 +1,6 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const { EmbedBuilder } = require('discord.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const Logger = require('#root/src/Logger.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');

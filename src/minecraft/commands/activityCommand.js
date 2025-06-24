@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
-const config = require('#/config.js').getConfig();('../../../config.js');
+const config = require('#root/config.js').getConfig();
 const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
