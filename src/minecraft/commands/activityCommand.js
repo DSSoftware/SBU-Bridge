@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
@@ -23,7 +23,7 @@ class topCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            if (!config.minecraft.API.SCF.enabled) {
+            if (!config.API.SCF.enabled) {
                 return this.send(`/${channel} This command was disabled!`);
             }
 

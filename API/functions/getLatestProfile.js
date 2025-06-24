@@ -1,6 +1,6 @@
 const { getMuseum } = require('./getMuseum.js');
 const { isUuid } = require('../utils/uuid.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 const { getUUID } = require('../../src/contracts/API/PlayerDBAPI.js');
 const { hypixelRequest } = require('../utils/scfAPIHandler.js');
@@ -22,7 +22,7 @@ async function getLatestProfile(uuid, options = { museum: false }) {
         }
     }
     const [profileResv2] = await Promise.all([
-        hypixelRequest(`https://api.hypixel.net/v2/skyblock/profiles?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
+        hypixelRequest(`https://api.hypixel.net/v2/skyblock/profiles?key=${config.API.hypixelAPIkey}&uuid=${uuid}`)
     ]).catch((error) => {
         throw error?.response?.data?.cause ?? 'Request to Hypixel API failed. Please try again!';
     });

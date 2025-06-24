@@ -1,6 +1,6 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const { EmbedBuilder } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const Logger = require('#root/src/Logger.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
@@ -42,7 +42,7 @@ module.exports = {
             .setDescription(`Now you will send messages as \`${minecraft_nick}\`.`)
             .setFooter({
                 text: '/help for more info',
-                iconURL: config.minecraft.API.SCF.logo
+                iconURL: config.API.SCF.logo
             });
 
         await interaction.followUp({

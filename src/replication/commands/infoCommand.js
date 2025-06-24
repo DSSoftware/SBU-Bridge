@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const fs = require('fs');
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
                         config.minecraft.skyblockEventsNotifications.enabled ? 'enabled' : 'disabled'
                     }\`\nAuto Accept: \`${
                         config.minecraft.guildRequirements.enabled ? 'enabled' : 'disabled'
-                    }\`\nGuild Experience Requirement: \`${config.minecraft.guild.guildExp.toLocaleString()}\`\nUptime: Online since <t:${Math.floor(
+                    }\`\nUptime: Online since <t:${Math.floor(
                         (Date.now() - client.uptime) / 1000
                     )}:R>\nVersion: \`${require('../../../package.json').version}\`\n`,
                     inline: true
@@ -49,17 +49,17 @@ module.exports = {
                         config.discord.channels.loggingChannel ? `<#${config.discord.channels.loggingChannel}>` : 'None'
                     }\nDebugging Channel: ${
                         config.discord.channels.debugChannel ? `<#${config.discord.channels.debugChannel}>` : 'None'
-                    }\nCommand Role: <@&${config.discord.commands.notifyContent}>\nMessage Mode: \`${
-                        config.discord.other.messageMode
-                    }\`\nFilter: \`${config.discord.other.filterMessages ? 'enabled' : 'disabled'}\`\nJoin Messages: \`${
-                        config.discord.other.joinMessage ? 'enabled' : 'disabled'
+                    }\nCommand Role: <@&${config.bot.commands.notifyContent}>\nMessage Mode: \`${
+                        config.bot.other.messageMode
+                    }\`\nFilter: \`${config.bot.other.filterMessages ? 'enabled' : 'disabled'}\`\nJoin Messages: \`${
+                        config.bot.other.joinMessage ? 'enabled' : 'disabled'
                     }\``,
                     inline: true
                 }
             )
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.minecraft.API.SCF.logo
+                iconURL: config.API.SCF.logo
             });
         await interaction.followUp({ embeds: [infoEmbed] });
     }

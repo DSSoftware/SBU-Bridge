@@ -5,7 +5,7 @@ const messageToImage = require('../contracts/messageToImage.js');
 const MessageHandler = require('./handlers/MessageHandler.js');
 const StateHandler = require('./handlers/StateHandler.js');
 const CommandHandler = require('./CommandHandler.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const Logger = require('.././Logger.js');
 const { kill } = require('node:process');
 const path = require('node:path');
@@ -32,7 +32,7 @@ class DiscordManager extends CommunicationBridge {
         this.client.on('ready', () => this.stateHandler.onReady());
         this.client.on('messageCreate', (message) => this.messageHandler.onMessage(message));
 
-        this.client.login(config.discord.bot.token).catch((error) => {
+        this.client.login(config.discord.token).catch((error) => {
             Logger.errorMessage(error);
         });
 
@@ -99,7 +99,7 @@ class DiscordManager extends CommunicationBridge {
                 return;
             }
     
-            const mode = chat === 'debugChannel' ? 'minecraft' : config.discord.other.messageMode.toLowerCase();
+            const mode = chat === 'debugChannel' ? 'minecraft' : config.bot.other.messageMode.toLowerCase();
     
             message = chat === 'debugChannel' ? fullMessage : message;
             if (message !== undefined && chat !== 'debugChannel') {
@@ -110,7 +110,7 @@ class DiscordManager extends CommunicationBridge {
             }
     
             // ? custom message format (config.discord.other.messageFormat)
-            if (config.discord.other.messageMode === 'minecraft' && chat !== 'debugChannel') {
+            if (config.bot.other.messageMode === 'minecraft' && chat !== 'debugChannel') {
                 message = replaceVariables(config.discord.other.messageFormat, {
                     chatType,
                     username,
@@ -234,7 +234,7 @@ class DiscordManager extends CommunicationBridge {
     async onPlayerToggle({ fullMessage, username, message, color, channel }) {
         Logger.broadcastMessage(message, 'Event');
         channel = await this.stateHandler.getChannel(channel);
-        switch (config.discord.other.messageMode.toLowerCase()) {
+        switch (config.bot.other.messageMode.toLowerCase()) {
             case 'bot':
                 channel.send({
                     embeds: [

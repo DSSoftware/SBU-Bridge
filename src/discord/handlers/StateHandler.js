@@ -1,4 +1,4 @@
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const Logger = require('../../Logger.js');
 
 class StateHandler {

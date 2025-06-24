@@ -1,5 +1,5 @@
 const Logger = require('../Logger.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 const { getUUID } = require('../contracts/API/PlayerDBAPI');
 const hypixel = require('../contracts/API/HypixelRebornAPI.js');
@@ -33,7 +33,7 @@ class APIManager {
                 return;
             }
 
-            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.minecraft.API.SCF.key}`;
+            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.API.SCF.key}`;
 
             isActionRunning = true;
 
@@ -147,7 +147,7 @@ class APIManager {
                         }
 
                         if (completed) {
-                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.minecraft.API.SCF.key}&rid=${act_rid}`;
+                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.API.SCF.key}&rid=${act_rid}`;
                             await axios.get(confirm_url).catch(e => {
                                 // Do nothing.
                             });

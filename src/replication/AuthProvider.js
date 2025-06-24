@@ -1,4 +1,4 @@
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 
 const GM_PERMS = {
@@ -65,7 +65,7 @@ class AuthHandler {
         let perm_name = 'Member';
         let auth_provider = 'INNATE';
 
-        config.discord.replication.permissions.mod.forEach((mod_id) => {
+        config.replication.permissions.mod.forEach((mod_id) => {
             if (user.roles.cache.has(mod_id)) {
                 permission_level = 1;
                 perm_name = 'Moderator';
@@ -75,7 +75,7 @@ class AuthHandler {
             }
         });
 
-        config.discord.replication.permissions.admin.forEach((admin_id) => {
+        config.replication.permissions.admin.forEach((admin_id) => {
             if (user.roles.cache.has(admin_id)) {
                 permission_level = 3;
                 perm_name = 'Administrator';
@@ -85,7 +85,7 @@ class AuthHandler {
             }
         });
 
-        config.discord.replication.permissions.ownerIDs.forEach((owner_id) => {
+        config.replication.permissions.ownerIDs.forEach((owner_id) => {
             if (user.id == owner_id) {
                 permission_level = 5;
                 perm_name = 'Guild Owner';
@@ -95,7 +95,7 @@ class AuthHandler {
             }
         });
 
-        config.discord.replication.permissions.dev.forEach((dev_id) => {
+        config.replication.permissions.dev.forEach((dev_id) => {
             if (user.roles.cache.has(dev_id)) {
                 permissions.debug = true;
             }

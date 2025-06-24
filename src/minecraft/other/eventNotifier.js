@@ -1,7 +1,7 @@
 const { getSkyblockCalendar } = require('../../../API/functions/getCalendar.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const axios = require('axios');
 const Logger = require('#root/src/Logger.js');
 

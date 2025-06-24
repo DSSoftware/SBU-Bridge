@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
@@ -29,7 +29,7 @@ class topCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            if (!config.minecraft.API.SCF.enabled) {
+            if (!config.API.SCF.enabled) {
                 return this.send(`/${channel} This command was disabled!`);
             }
 
@@ -57,7 +57,7 @@ class topCommand extends minecraftCommand {
             }
 
             if (this.getArgs(message)[0] == 'weekly') {
-                if (!config.minecraft.commands.integrate_images && config.minecraft.API.useImgur) {
+                if (!config.minecraft.commands.integrate_images) {
                     return this.send(`/${channel} This sub-command was disabled!`);
                 }
                 let top_info = await SCFAPI.getMessagesTop(config.minecraft.guild.guildId);
@@ -66,7 +66,7 @@ class topCommand extends minecraftCommand {
                     return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
                 }
 
-                let Name = `§6${config.minecraft.guild.guildName} Guild Top:`;
+                let Name = `§6Guild Top:`;
                 let Lore = [];
                 let place = 0;
 
@@ -96,13 +96,13 @@ class topCommand extends minecraftCommand {
                 const upload = await uploadImage(renderedItem);
 
                 if (!config.minecraft.commands.integrate_images) {
-                    this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top was sent in Discord.`);
+                    this.send(`/${channel} Guild Top was sent in Discord.`);
     
                     this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
                     return;
                 }
 
-                this.send(`/${channel} ${config.minecraft.guild.guildName} Guild Top: ${upload.data.link}`);
+                this.send(`/${channel} Guild Top: ${upload.data.link}`);
 
                 return;
             }

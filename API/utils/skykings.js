@@ -1,12 +1,12 @@
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const Logger = require('../../src/Logger.js');
 const axios = require('axios');
 
-const key = config.minecraft.API.skykingsAPIkey;
+const key = config.API.skykingsAPIkey;
 
 async function lookupUUID(uuid) {
     return new Promise(async (resolve, reject) => {
-        if (config.minecraft.API.banlist.skykings === false) {
+        if (config.API.banlist.skykings === false) {
             resolve(false);
             return;
         }

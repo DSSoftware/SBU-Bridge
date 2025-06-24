@@ -7,7 +7,7 @@ const eventHandler = require('../../contracts/EventHandler.js');
 const getWeight = require('../../../API/stats/weight.js');
 const messages = require('../../../messages.json');
 const { EmbedBuilder } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const Logger = require('../../Logger.js');
 const axios = require('axios');
 const Skykings = require('../../../API/utils/skykings');
@@ -80,7 +80,7 @@ class StateHandler extends eventHandler {
             }
         }*/
 
-        if (this.isLobbyJoinMessage(message) && config.discord.other.autoLimbo === true) {
+        if (this.isLobbyJoinMessage(message) && config.bot.other.autoLimbo === true) {
             return bot.chat("/limbo");
         }
 
@@ -182,7 +182,7 @@ class StateHandler extends eventHandler {
                     .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                     .setFooter({
                         text: `/help [command] for more information`,
-                        iconURL: config.minecraft.API.SCF.logo
+                        iconURL: config.API.SCF.logo
                     });
 
                 await client.channels.cache
@@ -235,7 +235,7 @@ class StateHandler extends eventHandler {
         }
 
         if (this.isLoginMessage(message)) {
-            if (config.discord.other.joinMessage === true) {
+            if (config.bot.other.joinMessage === true) {
                 const username = message.split('>')[1].trim().split('joined.')[0].trim();
                 return this.minecraft.broadcastPlayerToggle({
                     fullMessage: colouredMessage,
@@ -248,7 +248,7 @@ class StateHandler extends eventHandler {
         }
 
         if (this.isLogoutMessage(message)) {
-            if (config.discord.other.joinMessage === true) {
+            if (config.bot.other.joinMessage === true) {
                 const username = message.split('>')[1].trim().split('left.')[0].trim();
                 return this.minecraft.broadcastPlayerToggle({
                     fullMessage: colouredMessage,
@@ -305,7 +305,7 @@ class StateHandler extends eventHandler {
                 .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                 .setFooter({
                     text: `/help [command] for more information`,
-                    iconURL: config.minecraft.API.SCF.logo
+                    iconURL: config.API.SCF.logo
                 });
 
             await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
@@ -325,7 +325,7 @@ class StateHandler extends eventHandler {
             }
 
             await delay(1000);
-            let invite_message = config.minecraft.guild.join_message_override
+            let invite_message = config.minecraft.guild.join_message
                 ? config.minecraft.guild.join_message
                 : messages.guildJoinMessage;
 
@@ -335,10 +335,10 @@ class StateHandler extends eventHandler {
                 })}`
             );
 
-            if (process.env.notify_enabled === 'true') {
+            if (!!config.bot.commands.notifyContent) {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${config.discord.commands.notifyContent}\n:inbox_tray: ${username} has joined the guild!`);
+                    .send(`${config.bot.commands.notifyContent}\n:inbox_tray: ${username} has joined the guild!`);
             }
 
             return [
@@ -365,10 +365,10 @@ class StateHandler extends eventHandler {
                 .trim()
                 .split(/ +/g)[0];
 
-            if (process.env.notify_enabled === 'true') {
+            if (!!config.bot.commands.notifyContent) {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${config.discord.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
+                    .send(`${config.bot.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
             }
 
             let request_res = await SCFAPI.handleLeave(username);
@@ -416,10 +416,10 @@ class StateHandler extends eventHandler {
                 .trim()
                 .split(/ +/g)[0];
 
-            if (process.env.notify_enabled === 'true') {
+            if (!!config.bot.commands.notifyContent) {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${config.discord.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
+                    .send(`${config.bot.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
             }
 
             let request_res = await SCFAPI.handleLeave(username);
@@ -553,8 +553,8 @@ class StateHandler extends eventHandler {
             });
 
             try {
-                if (config.discord.replication.enabled) {
-                    replication_client.channels.cache.get(config.discord.replication.channels.guild).send({
+                if (config.replication.enabled) {
+                    replication_client.channels.cache.get(config.replication.channels.guild).send({
                         embeds: [
                             {
                                 color: 15548997,
@@ -890,11 +890,11 @@ class StateHandler extends eventHandler {
     }*/
 
         const regex =
-            config.discord.other.messageMode === 'minecraft'
+            config.bot.other.messageMode === 'minecraft'
                 ? /^(?<chatType>§[0-9a-fA-F](Guild|Officer)) > (?<rank>§[0-9a-fA-F](?:\[.*?\])?)?\s*(?<username>[^§\s]+)\s*(?:(?<guildRank>§[0-9a-fA-F](?:\[.*?\])?))?\s*§f: (?<message>.*)/
                 : /^(?<chatType>\w+) > (?:(?:\[(?<rank>[^\]]+)\] )?(?:(?<username>\w+)(?: \[(?<guildRank>[^\]]+)\])?: )?)?(?<message>.+)$/;
 
-        const match = (config.discord.other.messageMode === 'minecraft' ? colouredMessage : message).match(regex);
+        const match = (config.bot.other.messageMode === 'minecraft' ? colouredMessage : message).match(regex);
 
         if (!match) {
             return;

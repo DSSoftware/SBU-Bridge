@@ -1,7 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 // eslint-disable-next-line no-unused-vars
 const { EmbedBuilder, CommandInteraction } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const Logger = require('../.././Logger.js');
 const { ErrorEmbed } = require('../../contracts/embedHandler.js');
 
@@ -58,7 +58,7 @@ module.exports = {
                         `Command: \`${commandName}\`\nOptions: \`${commandOptions}\`\nUser ID: \`${userID}\`\nUser: \`${username}\`\n\`\`\`${errorStack}\`\`\``
                     );
                     interaction.client.channels.cache.get(config.discord.channels.loggingChannel).send({
-                        content: `<@&${config.discord.commands.notifyContent}>`,
+                        content: `<@&${config.bot.commands.notifyContent}>`,
                         embeds: [errorLog]
                     });
                 }

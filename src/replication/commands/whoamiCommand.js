@@ -1,6 +1,6 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const { EmbedBuilder } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const AuthProvider = require('../AuthProvider.js');
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
             )
             .setFooter({
                 text: '/help for more info',
-                iconURL: config.minecraft.API.SCF.logo
+                iconURL: config.API.SCF.logo
             });
 
         await interaction.followUp({

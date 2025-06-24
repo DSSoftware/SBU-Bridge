@@ -1,6 +1,6 @@
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { demojify } = require('discord-emoji-converter');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const axios = require('axios');
 const scfBridgeLock = require('../../../API/utils/scfBridgeLock.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
@@ -35,7 +35,7 @@ class MessageHandler {
             }
 
             let uuid = player_info?.data?.uuid;
-            let hypixel_info = await hypixelRequest(`https://api.hypixel.net/v2/player?key=${config.minecraft.API.hypixelAPIkey}&uuid=${uuid}`)
+            let hypixel_info = await hypixelRequest(`https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`)
                 .catch((error) => {});
 
             if (!hypixel_info?.success || hypixel_info?.player?.displayname == undefined) {
@@ -45,7 +45,7 @@ class MessageHandler {
             response.uuid = player_info?.data?.uuid;
             response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
 
-            let guild_info = await hypixelRequest(`https://api.hypixel.net/v2/guild?key=${config.minecraft.API.hypixelAPIkey}&player=${uuid}`)
+            let guild_info = await hypixelRequest(`https://api.hypixel.net/v2/guild?key=${config.API.hypixelAPIkey}&player=${uuid}`)
                 .catch((error) => {});
 
             response.guild_id = guild_info?.guild?._id;
@@ -86,23 +86,23 @@ class MessageHandler {
                 return;
             }
 
-            if (config.discord.IGC.enabled) {
+            /*if (config.discord.IGC.enabled) {
                 if (message.webhookId !== null && config.discord.IGC.settings.listening == message.channel.id) {
                     if(message.author.id == config.discord.IGC.settings.webhook_self){
                         return;
                     }
                     console.log(message);
                 }
-            }
+            }*/
 
             let sender_data = undefined;
 
-            if (config.minecraft.API.SCF.enabled) {
+            if (config.API.SCF.enabled) {
                 let bypassCheck = false;
                 try {
                     sender_data = await this.getSenderData(message.author.id);
                 } catch (e) {
-                    if (!config.discord.other.discordFallback) {
+                    if (!config.bot.other.discordFallback) {
                         message.reply({
                             embeds: [
                                 {
@@ -119,7 +119,7 @@ class MessageHandler {
 
                 if (!bypassCheck) {
                     if (sender_data?.data?.nick == undefined && !message.author.bot) {
-                        if (message.channel.id == config.discord.replication.channels.officer) {
+                        if (message.channel.id == config.replication.channels.officer) {
                             message.react('❌').catch((e) => {});
                             return;
                         }
@@ -154,11 +154,11 @@ class MessageHandler {
             }
 
             let chat = 'Guild/Replication';
-            if (message.channel.id == config.discord.replication.channels.debug) {
+            if (message.channel.id == config.replication.channels.debug) {
                 chat = 'Debug';
             }
 
-            if (message.channel.id == config.discord.replication.channels.officer) {
+            if (message.channel.id == config.replication.channels.officer) {
                 chat = 'Officer/Replication';
             }
 
@@ -241,7 +241,7 @@ class MessageHandler {
                 mentionedUserName = sender_data?.data?.nick ?? repliedUserObject?.user?.username;
             }
 
-            if (config.discord.other.messageMode === 'bot' && reference.embed !== null) {
+            if (config.bot.other.messageMode === 'bot' && reference.embed !== null) {
                 const name = reference.embeds[0]?.author?.name;
                 if (name === undefined) {
                     return mentionedUserName;
@@ -250,7 +250,7 @@ class MessageHandler {
                 return name;
             }
 
-            if (config.discord.other.messageMode === 'minecraft' && reference.attachments !== null) {
+            if (config.bot.other.messageMode === 'minecraft' && reference.attachments !== null) {
                 const name = reference.attachments.values()?.next()?.value?.name;
                 if (name === undefined) {
                     return mentionedUserName;
@@ -259,7 +259,7 @@ class MessageHandler {
                 return name.split('.')[0];
             }
 
-            if (config.discord.other.messageMode === 'webhook') {
+            if (config.bot.other.messageMode === 'webhook') {
                 if (reference.author.username === undefined) {
                     return mentionedUserName;
                 }
@@ -329,10 +329,10 @@ class MessageHandler {
                 : false;
         const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
         const validChannelIds = [
-            config.discord.replication.channels.guild,
-            config.discord.replication.channels.officer,
-            config.discord.replication.channels.debug,
-            config.discord.IGC.settings.listening
+            config.replication.channels.guild,
+            config.replication.channels.officer,
+            config.replication.channels.debug,
+            //config.discord.IGC.settings.listening
         ];
 
         return isValid && validChannelIds.includes(message.channel.id);

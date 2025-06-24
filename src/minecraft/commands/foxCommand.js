@@ -1,7 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const axios = require('axios');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 
 class FoxCommand extends minecraftCommand {
     constructor(minecraft) {

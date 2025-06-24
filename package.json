@@ -13,7 +13,7 @@
         "nodemon": "nodemon index"
     },
     "imports": {
-        "#root/*.js": "./*.js"
+        "#/*": "./*"
     },
     "repository": {
         "type": "git",

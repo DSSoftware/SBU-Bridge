@@ -1,7 +1,7 @@
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { uploadImage } = require('../../contracts/API/imgurAPI.js');
 const { decodeData, formatUsername } = require('../../contracts/helperFunctions.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { renderLore } = require('../../contracts/renderItem.js');
 const Logger = require('#root/src/Logger.js');

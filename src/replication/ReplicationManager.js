@@ -5,7 +5,7 @@ const messageToImage = require('../contracts/messageToImage.js');
 const MessageHandler = require('./handlers/MessageHandler.js');
 const StateHandler = require('./handlers/StateHandler.js');
 const CommandHandler = require('./CommandHandler.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const Logger = require('../Logger.js');
 const { kill } = require('node:process');
 const path = require('node:path');
@@ -23,7 +23,7 @@ class ReplicationManager extends CommunicationBridge {
     }
 
     async connect() {
-        if (!config.discord.replication.enabled) {
+        if (!config.replication.enabled) {
             return;
         }
         global.replication_client = new Client({
@@ -35,7 +35,7 @@ class ReplicationManager extends CommunicationBridge {
         this.client.on('ready', () => this.stateHandler.onReady());
         this.client.on('messageCreate', (message) => this.messageHandler.onMessage(message));
 
-        this.client.login(config.discord.replication.token).catch((error) => {
+        this.client.login(config.replication.token).catch((error) => {
             Logger.errorMessage(error);
         });
 
@@ -104,11 +104,11 @@ class ReplicationManager extends CommunicationBridge {
                 return;
             }
     
-            const mode = chat === 'debugChannel' ? 'minecraft' : config.discord.other.messageMode.toLowerCase();
+            const mode = chat === 'debugChannel' ? 'minecraft' : config.bot.other.messageMode.toLowerCase();
             message = chat === 'debugChannel' ? fullMessage : message;
     
             // ? custom message format (config.discord.other.messageFormat)
-            if (config.discord.other.messageMode === 'minecraft' && chat !== 'debugChannel') {
+            if (config.bot.other.messageMode === 'minecraft' && chat !== 'debugChannel') {
                 message = replaceVariables(config.discord.other.messageFormat, {
                     chatType,
                     username,
@@ -247,7 +247,7 @@ class ReplicationManager extends CommunicationBridge {
         if (channel == undefined) {
             return;
         }
-        switch (config.discord.other.messageMode.toLowerCase()) {
+        switch (config.bot.other.messageMode.toLowerCase()) {
             case 'bot':
                 channel.send({
                     embeds: [

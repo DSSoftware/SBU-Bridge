@@ -1,12 +1,12 @@
 /* eslint-disable no-throw-literal */
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 const { hypixelRequest } = require('../utils/scfAPIHandler.js');
 
 async function getMuseum(profileID, uuid) {
     try {
         const data = await hypixelRequest(
-            `https://api.hypixel.net/v2/skyblock/museum?key=${config.minecraft.API.hypixelAPIkey}&profile=${profileID}`
+            `https://api.hypixel.net/v2/skyblock/museum?key=${config.API.hypixelAPIkey}&profile=${profileID}`
         );
 
         if (data === undefined || data.success === false) {

@@ -1,4 +1,5 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 
 class DiscordLinkCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -12,7 +13,7 @@ class DiscordLinkCommand extends minecraftCommand {
 
     onCommand(username, message, channel = 'gc') {
         try {
-            this.send(`/${channel} Join our discord - ${process.env.discord_invite}`);
+            this.send(`/${channel} Join our discord - ${config.minecraft.guild.discord_invite}`);
         } catch (error) {
             this.send(`/${channel} Something went wrong...`);
         }

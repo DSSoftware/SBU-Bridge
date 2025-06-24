@@ -1,14 +1,14 @@
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 
 async function checkBlacklist(uuid) {
     return new Promise(async (resolve, reject) => {
         try {
-            if (config.minecraft.API.banlist.enabled === false) {
+            if (config.API.banlist.enabled === false) {
                 resolve(false);
                 return;
             }
-            const API_URL = config.minecraft.API.banlist.URL;
+            const API_URL = config.API.banlist.URL;
 
             await axios.get(API_URL, {
                 headers: {

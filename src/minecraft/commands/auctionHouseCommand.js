@@ -1,4 +1,4 @@
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const { addCommas, timeSince } = require('../../contracts/helperFunctions.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { renderLore } = require('../../contracts/renderItem.js');
@@ -36,7 +36,7 @@ class AuctionHouseCommand extends minecraftCommand {
             const uuid = uuid_response?.uuid;
             const nick = uuid_response?.username;
 
-            const { hypixelAPIkey } = config.minecraft.API;
+            const { hypixelAPIkey } = config.API;
             const [auctionResponse, playerResponse] = await Promise.all([
                 hypixelRequest(`https://api.hypixel.net/v2/skyblock/auction?key=${hypixelAPIkey}&player=${uuid}`),
                 hypixelRequest(`https://api.hypixel.net/v2/player?key=${hypixelAPIkey}&uuid=${uuid}`)

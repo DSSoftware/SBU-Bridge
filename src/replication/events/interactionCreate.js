@@ -1,5 +1,5 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 const { EmbedBuilder } = require('discord.js');
 const Logger = require('../.././Logger.js');
 
@@ -31,7 +31,7 @@ module.exports = {
                 .setDescription(`${errrorMessage}\`\`\`${error}\`\`\``)
                 .setFooter({
                     text: '/help [command] for more information',
-                    iconURL: config.minecraft.API.SCF.logo
+                    iconURL: config.API.SCF.logo
                 });
 
             await interaction.editReply({ embeds: [errorEmbed] });
@@ -49,11 +49,11 @@ module.exports = {
                     )
                     .setFooter({
                         text: '/help [command] for more information',
-                        iconURL: config.minecraft.API.SCF.logo
+                        iconURL: config.API.SCF.logo
                     });
 
                 client.channels.cache.get(config.discord.channels.loggingChannel).send({
-                    content: `<@&${config.discord.commands.notifyContent}>`,
+                    content: `<@&${config.bot.commands.notifyContent}>`,
                     embeds: [errorLog]
                 });
             }

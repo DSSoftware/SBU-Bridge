@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const config = require('../../../config.js');
+const config = require('#/config.js').getConfig();('../../../config.js');
 
 module.exports = {
     name: `${config.minecraft.bot.replication_prefix}` + 'uptime',
@@ -12,7 +12,7 @@ module.exports = {
             .setDescription(`Online since <t:${Math.floor((Date.now() - interaction.client.uptime) / 1000)}:R>`)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.minecraft.API.SCF.logo
+                iconURL: config.API.SCF.logo
             });
 
         interaction.followUp({ embeds: [uptimeEmbed] });

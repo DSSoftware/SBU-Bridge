@@ -1,6 +1,6 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const helperFunctions = require('./helperFunctions.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const Logger = require('#root/src/Logger.js');
 
 class minecraftCommand {
@@ -24,14 +24,14 @@ class minecraftCommand {
 
     async sendDiscordFollowup(channel, content, img_array) {
         let followup_channel = config.discord.channels.officerChannel;
-        let replica_channel = config.discord.replication.channels.officer;
+        let replica_channel = config.replication.channels.officer;
 
         if (channel == 'gc') {
             followup_channel = config.discord.channels.guildChatChannel;
-            replica_channel = config.discord.replication.channels.guild;
+            replica_channel = config.replication.channels.guild;
         }
 
-        if(!config.minecraft.API.useImgur){
+        if(!config.minecraft.commands.integrate_images){
             let files = [];
             for(let file of img_array){
                 files.push({

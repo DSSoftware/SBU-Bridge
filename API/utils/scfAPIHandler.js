@@ -1,4 +1,4 @@
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const axios = require('axios');
 
 const status = {};
@@ -94,7 +94,7 @@ function getFeatureStatus(feature) {
 async function SCFCheckBlacklist(uuid) {
     const require_service = "Blacklist";
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             resolve(false);
             return;
         }
@@ -104,7 +104,7 @@ async function SCFCheckBlacklist(uuid) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_banned = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                    `${config.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -127,7 +127,7 @@ async function SCFgetUUID(username) {
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try {
-                data = (await axios.get(`${config.minecraft.API.SCF.mojang}?nick=${username}`)).data;
+                data = (await axios.get(`${config.API.SCF.mojang}?nick=${username}`)).data;
 
                 if (data?.success == true && data?.id != null) {
                     resolve(data);
@@ -163,7 +163,7 @@ async function SCFgetUsername(uuid) {
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try {
-                data = (await axios.get(`${config.minecraft.API.SCF.mojang}?uuid=${uuid}`)).data;
+                data = (await axios.get(`${config.API.SCF.mojang}?uuid=${uuid}`)).data;
                 resolve(data);
                 return;
             } catch(e){
@@ -186,7 +186,7 @@ async function SCFgetUsername(uuid) {
 async function SCFCheckBridgelock(uuid) {
     const require_service = "Bridgelock";
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             resolve(false);
             return;
         }
@@ -196,7 +196,7 @@ async function SCFCheckBridgelock(uuid) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_banned = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.minecraft.API.SCF.key}`
+                    `${config.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -220,7 +220,7 @@ async function SCFgetLinked(discord_id) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.minecraft.API.SCF.key}`
+                    `${config.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -251,7 +251,7 @@ async function SCFsaveMessage(source, nick, uuid, guild) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let message_send = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.minecraft.API.SCF.key}&nick=${nick}&guild_id=${guild}`
+                    `${config.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.API.SCF.key}&nick=${nick}&guild_id=${guild}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -267,7 +267,7 @@ async function SCFsaveStatus(botConnected, commit_version) {
     const require_service = "Status";
     return new Promise(async (resolve, reject) => {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let statusURL = `${config.minecraft.API.SCF.provider}?method=updateBridgeStatus&api=${config.minecraft.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
+            let statusURL = `${config.API.SCF.provider}?method=updateBridgeStatus&api=${config.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
 
             axios.get(statusURL)
                 .then(function (response) {
@@ -287,7 +287,7 @@ async function SCFsaveStatus(botConnected, commit_version) {
 async function SCFsaveLinked(discord_id, uuid, tag) {
     const require_service = "InternalAPI";
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             reject("This feature is not supported by this instance.");
             return;
         }
@@ -295,7 +295,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&tag=${tag}`
+                    `${config.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.API.SCF.key}&tag=${tag}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -314,7 +314,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
 async function SCFgetMessagesSent(uuid, overall) {
     const require_service = "InternalAPI";
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             resolve({});
             return;
         }
@@ -322,7 +322,7 @@ async function SCFgetMessagesSent(uuid, overall) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `${config.minecraft.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.minecraft.API.SCF.key}&overall=${overall}`
+                    `${config.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -341,7 +341,7 @@ async function SCFgetMessagesSent(uuid, overall) {
 async function SCFgetMessagesTop(guild_id) {
     const require_service = "InternalAPI";
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             resolve({});
             return;
         }
@@ -349,7 +349,7 @@ async function SCFgetMessagesTop(guild_id) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.minecraft.API.SCF.key}&guild_id=${guild_id}`
+                    `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.API.SCF.key}&guild_id=${guild_id}`
                 )
             ]).catch((error) => {
                 SCFsaveLogging("error", `${error}`);
@@ -368,13 +368,13 @@ async function SCFgetMessagesTop(guild_id) {
 async function SCFsaveLogging(type, message) {
     const require_service = "Logging";
     return new Promise(async (resolve, reject) => {
-        if(!config.discord.other.logExtensively){
+        if(!config.bot.other.logExtensively){
             resolve(true);
             return;
         }
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             message = encodeURIComponent(JSON.stringify(message)); 
-            let loggingURL = `${config.minecraft.API.SCF.provider}?method=saveLogging&api=${config.minecraft.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
+            let loggingURL = `${config.API.SCF.provider}?method=saveLogging&api=${config.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
 
             axios.get(loggingURL)
                 .then(function (response) {
@@ -392,7 +392,7 @@ async function SCFsaveLogging(type, message) {
 
 async function SCFSendIGCMessage(uuid, message) {
     return new Promise(async (resolve, reject) => {
-
+        return;
         axios.post(config.discord.IGC.endpoint, {
             message: message,
             uuid: uuid, 
@@ -409,14 +409,14 @@ async function SCFSendIGCMessage(uuid, message) {
 
 async function SCFhandleLeave(username){
     return new Promise(async (resolve, reject) => {
-        if (!config.minecraft.API.SCF.enabled) {
+        if (!config.API.SCF.enabled) {
             resolve(true);
             return;
         }
         
         let player_info = await Promise.all([
             axios.get(
-                `https://sky.dssoftware.ru/discord/handler.php?api=${config.minecraft.API.SCF.key}&action=guild_kick&nick=${username}`
+                `https://sky.dssoftware.ru/discord/handler.php?api=${config.API.SCF.key}&action=guild_kick&nick=${username}`
             )
         ]).catch((error) => {
             SCFsaveLogging("error", `${error}`);

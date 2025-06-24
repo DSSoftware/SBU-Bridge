@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/extensions
 const { Routes } = require('discord-api-types/v9');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const { REST } = require('@discordjs/rest');
 const fs = require('fs');
 
@@ -16,11 +16,11 @@ class CommandHandler {
             commands.push(command);
         }
 
-        const rest = new REST({ version: '10' }).setToken(config.discord.bot.token);
+        const rest = new REST({ version: '10' }).setToken(config.discord.token);
 
-        const clientID = Buffer.from(config.discord.bot.token.split('.')[0], 'base64').toString('ascii');
+        const clientID = Buffer.from(config.discord.token.split('.')[0], 'base64').toString('ascii');
 
-        rest.put(Routes.applicationGuildCommands(clientID, config.discord.bot.serverID), { body: commands }).catch(
+        rest.put(Routes.applicationGuildCommands(clientID, config.discord.serverID), { body: commands }).catch(
             console.error
         );
     }

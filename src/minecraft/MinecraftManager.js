@@ -4,13 +4,13 @@ const StateHandler = require('./handlers/StateHandler.js');
 const ErrorHandler = require('./handlers/ErrorHandler.js');
 const ChatHandler = require('./handlers/ChatHandler.js');
 const CommandHandler = require('./CommandHandler.js');
-const config = require('../../config.js');
+const config = require('#/config.js').getConfig();('../../config.js');
 const mineflayer = require('mineflayer');
 const Logger = require('../Logger.js');
 const Filter = require('bad-words');
 const filter = new Filter();
 filter.removeWords('god', 'damn');
-filter.addWords(...config.discord.other.filterWords);
+filter.addWords(...config.bot.other.filterWords);
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class MinecraftManager extends CommunicationBridge {
@@ -70,13 +70,13 @@ class MinecraftManager extends CommunicationBridge {
             return this.bot.chat(message);
         }
 
-        if (channel === config.discord.replication.channels.debug && config.discord.channels.debugMode === true) {
+        if (channel === config.replication.channels.debug && config.discord.channels.debugMode === true) {
             return this.bot.chat(message);
         }
 
         const chat =
             channel === config.discord.channels.officerChannel ||
-            channel === config.discord.replication.channels.officer
+            channel === config.replication.channels.officer
                 ? '/oc'
                 : '/gc';
 
@@ -88,7 +88,7 @@ class MinecraftManager extends CommunicationBridge {
 
         for (const index in chunks) {
             let message_chunk = chunks[index];
-            if (config.discord.other.filterMessages) {
+            if (config.bot.other.filterMessages) {
                 try {
                     message_chunk = filter.clean(message_chunk);
                 } catch (e) {
