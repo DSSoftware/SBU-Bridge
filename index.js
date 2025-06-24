@@ -1,4 +1,4 @@
-const configLoader = require('#/config.js');
+const configLoader = require('#root/config.js');
 
 (async () => {
     const config = await configLoader.init();
