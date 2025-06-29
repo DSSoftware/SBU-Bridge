@@ -43,8 +43,6 @@ class unscrambleCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         
-        const tmpUser = this.getArgs(message)[0];
-        
         if(last_used + this.cooldown >= (new Date()).getTime()){
             if(notification) return;
             notification = true;
@@ -75,6 +73,8 @@ class unscrambleCommand extends minecraftCommand {
             cooldowns.set(this.name, Date.now());
             
             const listener = (username, message) => {
+                
+                const tmpUser = this.getArgs(message)[0];
                 if (getAnswer(message, answer)) {
                     this.send(
                         `/${channel} GG´s ${tmpUser}! You've guessed it right! Time elapsed: ${(Date.now() - startTime).toLocaleString()}ms!`
