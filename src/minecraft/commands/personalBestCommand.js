@@ -49,7 +49,7 @@ class PersonalBestCommand extends minecraftCommand {
             throw "Invalid Usage: !pb [user] [floor (m7/f4/etc)] [rank (S+, S, any)]";
         }
 
-        const personalBest = getPersonalBest(profile);
+        const personalBest = getPersonalBest(data);
         if (personalBest === null) {
             // eslint-disable-next-line no-throw-literal
             throw `${username} has never done dungeons before.`;
