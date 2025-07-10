@@ -35,8 +35,6 @@ class PersonalBestCommand extends minecraftCommand {
 
         username = formatUsername(username, data.profileData?.game_mode);
 
-        const { username, profile } = await getLatestProfile(player);
-
         const floor = (this.getArgs(message)[1] ?? "M7").toLowerCase();
         const rank = (this.getArgs(message)[2] ?? "S+").toLowerCase();
         const floors = ["e", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "m1", "m2", "m3", "m4", "m5", "m6", "m7"];
