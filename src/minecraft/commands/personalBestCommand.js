@@ -2,7 +2,7 @@ const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js
 const { getPersonalBest } = require("../../../API/stats/dungeonsPersonalBest.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const prettyms = require("pretty-ms");
-const { formatUsername } = require('#/src/contracts/helperFunctions');
+const { formatUsername } = require('../../contracts/helperFunctions.js');
 
 class PersonalBestCommand extends minecraftCommand {
     /** @param {import("minecraft-protocol").Client} minecraft */
