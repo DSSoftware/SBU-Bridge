@@ -32,8 +32,8 @@ class PersonalBestCommand extends minecraftCommand {
             
             // Parse arguments more intelligently
             let targetPlayer = username; // Default to command issuer
-            let floor = "M7"; // Default floor
-            let rank = "S+"; // Default rank
+            let floor = "m7"; // Default floor
+            let rank = "s+"; // Default rank
             
             // If we have arguments, parse them
             if (args.length > 0) {
