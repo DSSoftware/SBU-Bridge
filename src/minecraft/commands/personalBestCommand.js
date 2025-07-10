@@ -28,24 +28,44 @@ class PersonalBestCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
+            const args = this.getArgs(message);
+            
+            // Parse arguments more intelligently
+            let targetPlayer = username; // Default to command issuer
+            let floor = "M7"; // Default floor
+            let rank = "S+"; // Default rank
+            
+            // If we have arguments, parse them
+            if (args.length > 0) {
+                // Check if first argument is a floor (starts with f, m, or is 'e')
+                const firstArg = args[0].toLowerCase();
+                const isFloor = /^(e|f[1-7]|m[1-7])$/.test(firstArg);
+                
+                if (isFloor) {
+                    // First argument is a floor, so use command issuer as player
+                    floor = firstArg;
+                    rank = args[1] ? args[1].toLowerCase() : "s+";
+                } else {
+                    // First argument is a player name
+                    targetPlayer = args[0];
+                    floor = args[1] ? args[1].toLowerCase() : "m7";
+                    rank = args[2] ? args[2].toLowerCase() : "s+";
+                }
+            }
 
-            username = this.getArgs(message)[0] || username;
+            const data = await getLatestProfile(targetPlayer);
 
-            const data = await getLatestProfile(username);
+            const formattedUsername = formatUsername(targetPlayer, data.profileData?.game_mode);
 
-            const formattedUsername = formatUsername(username, data.profileData?.game_mode);
-
-            const floor = (this.getArgs(message)[1] ?? "M7").toLowerCase();
-            const rank = (this.getArgs(message)[2] ?? "S+").toLowerCase();
             const floors = ["e", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "m1", "m2", "m3", "m4", "m5", "m6", "m7"];
             const ranks = ["", "any", "s", "s+"];
             
             if (floors.includes(floor) === false) {
-                throw "Invalid Usage: !pb [user] [floor (m7/f4/etc)] [rank (S+, S, any)]";
+                throw "Invalid Usage: !pb [user] [floor (m7/f4/etc)] [rank (S+, S, any)] or !pb [floor] [rank]";
             }
 
             if (ranks.includes(rank) === false) {
-                throw "Invalid Usage: !pb [user] [floor (m7/f4/etc)] [rank (S+, S, any)]";
+                throw "Invalid Usage: !pb [user] [floor (m7/f4/etc)] [rank (S+, S, any)] or !pb [floor] [rank]";
             }
 
             const personalBest = getPersonalBest(data.profile);
