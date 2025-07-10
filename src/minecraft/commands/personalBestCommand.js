@@ -2,6 +2,7 @@ const { getLatestProfile } = require("../../../API/functions/getLatestProfile.js
 const { getPersonalBest } = require("../../../API/stats/dungeonsPersonalBest.js");
 const minecraftCommand = require("../../contracts/minecraftCommand.js");
 const prettyms = require("pretty-ms");
+const { formatUsername } = require('#/src/contracts/helperFunctions');
 
 class PersonalBestCommand extends minecraftCommand {
     /** @param {import("minecraft-protocol").Client} minecraft */
@@ -25,14 +26,14 @@ class PersonalBestCommand extends minecraftCommand {
         ];
     }
 
-    /**
-     * @param {string} player
-     * @param {string} message
-     * */
-    async onCommand(player, message) {
-        // CREDITS: by @dallincotton06 (https://github.com/dallincotton06)
-        const args = this.getArgs(message);
-        player = args[0] || player;
+
+    async onCommand(username, message, channel = 'gc') {
+
+        username = this.getArgs(message)[0] || username;
+
+        const data = await getLatestProfile(username, { museum: true });
+
+        username = formatUsername(username, data.profileData?.game_mode);
 
         const { username, profile } = await getLatestProfile(player);
 
