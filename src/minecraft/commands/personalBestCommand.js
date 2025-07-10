@@ -31,7 +31,7 @@ class PersonalBestCommand extends minecraftCommand {
 
         username = this.getArgs(message)[0] || username;
 
-        const data = await getLatestProfile(username, { museum: true });
+        const data = await getLatestProfile(username);
 
         username = formatUsername(username, data.profileData?.game_mode);
 
