@@ -28,11 +28,12 @@ class PersonalBestCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            const targetPlayer = this.getArgs(message)[0] || username;
 
-            const data = await getLatestProfile(targetPlayer);
+            username = this.getArgs(message)[0] || username;
 
-            const formattedUsername = formatUsername(targetPlayer, data.profileData?.game_mode);
+            const data = await getLatestProfile(username);
+
+            const formattedUsername = formatUsername(username, data.profileData?.game_mode);
 
             const floor = (this.getArgs(message)[1] ?? "M7").toLowerCase();
             const rank = (this.getArgs(message)[2] ?? "S+").toLowerCase();
