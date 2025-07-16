@@ -38,7 +38,7 @@ class unscrambleCommand extends minecraftCommand {
                 required: false
             }
         ];
-        this.cooldown = 10 * 1000;
+        this.cooldown = 45 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
@@ -46,7 +46,7 @@ class unscrambleCommand extends minecraftCommand {
         if(last_used + this.cooldown >= (new Date()).getTime()){
             if(notification) return;
             notification = true;
-            return this.send(`/${channel} You can only use !unscramble command once every 10 seconds :(`);
+            return this.send(`/${channel} You can only use !unscramble command once every 45 seconds :(`);
         }
         last_used = (new Date()).getTime();
         notification = false;
