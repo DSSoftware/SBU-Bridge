@@ -38,7 +38,7 @@ class unscrambleCommand extends minecraftCommand {
                 required: false
             }
         ];
-        this.cooldown = 45 * 1000 * 2;
+        this.cooldown = 45 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
