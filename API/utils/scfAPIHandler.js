@@ -15,7 +15,7 @@ for(const service of Object.keys(config.behavior)){
 setInterval(() => {
     for(const service of Object.keys(status)){
         if(status[service].errorsCounter != 0){
-            SCFsaveLogging("health", `Service ${service} had ${status[service].errorsCounter} errors in the past 5 minutes.`);
+            console.log(`Service ${service} had ${status[service].errorsCounter} errors in the past 5 minutes.`);
         }
         status[service].errorsCounter = 0;
     }
@@ -107,7 +107,7 @@ async function SCFCheckBlacklist(uuid) {
                     `${config.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 resolve(false);
             });
@@ -135,7 +135,7 @@ async function SCFgetUUID(username) {
                 }
             } catch (e) {
                 if ((e?.response?.status ?? '').toString().startsWith('5')) {
-                    SCFsaveLogging("error", `${e}`);
+                    console.log(e);
                     disableFeature(require_service);
                 } else {
                     reject('Invalid username.');
@@ -167,7 +167,7 @@ async function SCFgetUsername(uuid) {
                 resolve(data);
                 return;
             } catch(e){
-                SCFsaveLogging("error", `${e}`);
+                console.log(e);
                 disableFeature(require_service);
             }
         }
@@ -199,7 +199,7 @@ async function SCFCheckBridgelock(uuid) {
                     `${config.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 resolve(false);
             });
@@ -223,7 +223,7 @@ async function SCFgetLinked(discord_id) {
                     `${config.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 reject("Failed to obtain API response.");
             });
@@ -254,7 +254,7 @@ async function SCFsaveMessage(source, nick, uuid, guild) {
                     `${config.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.API.SCF.key}&nick=${nick}&guild_id=${guild}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
             });
         }
@@ -274,7 +274,7 @@ async function SCFsaveStatus(botConnected, commit_version) {
                     resolve(true);
                 })
                 .catch(function (error) {
-                    SCFsaveLogging("error", `${error}`);
+                    console.log(error);
                     disableFeature(require_service);
                     resolve(false);
                 });
@@ -298,7 +298,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
                     `${config.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.API.SCF.key}&tag=${tag}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 reject(error);
             });
@@ -325,7 +325,7 @@ async function SCFgetMessagesSent(uuid, overall) {
                     `${config.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 resolve({});
             });
@@ -352,7 +352,7 @@ async function SCFgetMessagesTop(guild_id) {
                     `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.API.SCF.key}&guild_id=${guild_id}`
                 )
             ]).catch((error) => {
-                SCFsaveLogging("error", `${error}`);
+                console.log(error);
                 disableFeature(require_service);
                 resolve({});
             });
@@ -362,31 +362,6 @@ async function SCFgetMessagesTop(guild_id) {
         }
 
         resolve({});
-    });
-}
-
-async function SCFsaveLogging(type, message) {
-    const require_service = "Logging";
-    return new Promise(async (resolve, reject) => {
-        if(!config.bot.other.logExtensively){
-            resolve(true);
-            return;
-        }
-        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            message = encodeURIComponent(JSON.stringify(message)); 
-            let loggingURL = `${config.API.SCF.provider}?method=saveLogging&api=${config.API.SCF.key}&type=${type}&message=${message}&bridge=${config.minecraft.bot.unique_id}`;
-
-            axios.get(loggingURL)
-                .then(function (response) {
-                    resolve(true);
-                })
-                .catch(function (error) {
-                    // NOT DISABLING THE SERVICE, OR IT WILL BASICALLY CAUSE A CHAIN REACTION
-                    resolve(false);
-                });
-        }
-
-        resolve(true);
     });
 }
 
@@ -419,7 +394,7 @@ async function SCFhandleLeave(username){
                 `https://sky.dssoftware.ru/discord/handler.php?api=${config.API.SCF.key}&action=guild_kick&nick=${username}`
             )
         ]).catch((error) => {
-            SCFsaveLogging("error", `${error}`);
+            console.log(error);
             resolve(false);
         });
 
@@ -441,7 +416,7 @@ async function SCFHypixelRequest(url){
                 resolve(data);
             } catch (e) {
                 if ((e?.response?.status ?? '').toString().startsWith('5') || (e?.response?.status ?? '').toString() == '429') {
-                    SCFsaveLogging("error", `${e}`);
+                    console.log(e);
                     disableFeature(require_service);
                 } else {
                     reject('Invalid username.');
@@ -474,7 +449,6 @@ module.exports = {
     saveLinked: SCFsaveLinked,
     getMessagesSent: SCFgetMessagesSent,
     getMessagesTop: SCFgetMessagesTop,
-    saveLogging: SCFsaveLogging,
     handleLeave: SCFhandleLeave,
     sendIGCMessage: SCFSendIGCMessage,
     hypixelRequest: SCFHypixelRequest,
