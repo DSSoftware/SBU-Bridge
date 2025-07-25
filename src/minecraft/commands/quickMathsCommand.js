@@ -24,14 +24,14 @@ class QuickMathsCommand extends minecraftCommand {
         this.description = 'Solve the equation in less than 10 seconds! Test your math skills!';
         this.options = [];
 
-        this.cooldown = 30 * 1000;
+        this.cooldown = 15 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
         if(last_used + this.cooldown >= (new Date()).getTime()){
             if(notification) return;
             notification = true;
-            return this.send(`/${channel} You can only use !quickmaths command once every 30 seconds :(`);
+            return this.send(`/${channel} You can only use !quickmaths command once every ${this.cooldown / 1000} seconds :(`);
         }
         last_used = (new Date()).getTime();
         notification = false;

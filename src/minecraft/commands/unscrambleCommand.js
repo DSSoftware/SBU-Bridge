@@ -38,7 +38,7 @@ class unscrambleCommand extends minecraftCommand {
                 required: false
             }
         ];
-        this.cooldown = 45 * 1000;
+        this.cooldown = 15 * 1000;
     }
 
     async onCommand(username, message, channel = 'gc') {
@@ -46,7 +46,7 @@ class unscrambleCommand extends minecraftCommand {
         if(last_used + this.cooldown >= (new Date()).getTime()){
             if(notification) return;
             notification = true;
-            return this.send(`/${channel} You can only use !unscramble command once every 45 seconds :(`);
+            return this.send(`/${channel} You can only use !unscramble command once every ${this.cooldown/1000} seconds :(`);
         }
         last_used = (new Date()).getTime();
         notification = false;
@@ -77,7 +77,7 @@ class unscrambleCommand extends minecraftCommand {
                 const tmpUser = this.getArgs(message)[0];
                 if (getAnswer(message, answer)) {
                     this.send(
-                        `/${channel} GG´s ${tmpUser}! You've guessed it right! Time elapsed: ${(Date.now() - startTime).toLocaleString()}ms!`
+                        `/${channel} GG ${tmpUser}! You've guessed it right! Time elapsed: ${(Date.now() - startTime).toLocaleString()}ms!`
                     );
 
                     bot.removeListener('chat', listener);
