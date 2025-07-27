@@ -311,7 +311,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
     });
 }
 
-async function SCFgetMessagesSent(uuid, overall) {
+async function SCFgetCutoffScore(uuid, overall) {
     const require_service = "InternalAPI";
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
@@ -322,7 +322,34 @@ async function SCFgetMessagesSent(uuid, overall) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `${config.API.SCF.provider}?method=getMessagesSent&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
+                    `${config.API.SCF.provider}?method=getCutoffPlace&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
+                )
+            ]).catch((error) => {
+                console.log(error);
+                disableFeature(require_service);
+                resolve({});
+            });
+
+            player_info = player_info?.[0]?.data ?? {};
+            resolve(player_info);
+        }
+
+        resolve({});
+    });
+}
+
+async function SCFgetRollingScore(uuid, overall) {
+    const require_service = "InternalAPI";
+    return new Promise(async (resolve, reject) => {
+        if (!config.API.SCF.enabled) {
+            resolve({});
+            return;
+        }
+
+        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+            let player_info = await Promise.all([
+                axios.get(
+                    `${config.API.SCF.provider}?method=getRollingPlace&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
                 )
             ]).catch((error) => {
                 console.log(error);
@@ -447,7 +474,8 @@ module.exports = {
     saveMessage: SCFsaveMessage,
     saveStatus: SCFsaveStatus,
     saveLinked: SCFsaveLinked,
-    getMessagesSent: SCFgetMessagesSent,
+    getCutoffScore: SCFgetCutoffScore,
+    getRollingScore: SCFgetRollingScore,
     getMessagesTop: SCFgetMessagesTop,
     handleLeave: SCFhandleLeave,
     sendIGCMessage: SCFSendIGCMessage,

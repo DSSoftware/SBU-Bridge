@@ -46,7 +46,7 @@ class topCommand extends minecraftCommand {
 
             gexp = player.weeklyExperience || 0;
 
-            let placement_info = await SCFAPI.getMessagesSent(player_uuid, 1);
+            let placement_info = await SCFAPI.getRollingScore(player_uuid, 1);
 
             score = placement_info.data.count ?? 0;
 
