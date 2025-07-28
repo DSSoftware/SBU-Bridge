@@ -59,9 +59,9 @@ class Config {
 
                 // Add this new section
                 SBU: {
-                    enabled: this.env('sbu_rubic_enabled') == 'true',
-                    baseURL: process.env.BACKEND_URL || 'http://sbu.rubic-solution.de',
-                    authToken: process.env.AUTH_TOKEN || 'your-64-char-auth-token-here',
+                    enabled: this.env('sbu_enabled') == 'true',
+                    baseURL: this.env.sbu_url || 'http://sbu.rubic-solution.de',
+                    authToken: this.env.sbu_auth_token || 'your-64-char-auth-token-here',
                     guildId: this.env('guild_id'),
                     logchan: "1384965712979955728",
                     timeout: 10000,
