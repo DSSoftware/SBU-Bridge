@@ -364,7 +364,7 @@ class StateHandler extends eventHandler {
                     });
                     
                     if (response) {
-                        console.log('SBU API call successful:', response);
+                        console.log('SBU API call successful:');
 
                         // Add delay before member deletion
                         await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
@@ -379,7 +379,7 @@ class StateHandler extends eventHandler {
                         });
                         
                         if (verifyResponse) {
-                            console.log('SBU verify-user API call successful:', verifyResponse);
+                            console.log('SBU verify-user API call successful:');
                         }
                         
                         // Make second API call to send embedded message
@@ -415,7 +415,7 @@ class StateHandler extends eventHandler {
                         });
                         
                         if (embedResponse) {
-                            console.log('SBU send-embed API call successful:', embedResponse);
+                            console.log('SBU send-embed API call successful:');
                         }
                     }
                 } else {
@@ -487,7 +487,7 @@ class StateHandler extends eventHandler {
                     });
                     
                     if (deverifyResponse) {
-                        console.log('SBU deverify-user API call successful:', deverifyResponse);
+                        console.log('SBU deverify-user API call successful:');
                     }
 
                     // Add delay before member deletion
@@ -508,7 +508,7 @@ class StateHandler extends eventHandler {
                     });
 
                     if (response) {
-                        console.log('SBU API call successful:', response);
+                        console.log('SBU API call successful:');
 
                         // Make second API call to send embedded message
                         console.log('Making SBU send-embed API call');
@@ -543,7 +543,7 @@ class StateHandler extends eventHandler {
                         });
 
                         if (embedResponse) {
-                            console.log('SBU send-embed API call successful:', embedResponse);
+                            console.log('SBU send-embed API call successful:');
                         }
                     }
                 } else {
@@ -637,7 +637,7 @@ class StateHandler extends eventHandler {
                     });
                     
                     if (deverifyResponse) {
-                        console.log('SBU deverify-user API call successful:', deverifyResponse);
+                        console.log('SBU deverify-user API call successful:');
                     }
 
                     // Add delay before member deletion
@@ -658,7 +658,7 @@ class StateHandler extends eventHandler {
                     });
 
                     if (response) {
-                        console.log('SBU API call successful:', response);
+                        console.log('SBU API call successful:');
 
                         // Make second API call to send embedded message
                         console.log('Making SBU send-embed API call');
@@ -693,7 +693,7 @@ class StateHandler extends eventHandler {
                         });
 
                         if (embedResponse) {
-                            console.log('SBU send-embed API call successful:', embedResponse);
+                            console.log('SBU send-embed API call successful:');
                         }
                     }
                 } else {
