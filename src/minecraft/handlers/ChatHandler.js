@@ -18,6 +18,9 @@ const getDungeons = require('../../../API/stats/dungeons.js');
 const { getNetworth } = require('skyhelper-networth');
 const getSkills = require('../../../API/stats/skills.js');
 const getSlayer = require('../../../API/stats/slayer.js');
+const globalSbuService = require('../../contracts/GlobalSbuService');
+const sbuServiceWrapper = require('../../../API/utils/sbuServiceWrapper.js');
+const sbuHelper = require('../../utils/sbuHelper.js');
 
 class StateHandler extends eventHandler {
     constructor(minecraft, command, discord) {
@@ -341,6 +344,98 @@ class StateHandler extends eventHandler {
                     .send(`${config.bot.commands.notifyContent}\n:inbox_tray: ${username} has joined the guild!`);
             }
 
+            try {
+                // Check if SBU service is available before making calls
+                if (config.API.SBU.enabled) {
+                    console.log('Making SBU API call with data:', {
+                        uuid: uuid,
+                        guildId: config.API.SBU.guildId,
+                        endpoint: `/api/hypixel/player/${uuid}/upsert`
+                    });
+
+                    // This will either execute immediately if service is ready,
+                    // or queue the call until service is initialized
+                    const response = await sbuHelper.safeApiCall(`/api/hypixel/player/${uuid}/upsert`, {
+                        method: 'POST',
+                        data: {
+                            uuid: uuid,
+                            guildId: config.API.SBU.guildId
+                        }
+                    });
+                    
+                    if (response) {
+                        console.log('SBU API call successful:', response);
+
+                        // Add delay before member deletion
+                        await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
+
+                        // Make API call to verify user
+                        console.log('Making SBU verify-user API call');
+                        const verifyResponse = await sbuHelper.safeApiCall(`/api/discord/verify-user`, {
+                            method: 'POST',
+                            data: {
+                                uuid: uuid
+                            }
+                        });
+                        
+                        if (verifyResponse) {
+                            console.log('SBU verify-user API call successful:', verifyResponse);
+                        }
+                        
+                        // Make second API call to send embedded message
+                        console.log('Making SBU send-embed API call');
+                        const embedResponse = await sbuHelper.safeApiCall(`/api/discord/send-embed`, {
+                            method: 'POST',
+                            data: {
+                                channelId: config.API.SBU.logchan,
+                                embed: {
+                                    title: "Guild Member Joined",
+                                    description: `${username} has joined the guild and been added to SBU tracking`,
+                                    color: 2067276,
+                                    fields: [
+                                        {
+                                            name: "Player",
+                                            value: username,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "UUID",
+                                            value: uuid,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "Status",
+                                            value: "Successfully tracked",
+                                            inline: true
+                                        }
+                                    ]
+                                },
+                                userId: uuid
+                            }
+                        });
+                        
+                        if (embedResponse) {
+                            console.log('SBU send-embed API call successful:', embedResponse);
+                        }
+                    }
+                } else {
+                    console.log('SBU Service not enabled, skipping SBU API calls');
+                }
+            } catch (error) {
+                console.log('SBU API call failed:', {
+                    message: error.message,
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    data: error.response?.data,
+                    config: {
+                        url: error.config?.url,
+                        method: error.config?.method,
+                        data: error.config?.data
+                    }
+                });
+                // Continue execution even if SBU calls fail - don't throw the error
+                console.log('Continuing without SBU integration due to service unavailability');
+            }
             return [
                 this.minecraft.broadcastHeadedEmbed({
                     message: replaceVariables(messages.joinMessage, { username }),
@@ -369,6 +464,105 @@ class StateHandler extends eventHandler {
                 await client.channels.cache
                     .get(`${config.discord.channels.loggingChannel}`)
                     .send(`${config.bot.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
+            }
+
+            try {
+                // Get UUID for the user who left
+                let uuid;
+                try {
+                    uuid = await getUUID(username);
+                } catch (e) {
+                    console.log('Failed to get UUID for user:', username);
+                }
+
+                // Check if SBU service is available before making calls
+                if (config.API.SBU.enabled && uuid) {
+                    // Make API call to deverify user first
+                    console.log('Making SBU deverify-user API call');
+                    const deverifyResponse = await sbuHelper.safeApiCall(`/api/discord/deverify-user`, {
+                        method: 'POST',
+                        data: {
+                            uuid: uuid
+                        }
+                    });
+                    
+                    if (deverifyResponse) {
+                        console.log('SBU deverify-user API call successful:', deverifyResponse);
+                    }
+
+                    // Add delay before member deletion
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
+
+                    console.log('Making SBU API call with data:', {
+                        endpoint: `/api/members/${uuid}/guild/${config.API.SBU.guildId}`
+                    });
+
+                    // This will either execute immediately if service is ready,
+                    // or queue the call until service is initialized
+                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.API.SBU.guildId}`, {
+                        method: 'DELETE',
+                        data: {
+                            uuid: uuid,
+                            guildId: config.API.SBU.guildId
+                        }
+                    });
+
+                    if (response) {
+                        console.log('SBU API call successful:', response);
+
+                        // Make second API call to send embedded message
+                        console.log('Making SBU send-embed API call');
+                        const embedResponse = await sbuHelper.safeApiCall(`/api/discord/send-embed`, {
+                            method: 'POST',
+                            data: {
+                                channelId: config.API.SBU.logchan,
+                                embed: {
+                                    title: "Guild Member Left",
+                                    description: `${username} has left the guild and been removed from SBU tracking`,
+                                    color: 0xfc1303,
+                                    fields: [
+                                        {
+                                            name: "Player",
+                                            value: username,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "UUID",
+                                            value: uuid,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "Status",
+                                            value: "Successfully removed",
+                                            inline: true
+                                        }
+                                    ]
+                                },
+                                userId: uuid
+                            }
+                        });
+
+                        if (embedResponse) {
+                            console.log('SBU send-embed API call successful:', embedResponse);
+                        }
+                    }
+                } else {
+                    console.log('SBU Service not enabled, skipping SBU API calls');
+                }
+            } catch (error) {
+                console.log('SBU API call failed:', {
+                    message: error.message,
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    data: error.response?.data,
+                    config: {
+                        url: error.config?.url,
+                        method: error.config?.method,
+                        data: error.config?.data
+                    }
+                });
+                // Continue execution even if SBU calls fail - don't throw the error
+                console.log('Continuing without SBU integration due to service unavailability');
             }
 
             let request_res = await SCFAPI.handleLeave(username);
@@ -421,6 +615,106 @@ class StateHandler extends eventHandler {
                     .get(`${config.discord.channels.loggingChannel}`)
                     .send(`${config.bot.commands.notifyContent}\n:outbox_tray: ${username} has left the guild!`);
             }
+
+            try {
+                // Get UUID for the user who left
+                let uuid;
+                try {
+                    uuid = await getUUID(username);
+                } catch (e) {
+                    console.log('Failed to get UUID for user:', username);
+                }
+
+                // Check if SBU service is available before making calls
+                if (config.API.SBU.enabled && uuid) {
+                    // Make API call to deverify user first
+                    console.log('Making SBU deverify-user API call');
+                    const deverifyResponse = await sbuHelper.safeApiCall(`/api/discord/deverify-user`, {
+                        method: 'POST',
+                        data: {
+                            uuid: uuid
+                        }
+                    });
+                    
+                    if (deverifyResponse) {
+                        console.log('SBU deverify-user API call successful:', deverifyResponse);
+                    }
+
+                    // Add delay before member deletion
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
+
+                    console.log('Making SBU API call with data:', {
+                        endpoint: `/api/members/${uuid}/guild/${config.API.SBU.guildId}`
+                    });
+
+                    // This will either execute immediately if service is ready,
+                    // or queue the call until service is initialized
+                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.API.SBU.guildId}`, {
+                        method: 'DELETE',
+                        data: {
+                            uuid: uuid,
+                            guildId: config.API.SBU.guildId
+                        }
+                    });
+
+                    if (response) {
+                        console.log('SBU API call successful:', response);
+
+                        // Make second API call to send embedded message
+                        console.log('Making SBU send-embed API call');
+                        const embedResponse = await sbuHelper.safeApiCall(`/api/discord/send-embed`, {
+                            method: 'POST',
+                            data: {
+                                channelId: config.API.SBU.logchan,
+                                embed: {
+                                    title: "Guild Member Left",
+                                    description: `${username} has left the guild and been removed from SBU tracking`,
+                                    color: 0xfc1303,
+                                    fields: [
+                                        {
+                                            name: "Player",
+                                            value: username,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "UUID",
+                                            value: uuid,
+                                            inline: true
+                                        },
+                                        {
+                                            name: "Status",
+                                            value: "Successfully removed",
+                                            inline: true
+                                        }
+                                    ]
+                                },
+                                userId: uuid
+                            }
+                        });
+
+                        if (embedResponse) {
+                            console.log('SBU send-embed API call successful:', embedResponse);
+                        }
+                    }
+                } else {
+                    console.log('SBU Service not enabled, skipping SBU API calls');
+                }
+            } catch (error) {
+                console.log('SBU API call failed:', {
+                    message: error.message,
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    data: error.response?.data,
+                    config: {
+                        url: error.config?.url,
+                        method: error.config?.method,
+                        data: error.config?.data
+                    }
+                });
+                // Continue execution even if SBU calls fail - don't throw the error
+                console.log('Continuing without SBU integration due to service unavailability');
+            }
+
 
             let request_res = await SCFAPI.handleLeave(username);
 
@@ -963,7 +1257,7 @@ class StateHandler extends eventHandler {
         );
 
         if (regex.test(message) === false) {
-            const getMessage = /^(?<username>(?!https?:\/\/)[^\s»:>]+)\s*[»:>]\s*(?<message>.*)/;
+            const getMessage = /^(?<username>(?!https?:\/\/)[^\s»:>\s]+)\s*[»:>\s]\s*(?<message>.*)/;
 
             const match = message.match(getMessage);
             if (match === null || match.groups.message === undefined) {

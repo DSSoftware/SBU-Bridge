@@ -221,12 +221,18 @@ const configLoader = require('#root/config.js');
             process.exit(1);
         });
         const app = require('./src/Application.js');
+        const sbuServiceWrapper = require('./API/utils/sbuServiceWrapper.js');
 
         ('use strict');
 
         app.register()
-            .then(() => {
-                app.connect();
+            .then(async () => {
+                // Initialize SBU service wrapper if enabled
+                if (config.API.SBU.enabled) {
+                    await sbuServiceWrapper.initialize(config.API.SBU.baseURL, config.API.SBU.authToken);
+                }
+                
+                return app.connect();
             })
             .catch((error) => {
                 console.error(error);
