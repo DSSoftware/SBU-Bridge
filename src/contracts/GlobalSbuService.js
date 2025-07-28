@@ -13,6 +13,12 @@ class GlobalSbuService {
             return this.sbuService;
         }
 
+        if (!config.API.SBU.enabled) {
+            Logger.infoMessage('SBU service is disabled in configuration');
+            this.initialized = true;
+            return null;
+        }
+
         try {
             this.sbuService = new SbuService(
                 config.API.SBU.baseURL,
@@ -26,6 +32,7 @@ class GlobalSbuService {
             return this.sbuService;
         } catch (error) {
             Logger.warnMessage('Failed to initialize SBU Service:', error);
+            this.initialized = true; // Mark as initialized even if failed
             throw error;
         }
     }
@@ -40,14 +47,13 @@ class GlobalSbuService {
     async makeApiCall(endpoint, options = {}) {
         try {
             const service = this.getService();
-            const api = service.getApiInstance();
-            return await api.request(endpoint, options);
+            // Use the service's makeApiCall method directly
+            return await service.makeApiCall(endpoint, options);
         } catch (error) {
             Logger.warnMessage('SBU API call failed:', error);
             throw error;
         }
     }
-
 }
 
 // Create a singleton instance

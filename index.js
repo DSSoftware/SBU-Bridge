@@ -213,25 +213,25 @@ const configLoader = require('#root/config.js');
         process.on('unhandledRejection', function (err, promise) {
             console.log('Unhandled rejection (promise: ', promise, ', reason: ', err, ').');
             Logger.warnMessage(`Unhandled rejection (promise: ${promise}, reason: ${err}).`);
-            /*process.send({
-                event_id: 'exceptionCaught',
-                exception: "Unhandled rejection. Check logs. (" + promise + ")",
-                stack: "Cannot fit rejection message here, check logs."
-            });*/
             process.exit(1);
         });
         const app = require('./src/Application.js');
-        const sbuServiceWrapper = require('./API/utils/sbuServiceWrapper.js');
+        const globalSbuService = require('./src/contracts/GlobalSbuService.js'); // Change this line
 
         ('use strict');
 
         app.register()
             .then(async () => {
-                // Initialize SBU service wrapper if enabled
+                // Initialize Global SBU service if enabled
                 if (config.API.SBU.enabled) {
-                    await sbuServiceWrapper.initialize(config.API.SBU.baseURL, config.API.SBU.authToken);
+                    try {
+                        await globalSbuService.initialize();
+                        Logger.infoMessage('Global SBU service initialized successfully');
+                    } catch (error) {
+                        Logger.warnMessage('Failed to initialize Global SBU service:', error.message);
+                    }
                 }
-                
+            
                 return app.connect();
             })
             .catch((error) => {

@@ -1,14 +1,17 @@
 const config = require('#root/config.js').getConfig();
 const Logger = require('../Logger.js');
+const globalSbuService = require('../contracts/GlobalSbuService.js');
 
 class SbuHelper {
     constructor() {
-        this.service = null;
-        this.isEnabled = false;
         this.isInitialized = false;
     }
 
     async initialize() {
+        if (this.isInitialized) {
+            return true;
+        }
+
         if (!config.API.SBU.enabled) {
             Logger.infoMessage('SBU service is disabled');
             this.isInitialized = true;
@@ -16,39 +19,46 @@ class SbuHelper {
         }
 
         try {
-            const SbuService = require('../../API/utils/sbuService.js');
-            this.service = new SbuService(config.API.SBU.baseURL, config.API.SBU.authToken);
-            await this.service.initialize();
-            this.isEnabled = true;
+            // The GlobalSbuService should already be initialized by the main app
+            // We just need to verify it's ready
+            if (!globalSbuService.initialized) {
+                await globalSbuService.initialize();
+            }
             this.isInitialized = true;
-            Logger.infoMessage('SBU service initialized successfully');
+            Logger.infoMessage('SBU helper initialized successfully');
             return true;
         } catch (error) {
-            Logger.errorMessage('Failed to initialize SBU service:', error.message);
-            this.isEnabled = false;
+            Logger.errorMessage('Failed to initialize SBU helper:', error.message);
             this.isInitialized = true;
             return false;
         }
     }
 
-    async makeApiCall(endpoint, options = {}) {
+    async ensureInitialized() {
         if (!this.isInitialized) {
-            throw new Error('SBU service not initialized');
+            await this.initialize();
         }
+    }
 
-        if (!this.isEnabled || !this.service) {
+    async makeApiCall(endpoint, options = {}) {
+        await this.ensureInitialized();
+
+        if (!this.isAvailable()) {
             throw new Error('SBU service is not available');
         }
 
-        return this.service.makeApiCall(endpoint, options);
+        return globalSbuService.getService().makeApiCall(endpoint, options);
     }
 
     isAvailable() {
-        return this.isEnabled && this.service && this.isInitialized;
+        return config.API.SBU.enabled && globalSbuService.initialized && globalSbuService.sbuService;
     }
 
     async safeApiCall(endpoint, options = {}) {
         try {
+            // Auto-initialize if not already done
+            await this.ensureInitialized();
+            
             if (!this.isAvailable()) {
                 Logger.warnMessage('SBU service not available, skipping API call');
                 return null;
