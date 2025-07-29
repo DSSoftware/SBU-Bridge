@@ -62,7 +62,6 @@ class Config {
                     enabled: this.env('sbu_enabled') == 'true',
                     baseURL: this.env('sbu_url'),
                     authToken: this.env('sbu_auth_token'),
-                    guildId: this.env('guild_id'),
                     logchan: "1385348910913949707",
                     timeout: 10000,
                     retryAttempts: 2,
@@ -279,27 +278,3 @@ class Config {
 }
 
 module.exports = new Config();
-
-
-
-/*IGC: {
-            // Inter Guild Chat
-            enabled: process.env.igc_enabled == 'true',
-            settings: {
-                listening: process.env.igc_listening,
-                webhook: process.env.igc_webhook,
-                webhook_self: process.env.igc_self_id,
-                channels: {
-                    guild: {
-                        enabled: process.env.igc_guild_enabled == "true",
-                        prefix: process.env.igc_guild_prefix,
-                        commands: process.env.igc_guild_commands == "true"
-                    },
-                    officer: {
-                        enabled: process.env.igc_officer_enabled == "true",
-                        prefix: process.env.igc_officer_prefix,
-                        commands: process.env.igc_officer_commands == "true"
-                    },
-                }
-            }
-        },*/

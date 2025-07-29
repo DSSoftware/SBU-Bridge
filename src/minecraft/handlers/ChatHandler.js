@@ -349,7 +349,7 @@ class StateHandler extends eventHandler {
                 if (config.API.SBU.enabled) {
                     console.log('Making SBU API call with data:', {
                         uuid: uuid,
-                        guildId: config.API.SBU.guildId,
+                        guildId: config.minecraft.guild.guildId,
                         endpoint: `/api/hypixel/player/${uuid}/upsert`
                     });
 
@@ -359,7 +359,7 @@ class StateHandler extends eventHandler {
                         method: 'POST',
                         data: {
                             uuid: uuid,
-                            guildId: config.API.SBU.guildId
+                            guildId: config.minecraft.guild.guildId
                         }
                     });
                     
@@ -494,16 +494,16 @@ class StateHandler extends eventHandler {
                     await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
 
                     console.log('Making SBU API call with data:', {
-                        endpoint: `/api/members/${uuid}/guild/${config.API.SBU.guildId}`
+                        endpoint: `/api/members/${uuid}/guild/${config.minecraft.guild.guildId}`
                     });
 
                     // This will either execute immediately if service is ready,
                     // or queue the call until service is initialized
-                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.API.SBU.guildId}`, {
+                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.minecraft.guild.guildId}`, {
                         method: 'DELETE',
                         data: {
                             uuid: uuid,
-                            guildId: config.API.SBU.guildId
+                            guildId: config.minecraft.guild.guildId
                         }
                     });
 
@@ -644,16 +644,16 @@ class StateHandler extends eventHandler {
                     await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
 
                     console.log('Making SBU API call with data:', {
-                        endpoint: `/api/members/${uuid}/guild/${config.API.SBU.guildId}`
+                        endpoint: `/api/members/${uuid}/guild/${config.minecraft.guild.guildId}`
                     });
 
                     // This will either execute immediately if service is ready,
                     // or queue the call until service is initialized
-                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.API.SBU.guildId}`, {
+                    const response = await sbuHelper.safeApiCall(`/api/members/${uuid}/guild/${config.minecraft.guild.guildId}`, {
                         method: 'DELETE',
                         data: {
                             uuid: uuid,
-                            guildId: config.API.SBU.guildId
+                            guildId: config.minecraft.guild.guildId
                         }
                     });
 
