@@ -1,26 +1,17 @@
 const { replaceAllRanks, replaceVariables } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const eventHandler = require('../../contracts/EventHandler.js');
-const getWeight = require('../../../API/stats/weight.js');
 const messages = require('../../../messages.json');
 const { EmbedBuilder } = require('discord.js');
 const config = require('#root/config.js').getConfig();
 const Logger = require('../../Logger.js');
-const axios = require('axios');
 const Skykings = require('../../../API/utils/skykings');
 const Blacklist = require('../../../API/utils/blacklist');
 const SCFAPI = require('../../../API/utils/scfAPIHandler');
 const getDungeons = require('../../../API/stats/dungeons.js');
-
-const { getNetworth } = require('skyhelper-networth');
-const getSkills = require('../../../API/stats/skills.js');
-const getSlayer = require('../../../API/stats/slayer.js');
-const globalSbuService = require('../../contracts/GlobalSbuService');
-const sbuServiceWrapper = require('../../../API/utils/sbuServiceWrapper.js');
-const sbuHelper = require('../../utils/sbuHelper.js');
+const sbuHelper = require('../../api/sbuHelper.js');
 
 class StateHandler extends eventHandler {
     constructor(minecraft, command, discord) {
