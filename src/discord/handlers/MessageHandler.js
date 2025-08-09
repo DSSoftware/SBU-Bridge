@@ -125,13 +125,17 @@ class MessageHandler {
                         // If no cached data or cache is old, check API status
                         if (!approvalData || (Date.now() - approvalData.last_save) > 300000) { // 5 minutes cache
                             try {
+                                console.log(`Checking approval status for user ${message.author.username} (${message.author.id})`);
                                 const apiStatus = await this.checkApprovalStatus(message.author.id);
+                                console.log(`Approval status result: ${apiStatus}`);
+                                
                                 approvalData = {
                                     last_save: Date.now(),
                                     status: apiStatus
                                 };
                                 sender_cache.set(approvalKey, approvalData);
                             } catch (error) {
+                                console.log('Error checking approval status:', error);
                                 // If API check fails and no cached data, treat as new user
                                 if (!approvalData) {
                                     approvalData = { status: 'new' };
@@ -139,18 +143,24 @@ class MessageHandler {
                             }
                         }
 
+                        console.log(`Final approval status for ${message.author.username}: ${approvalData.status}`);
+
                         // Handle different approval statuses
                         if (approvalData.status === 'pending') {
+                            console.log(`User ${message.author.username} has pending approval - reacting with ⏳`);
                             message.react('⏳').catch((e) => {});
                             return;
                         } else if (approvalData.status === 'denied') {
+                            console.log(`User ${message.author.username} is denied - reacting with ❌`);
                             message.react('❌').catch((e) => {});
                             return;
                         } else if (approvalData.status === 'approved') {
+                            console.log(`User ${message.author.username} is approved but doesn't have bridge role - allowing message`);
                             // User is approved but doesn't have the role yet - this shouldn't happen
                             // but we'll allow it and let Discord role sync handle it
                         } else {
                             // New user or unknown status - send approval request
+                            console.log(`Sending new approval request for ${message.author.username}`);
                             try {
                                 // Try to get existing UUID if user is already linked
                                 let userUuid = null;
@@ -164,6 +174,7 @@ class MessageHandler {
                                 console.log('Making approval request API call with data:', {
                                     userId: message.author.id,
                                     username: message.author.username,
+                                    uuid: userUuid,
                                     endpoint: '/api/discord/bridge'
                                 });
 
@@ -176,7 +187,7 @@ class MessageHandler {
                                 });
 
                                 if (response) {
-                                    console.log('Approval request API call successful');
+                                    console.log('Approval request API call successful for', message.author.username);
 
                                     // Cache the approval request to prevent duplicates
                                     sender_cache.set(approvalKey, {
@@ -200,9 +211,11 @@ class MessageHandler {
 
                                     message.react('⏳').catch((e) => {});
                                     return;
+                                } else {
+                                    console.log('Approval request API call returned no response for', message.author.username);
                                 }
                             } catch (error) {
-                                console.log('Approval request API call failed:', {
+                                console.log('Approval request API call failed for', message.author.username, ':', {
                                     message: error.message,
                                     status: error.response?.status,
                                     statusText: error.response?.statusText,
@@ -510,6 +523,13 @@ class MessageHandler {
             const hasBridgePlusRole = config.API.SBU.bridgeplus_role && userRoles.includes(config.API.SBU.bridgeplus_role);
             const hasDeniedRole = config.API.SBU.denied_role && userRoles.includes(config.API.SBU.denied_role);
 
+            console.log(`Checking approval status for ${member.user.username}:`, {
+                hasBridgeRole,
+                hasBridgePlusRole,
+                hasDeniedRole,
+                userRoles: userRoles.length
+            });
+
             // If user has bridge roles, they are approved
             if (hasBridgeRole || hasBridgePlusRole) {
                 return 'approved';
@@ -524,9 +544,12 @@ class MessageHandler {
             const approvalKey = `approval_${userId}`;
             const cachedData = sender_cache.get(approvalKey);
 
+            console.log(`Cache data for ${member.user.username}:`, cachedData);
+
             // If user previously had approval status but no longer has bridge roles,
             // and they don't have a denied role, treat as new user (roles were removed)
             if (cachedData && cachedData.status === 'approved') {
+                console.log(`User ${member.user.username} was previously approved but no longer has bridge roles - clearing cache`);
                 // User was previously approved but no longer has bridge roles
                 // Clear the cache and treat as new user
                 sender_cache.delete(approvalKey);
@@ -535,10 +558,12 @@ class MessageHandler {
 
             // If cached data exists and it's recent, use it (for pending/denied status)
             if (cachedData && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
+                console.log(`Using cached status for ${member.user.username}: ${cachedData.status}`);
                 return cachedData.status;
             }
 
             // Default to new user if no cache or old cache
+            console.log(`Treating ${member.user.username} as new user`);
             return 'new';
         } catch (error) {
             console.log('Failed to check approval status:', error.message);
