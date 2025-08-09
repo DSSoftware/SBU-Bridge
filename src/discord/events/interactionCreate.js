@@ -38,12 +38,12 @@ module.exports = {
         } catch (error) {
             Logger.warnMessage(error);
             try {
-                const errrorMessage =
+                const errorMessage =
                     error instanceof HypixelDiscordChatBridgeError
                         ? ''
                         : 'Please try again later. The error has been sent to the Developers.\n\n';
 
-                const errorEmbed = new ErrorEmbed(`${errrorMessage}\`\`\`${error}\`\`\``);
+                const errorEmbed = new ErrorEmbed(`${errorMessage}\`\`\`${error}\`\`\``);
 
                 await interaction.editReply({ embeds: [errorEmbed] });
 
