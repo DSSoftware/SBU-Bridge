@@ -538,17 +538,20 @@ class MessageHandler {
         const oldRoles = oldMember.roles.cache.map(role => role.id);
         const newRoles = newMember.roles.cache.map(role => role.id);
 
-        const bridgeRoles = [config.API.SBU.bridge_role, config.API.SBU.bridgeplus_role, config.API.SBU.denied_role].filter(Boolean);
+        const bridgeRoles = [config.API.SBU.bridge_role, config.API.SBU.bridgeplus_role].filter(Boolean);
+        const deniedRole = config.API.SBU.denied_role;
 
         const hadBridgeRole = bridgeRoles.some(roleId => oldRoles.includes(roleId));
         const hasBridgeRole = bridgeRoles.some(roleId => newRoles.includes(roleId));
+        const hadDeniedRole = deniedRole && oldRoles.includes(deniedRole);
+        const hasDeniedRole = deniedRole && newRoles.includes(deniedRole);
+
+        const approvalKey = `approval_${newMember.id}`;
 
         // If bridge roles changed, update the approval cache
         if (hadBridgeRole !== hasBridgeRole) {
-            const approvalKey = `approval_${newMember.id}`;
-
-            if (newRoles.includes(config.API.SBU.bridge_role) || newRoles.includes(config.API.SBU.bridgeplus_role)) {
-                // User was approved
+            if (hasBridgeRole) {
+                // User was approved (bridge role added)
                 sender_cache.set(approvalKey, {
                     last_save: Date.now(),
                     status: 'approved'
@@ -563,8 +566,27 @@ class MessageHandler {
                     }]
                 }).catch(() => {}); // Ignore if DMs are disabled
 
-            } else if (newRoles.includes(config.API.SBU.denied_role)) {
-                // User was denied
+            } else if (hadBridgeRole && !hasBridgeRole) {
+                // Bridge role was removed - reset status and potentially resend approval request
+                sender_cache.delete(approvalKey); // Clear the cache
+                
+                // Notify user that their access was revoked
+                newMember.send({
+                    embeds: [{
+                        color: 16776960, // Yellow color
+                        title: '⚠️ Bridge Access Revoked',
+                        description: 'Your bridge access has been revoked. If you believe this is an error, please try sending a message in the bridge channel to request approval again.'
+                    }]
+                }).catch(() => {}); // Ignore if DMs are disabled
+
+                console.log(`Bridge access revoked for user ${newMember.user.username} (${newMember.id})`);
+            }
+        }
+
+        // Handle denied role changes
+        if (hadDeniedRole !== hasDeniedRole) {
+            if (hasDeniedRole) {
+                // User was denied (denied role added)
                 sender_cache.set(approvalKey, {
                     last_save: Date.now(),
                     status: 'denied'
@@ -578,6 +600,12 @@ class MessageHandler {
                         description: 'Your request to use the bridge has been denied. Please contact a moderator if you believe this is an error.'
                     }]
                 }).catch(() => {}); // Ignore if DMs are disabled
+
+            } else if (hadDeniedRole && !hasDeniedRole) {
+                // Denied role was removed - clear the cache so they can request again
+                sender_cache.delete(approvalKey);
+                
+                console.log(`Denied status cleared for user ${newMember.user.username} (${newMember.id})`);
             }
         }
     }
