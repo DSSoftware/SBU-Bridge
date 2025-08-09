@@ -2,7 +2,7 @@ const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js')
 const config = require('#root/config.js').getConfig();
 const { EmbedBuilder } = require('discord.js');
 const app = require('../../Application.js');
-const AuthProvider = require('../AuthProvider.js');
+const AuthProvider = require('#root/src/AuthProvider.js');
 
 module.exports = {
     name: `${config.minecraft.bot.guild_prefix}` + 'stop',

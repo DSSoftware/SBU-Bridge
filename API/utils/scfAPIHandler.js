@@ -284,7 +284,7 @@ async function SCFsaveStatus(botConnected, commit_version) {
     });
 }
 
-async function SCFsaveLinked(discord_id, uuid, tag) {
+async function SCFsaveLinked(discord_id, uuid) {
     const require_service = "InternalAPI";
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
@@ -295,7 +295,7 @@ async function SCFsaveLinked(discord_id, uuid, tag) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `${config.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.API.SCF.key}&tag=${tag}`
+                    `${config.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.API.SCF.key}`
                 )
             ]).catch((error) => {
                 console.log(error);

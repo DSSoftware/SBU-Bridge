@@ -4,6 +4,7 @@ const config = require('#root/config.js').getConfig();
 const Logger = require('#root/src/Logger.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
+const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 
 module.exports = {
     name: `${config.minecraft.bot.guild_prefix}` + 'link',
@@ -27,7 +28,14 @@ module.exports = {
             throw new HypixelDiscordChatBridgeError('Invalid IGN.');
         }
 
-        let data = await SCFAPI.saveLinked(user.id, uuid, user.user.username).catch((error) => {
+        const user_info = await hypixel.getPlayer(uuid);
+        let tag = user_info.socialMedia.links.DISCORD || undefined;
+
+        if(tag != user.user.username){
+            throw new HypixelDiscordChatBridgeError(`Discord account on Hypixel is different from your current account!\n\nYour current user tag: ${user.user.username}\nLinked user tag: ${tag}`);
+        }
+
+        let data = await SCFAPI.saveLinked(user.id, uuid).catch((error) => {
             Logger.warnMessage(error);
             throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
         });

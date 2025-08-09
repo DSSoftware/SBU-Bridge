@@ -1,7 +1,7 @@
 const HypixelDiscordChatBridgeError = require('../../contracts/errorHandler.js');
 const { EmbedBuilder } = require('discord.js');
 const config = require('#root/config.js').getConfig();
-const AuthProvider = require('../AuthProvider.js');
+const AuthProvider = require('#root/src/AuthProvider.js');
 
 module.exports = {
     name: `${config.minecraft.bot.replication_prefix}` + 'simulate',
