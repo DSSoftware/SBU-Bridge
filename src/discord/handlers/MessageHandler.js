@@ -490,9 +490,14 @@ class MessageHandler {
     async checkApprovalStatus(userId) {
         try {
             // Get the user from the guild to check their current roles
-            const guild = this.discord.client.guilds.cache.get(config.discord.guildId);
+            const guildId = config.discord.guildId || config.discord.serverID;
+            if (!guildId) {
+                throw new Error('Guild ID not configured');
+            }
+
+            const guild = this.discord.client.guilds.cache.get(guildId);
             if (!guild) {
-                throw new Error('Guild not found');
+                throw new Error(`Guild not found with ID: ${guildId}`);
             }
 
             const member = await guild.members.fetch(userId);
@@ -513,17 +518,19 @@ class MessageHandler {
                 return 'denied';
             }
 
-            // If no bridge roles and no denied role, check if they have a pending request
+            // If no bridge roles and no denied role, check cache
             const approvalKey = `approval_${userId}`;
             const cachedData = sender_cache.get(approvalKey);
 
-            if (cachedData && cachedData.status === 'pending') {
-                return 'pending';
+            // If cached data exists and it's recent, use it
+            if (cachedData && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
+                return cachedData.status;
             }
 
+            // If no recent cache or user lost their roles, treat as new user
             return 'new';
         } catch (error) {
-            console.log('Failed to check approval status:', error);
+            console.log('Failed to check approval status:', error.message);
             return 'new';
         }
     }
