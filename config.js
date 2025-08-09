@@ -75,7 +75,7 @@ class Config {
                     bridge_role: "1399847464600731828",
                     bridgeplus_role: "1399847612341026948",
                     bridge_blacklist_role: "1218393424068087838",
-                    require_approval: process.env.BRIDGE_REQUIRE_APPROVAL === 'true' || false
+                    require_approval: this.env('sbu_approval') == 'true' || false
                 },
 
                 banlist: {
