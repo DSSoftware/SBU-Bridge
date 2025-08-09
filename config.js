@@ -71,7 +71,11 @@ class Config {
                         minInterval: 100, // ms between requests
                         maxConcurrent: 3, // max concurrent requests
                         retryDelay: 5000 // delay before retrying failed requests
-                    }
+                    },
+                    bridge_role: "1399847464600731828",
+                    bridgeplus_role: "1399847612341026948",
+                    bridge_blacklist_role: "1218393424068087838",
+                    require_approval: process.env.BRIDGE_REQUIRE_APPROVAL === 'true' || false
                 },
 
                 banlist: {
