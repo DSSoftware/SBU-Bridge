@@ -540,25 +540,23 @@ class MessageHandler {
                 return 'denied';
             }
 
-            // If user has neither bridge roles nor denied role, check cache
+            // Check cache for existing approval status
             const approvalKey = `approval_${userId}`;
             const cachedData = sender_cache.get(approvalKey);
 
             console.log(`Cache data for ${member.user.username}:`, cachedData);
 
-            // If user previously had approval status but no longer has bridge roles,
-            // and they don't have a denied role, treat as new user (roles were removed)
-            if (cachedData && cachedData.status === 'approved') {
-                console.log(`User ${member.user.username} was previously approved but no longer has bridge roles - clearing cache`);
-                // User was previously approved but no longer has bridge roles
-                // Clear the cache and treat as new user
+            // If user has no bridge roles and no denied role, but has cached approval status,
+            // this means their roles were removed - clear cache and treat as new
+            if (cachedData && (cachedData.status === 'approved' || cachedData.status === 'pending')) {
+                console.log(`User ${member.user.username} has cached status ${cachedData.status} but no bridge roles - clearing cache and treating as new`);
                 sender_cache.delete(approvalKey);
                 return 'new';
             }
 
-            // If cached data exists and it's recent, use it (for pending/denied status)
-            if (cachedData && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
-                console.log(`Using cached status for ${member.user.username}: ${cachedData.status}`);
+            // If cached data exists and it's recent, use it (for denied status only at this point)
+            if (cachedData && cachedData.status === 'denied' && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
+                console.log(`Using cached denied status for ${member.user.username}: ${cachedData.status}`);
                 return cachedData.status;
             }
 
