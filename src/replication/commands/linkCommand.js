@@ -29,7 +29,7 @@ module.exports = {
         }
 
         const user_info = await hypixel.getPlayer(uuid);
-        let tag = user_info.socialMedia.links.DISCORD || undefined;
+        let tag = user_info?.socialMedia?.links?.DISCORD || undefined;
 
         if(tag != user.user.username){
             throw new HypixelDiscordChatBridgeError(`Discord account on Hypixel is different from your current account!\n\nYour current user tag: ${user.user.username}\nLinked user tag: ${tag}`);
