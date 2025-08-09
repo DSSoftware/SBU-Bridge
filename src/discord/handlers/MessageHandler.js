@@ -508,26 +508,37 @@ class MessageHandler {
             const userRoles = member.roles.cache.map(role => role.id);
             const hasBridgeRole = config.API.SBU.bridge_role && userRoles.includes(config.API.SBU.bridge_role);
             const hasBridgePlusRole = config.API.SBU.bridgeplus_role && userRoles.includes(config.API.SBU.bridgeplus_role);
+            const hasDeniedRole = config.API.SBU.denied_role && userRoles.includes(config.API.SBU.denied_role);
 
+            // If user has bridge roles, they are approved
             if (hasBridgeRole || hasBridgePlusRole) {
                 return 'approved';
             }
 
-            // Check if user has a denied role (if you have one configured)
-            if (config.API.SBU.denied_role && userRoles.includes(config.API.SBU.denied_role)) {
+            // If user has denied role, they are denied
+            if (hasDeniedRole) {
                 return 'denied';
             }
 
-            // If no bridge roles and no denied role, check cache
+            // If user has neither bridge roles nor denied role, check cache
             const approvalKey = `approval_${userId}`;
             const cachedData = sender_cache.get(approvalKey);
 
-            // If cached data exists and it's recent, use it
+            // If user previously had approval status but no longer has bridge roles,
+            // and they don't have a denied role, treat as new user (roles were removed)
+            if (cachedData && cachedData.status === 'approved') {
+                // User was previously approved but no longer has bridge roles
+                // Clear the cache and treat as new user
+                sender_cache.delete(approvalKey);
+                return 'new';
+            }
+
+            // If cached data exists and it's recent, use it (for pending/denied status)
             if (cachedData && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
                 return cachedData.status;
             }
 
-            // If no recent cache or user lost their roles, treat as new user
+            // Default to new user if no cache or old cache
             return 'new';
         } catch (error) {
             console.log('Failed to check approval status:', error.message);
