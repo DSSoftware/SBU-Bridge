@@ -62,7 +62,7 @@ class Config {
                     enabled: this.env('sbu_enabled') == 'true',
                     baseURL: this.env('sbu_url'),
                     authToken: this.env('sbu_auth_token'),
-                    logchan: "1385348910913949707",
+                    logchan: this.env('sbu_logchan'),
                     timeout: 10000,
                     retryAttempts: 2,
                     retryDelay: 2000,
@@ -72,9 +72,9 @@ class Config {
                         maxConcurrent: 3, // max concurrent requests
                         retryDelay: 5000 // delay before retrying failed requests
                     },
-                    bridge_role: "1399847464600731828",
-                    bridgeplus_role: "1399847612341026948",
-                    bridge_blacklist_role: "1218393424068087838",
+                    bridge_role: this.env('bridge_role'),
+                    bridgeplus_role: this.env('bridgeplus_role'),
+                    bridge_blacklist_role: this.env('bridge_blacklist_role'),
                     require_approval: this.env('sbu_approval') == 'true' || false
                 },
 
