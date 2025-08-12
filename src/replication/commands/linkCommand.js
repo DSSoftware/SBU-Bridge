@@ -30,7 +30,7 @@ module.exports = {
         let hypixel_info = await SCFAPI.hypixelRequest(
             `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
         ).catch((error) => {});
-        let tag = hypixel_info.socialMedia?.links?.DISCORD || undefined;
+        let tag = hypixel_info.player.socialMedia?.links?.DISCORD || undefined;
 
         if (tag != user.user.username) {
             throw new HypixelDiscordChatBridgeError(
