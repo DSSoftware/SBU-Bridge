@@ -31,7 +31,7 @@ module.exports = {
             `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
         ).catch((error) => {});
 
-        console.log(hypixel_info.socialMedia
+        console.log(hypixel_info.socialMedia);
         let tag = hypixel_info.socialMedia?.links?.DISCORD || undefined;
 
         if (tag != user.user.username) {
