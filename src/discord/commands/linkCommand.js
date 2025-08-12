@@ -4,7 +4,6 @@ const config = require('#root/config.js').getConfig();
 const Logger = require('#root/src/Logger.js');
 const playerAPI = require('../../contracts/API/PlayerDBAPI.js');
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
-const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
 
 module.exports = {
     name: `${config.minecraft.bot.guild_prefix}` + 'link',
@@ -24,15 +23,19 @@ module.exports = {
         const minecraft_nick = interaction.options.getString('nick');
         const uuid = await playerAPI.getUUID(minecraft_nick);
 
-        if(uuid == null){
+        if (uuid == null) {
             throw new HypixelDiscordChatBridgeError('Invalid IGN.');
         }
 
-        const user_info = await hypixel.getPlayer(uuid);
-        let tag = user_info?.socialMedia?.links?.DISCORD || undefined;
+        let hypixel_info = await SCFAPI.hypixelRequest(
+            `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
+        ).catch((error) => {});
+        let tag = hypixel_info.socialMedia?.links?.DISCORD || undefined;
 
-        if(tag != user.user.username){
-            throw new HypixelDiscordChatBridgeError(`Discord account on Hypixel is different from your current account!\n\nYour current user tag: ${user.user.username}\nLinked user tag: ${tag}`);
+        if (tag != user.user.username) {
+            throw new HypixelDiscordChatBridgeError(
+                `Discord account on Hypixel is different from your current account!\n\nYour current user tag: ${user.user.username}\nLinked user tag: ${tag}`
+            );
         }
 
         let data = await SCFAPI.saveLinked(user.id, uuid).catch((error) => {
