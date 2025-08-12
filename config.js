@@ -244,7 +244,7 @@ class Config {
             },
             longpoll: {
                 enabled: true,
-                provider: 'https://sky.dssoftware.ru/longpoll/'
+                provider: 'https://scfdev.dssoftware.ru/longpoll/'
             },
             logging: {
                 verbose: true

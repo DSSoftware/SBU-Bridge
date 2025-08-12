@@ -376,7 +376,7 @@ async function SCFgetMessagesTop(guild_id) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             let player_info = await Promise.all([
                 axios.get(
-                    `https://sky.dssoftware.ru/api.php?method=getMessagesTop&api=${config.API.SCF.key}&guild_id=${guild_id}`
+                    `https://scfdev.dssoftware.ru/api.php?method=getMessagesTop&api=${config.API.SCF.key}&guild_id=${guild_id}`
                 )
             ]).catch((error) => {
                 console.log(error);
@@ -418,7 +418,7 @@ async function SCFhandleLeave(username){
         
         let player_info = await Promise.all([
             axios.get(
-                `https://sky.dssoftware.ru/discord/handler.php?api=${config.API.SCF.key}&action=guild_kick&nick=${username}`
+                `https://scfdev.dssoftware.ru/discord/handler.php?api=${config.API.SCF.key}&action=guild_kick&nick=${username}`
             )
         ]).catch((error) => {
             console.log(error);
