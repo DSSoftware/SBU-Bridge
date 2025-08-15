@@ -37,6 +37,7 @@ class MessageHandler {
             let hypixel_info = await hypixelRequest(
                 `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
             ).catch((error) => {
+                Logger.warnMessage(error);
                 return {};
             });
 
@@ -335,7 +336,7 @@ class MessageHandler {
         const validChannelIds = [
             config.replication.channels.guild,
             config.replication.channels.officer,
-            config.replication.channels.debug
+            config.replication.channels.debug,
             //config.discord.IGC.settings.listening
         ];
 
