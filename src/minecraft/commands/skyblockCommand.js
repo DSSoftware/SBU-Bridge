@@ -1,7 +1,7 @@
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const { getNetworth } = require('skyhelper-networth');
+const { ProfileNetworthCalculator  } = require('skyhelper-networth');
 const getTalismans = require('../../../API/stats/talismans.js');
 const getDungeons = require('../../../API/stats/dungeons.js');
 const getSkills = require('../../../API/stats/skills.js');
@@ -28,16 +28,19 @@ class SkyblockCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
-            const data = await getLatestProfile(username);
+            const data = await getLatestProfile(username, { museum: true });
             username = formatUsername(username, data.profileData.game_mode);
+
+            let personal_bank = data?.v2?.profile?.profile?.bank_account;
+            let coop_bank = data.profileData?.banking?.balance || 0;
+            let coins_total = coop_bank + (personal_bank || 0);
+
+            const networthManager = new ProfileNetworthCalculator(data.profile, data.museum, coins_total);
 
             const [skills, slayer, networth, weight, dungeons, talismans] = await Promise.all([
                 getSkills(data.profile),
                 getSlayer(data.profile),
-                getNetworth(data.profile, data.profileData?.banking?.balance || 0, {
-                    cache: true,
-                    onlyNetworth: true
-                }),
+                networthManager.getNetworth(),
                 getWeight(data.profile),
                 getDungeons(data.profile, data.v2.profile),
                 getTalismans(data.profile)

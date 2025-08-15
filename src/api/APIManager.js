@@ -6,7 +6,6 @@ const hypixel = require('../contracts/API/HypixelRebornAPI.js');
 const Skykings = require('../../API/utils/skykings');
 const Blacklist = require('../../API/utils/blacklist');
 const SCFAPI = require('../../API/utils/scfAPIHandler.js');
-const { getNetworth } = require('skyhelper-networth');
 const getDungeons = require('../../API/stats/dungeons.js');
 const getSkills = require('../../API/stats/skills.js');
 const getSlayer = require('../../API/stats/slayer.js');

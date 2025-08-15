@@ -1,5 +1,5 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const { getNetworth } = require('skyhelper-networth');
+const { ProfileNetworthCalculator } = require('skyhelper-networth');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const Logger = require('#root/src/Logger.js');
@@ -34,10 +34,8 @@ class NetWorthCommand extends minecraftCommand {
 
             let coins_total = coop_bank + (personal_bank || 0);
 
-            const profile = await getNetworth(data.profile, coins_total, {
-                onlyNetworth: true,
-                museumData: data.museum
-            });
+            const networthManager = new ProfileNetworthCalculator(data.profile, data.museum, coins_total);
+            const profile = await networthManager.getNetworth();
 
             if (profile.noInventory === true) {
                 return this.send(`/${channel} ${username} has an Inventory API off!`);
