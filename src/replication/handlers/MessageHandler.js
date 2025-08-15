@@ -335,7 +335,7 @@ class MessageHandler {
         const validChannelIds = [
             config.replication.channels.guild,
             config.replication.channels.officer,
-            config.replication.channels.debug
+            config.replication.channels.debug,
             //config.discord.IGC.settings.listening
         ];
 
