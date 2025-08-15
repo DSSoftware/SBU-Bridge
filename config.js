@@ -58,6 +58,9 @@ class Config {
     getConfig() {
         if (!SCF) {
             SCF = new SCFAPIClient(this.env('scf_url'), this.env('discord_token'));
+            SCF.errorHandler((error) => {
+                console.log('[SCF API] Error:', error);
+            });
         }
         return {
             SCF: SCF,
