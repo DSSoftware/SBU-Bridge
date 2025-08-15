@@ -358,7 +358,6 @@ async function SCFgetMessagesTop(guild_id) {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try{
                 let top = await config.SCF.API.score.getTop(guild_id);
-                top.list[0].
                 resolve(top);
             }
             catch(e){
