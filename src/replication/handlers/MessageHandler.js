@@ -37,6 +37,7 @@ class MessageHandler {
             let hypixel_info = await hypixelRequest(
                 `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
             ).catch((error) => {
+                Logger.warnMessage(error);
                 return {};
             });
 
