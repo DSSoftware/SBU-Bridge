@@ -1,6 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
-const SCFAPIClient = require('scf-api').default;
+const SCFAPIClient = require("scf-api");
 
 let external_config = {
     fetched: false,
@@ -8,7 +8,7 @@ let external_config = {
 };
 
 /**
- * @type {SCFAPIClient}
+ * @type {SCFAPIClient.default}
  */
 let SCF;
 
