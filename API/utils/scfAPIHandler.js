@@ -217,7 +217,7 @@ async function SCFgetLinked(discord_id) {
                 return;
             }
             catch(e){
-                console.log(error);
+                console.log(e);
                 disableFeature(require_service);
                 reject('Failed to obtain API response.');
                 return;
