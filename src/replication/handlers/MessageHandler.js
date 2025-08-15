@@ -23,30 +23,34 @@ class MessageHandler {
             nick: undefined
         };
         try {
-            let player_info = await SCFAPI.getLinked(discord_id).catch(() => {
+            let uuid = await SCFAPI.getLinked(discord_id).catch(() => {
                 throw {
                     name: 'Failed to obtain API Data.',
                     doNotHandle: true
                 };
             });
 
-            if (!player_info?.data?.exists) {
+            if (!uuid) {
                 return response;
             }
 
-            let uuid = player_info?.data?.uuid;
-            let hypixel_info = await hypixelRequest(`https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`)
-                .catch((error) => {});
+            let hypixel_info = await hypixelRequest(
+                `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
+            ).catch((error) => {
+                Logger.warnMessage(error);
+                return {};
+            });
 
             if (!hypixel_info?.success || hypixel_info?.player?.displayname == undefined) {
                 return response;
             }
 
-            response.uuid = player_info?.data?.uuid;
-            response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
+            response.uuid = uuid;
+            response.nick = await playerAPI.getUsername(uuid);
 
-            let guild_info = await hypixelRequest(`https://api.hypixel.net/v2/guild?key=${config.API.hypixelAPIkey}&player=${uuid}`)
-                .catch((error) => {});
+            let guild_info = await hypixelRequest(
+                `https://api.hypixel.net/v2/guild?key=${config.API.hypixelAPIkey}&player=${uuid}`
+            ).catch((error) => {});
 
             response.guild_id = guild_info?.guild?._id;
 
@@ -327,7 +331,8 @@ class MessageHandler {
             message.webhookId === null
                 ? true
                 : false;
-        const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
+        const isValid =
+            !isBot && (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
         const validChannelIds = [
             config.replication.channels.guild,
             config.replication.channels.officer,

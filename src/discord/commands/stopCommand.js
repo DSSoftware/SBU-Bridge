@@ -30,7 +30,7 @@ module.exports = {
             .setDescription('The bot will be shut down in 5 seconds.')
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         interaction.followUp({ embeds: [restartEmbed] });

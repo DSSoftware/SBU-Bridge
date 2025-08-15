@@ -13,7 +13,7 @@ class Embed extends EmbedBuilder {
 
         this.setFooter({
             text: `by @artemdev | /help [command] for more information`,
-            iconURL: config.API.SCF.logo
+            iconURL: config.branding.logo
         });
 
         if (color) {

@@ -5,7 +5,7 @@ const configLoader = require('#root/config.js');
     const cluster = require('node:cluster');
     const axios = require('axios');
     const Logger = require('./src/Logger.js');
-    const error_reporting_url = config.API.SCF.error_reporting;
+    const error_reporting_url = config.API.tools.error_reporting;
 
     const fetch = require('node-fetch');
     if (cluster.isPrimary) {
@@ -65,19 +65,15 @@ const configLoader = require('#root/config.js');
 
         setInterval(startEmergencyLongpoll, 30000);
         async function startEmergencyLongpoll() {
-            if (!config.longpoll.enabled) return;
+            if (!config.API.SCF.enabled) return;
+            try{
+                let requests = await config.SCF.API.longpoll.getApplicable();
 
-            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.API.SCF.key}`;
-
-            try {
-                let response = await axios.get(request_url).catch(e => {
-                    // Do nothing
-                });
-                for (let action of Object.values(response?.data?.requests ?? {})) {
+                for (let action of requests) {
                     try {
-                        let act_rid = action?.rid ?? 'NONE';
-                        let act_type = action?.action ?? 'NONE';
-                        let act_data = action?.data ?? {};
+                        let act_rid = action.rid ?? 'NONE';
+                        let act_type = action.action ?? 'NONE';
+                        let act_data = action.data ?? {};
                         let completed = false;
 
                         if (act_type == 'forceReboot') {
@@ -98,17 +94,15 @@ const configLoader = require('#root/config.js');
                         }
 
                         if (completed) {
-                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.API.SCF.key}&rid=${act_rid}`;
-                            await axios.get(confirm_url).catch(e => {
-                                // Do nothing.
-                            });
+                            await config.SCF.API.longpoll.remove(act_rid);
                         }
                     } catch (e) {
                         Logger.warnMessage(action);
                         Logger.warnMessage(e);
                     }
                 }
-            } catch (e) {
+            }
+            catch(e){
                 Logger.warnMessage(e);
             }
         }

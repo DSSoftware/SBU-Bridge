@@ -48,8 +48,8 @@ module.exports = {
             .setAuthor({ name: 'Set rank' })
             .setDescription(`Successfully set rank of ${names}`)
             .setFooter({
-                text: `by @phoenix.owo | /help [command] for more information`,
-                iconURL: config.API.SCF.logo
+                text: `/help [command] for more information`,
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

@@ -12,7 +12,7 @@ module.exports = {
             .setDescription(`Online since <t:${Math.floor((Date.now() - interaction.client.uptime) / 1000)}:R>`)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         interaction.followUp({ embeds: [uptimeEmbed] });

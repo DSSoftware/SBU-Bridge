@@ -40,7 +40,7 @@ module.exports = {
             .setDescription(`Successfully executed \`/g demote ${name}\``)
             .setFooter({
                 text: '/help for more info',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

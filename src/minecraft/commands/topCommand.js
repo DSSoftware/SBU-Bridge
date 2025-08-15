@@ -40,71 +40,21 @@ class topCommand extends minecraftCommand {
                 }
 
                 let top_info = await SCFAPI.getMessagesTop(config.minecraft.guild.guildId);
+                let top_list = top_info.list;
 
-                if (top_info?.data == undefined || top_info?.data?.length == 0) {
+                if (!top_list) {
                     return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
                 }
 
-                let member = top_info?.data?.[spot-1] ?? {};
+                let member = top_list?.[spot-1] ?? {};
                 if(member?.uuid == undefined){
                     return this.send(`/${channel} [ERROR] There is no player at that position!`);
                 }
 
-                let nick = member?.nick ?? "N/A";
-                let messages = member?.count ?? "N/A";
+                let nick = member.nick ?? "N/A";
+                let messages = member.score ?? "N/A";
 
                 return this.send(`/${channel} Top ${spot} is ${nick} with ${messages} score.`);
-            }
-
-            if (this.getArgs(message)[0] == 'weekly') {
-                if (!config.minecraft.commands.integrate_images) {
-                    return this.send(`/${channel} This sub-command was disabled!`);
-                }
-                let top_info = await SCFAPI.getMessagesTop(config.minecraft.guild.guildId);
-
-                if (top_info?.data == undefined || top_info?.data?.length == 0) {
-                    return this.send(`/${channel} [ERROR] Somehow top has 0 players in it.`);
-                }
-
-                let Name = `§6Guild Top:`;
-                let Lore = [];
-                let place = 0;
-
-                top_info?.data.forEach((element) => {
-                    place++;
-                    let place_color = '§7';
-                    if (place == 1) {
-                        place_color = '§6';
-                    }
-                    if (place == 2) {
-                        place_color = '§f';
-                    }
-                    if (place == 3) {
-                        place_color = '§c';
-                    }
-                    let info = `§7${place_color}${place}. ${element.nick} - ${element.count} Score§7`;
-
-                    Lore.push(info);
-                });
-
-                Lore.push(`§f`);
-
-                Lore.unshift(`§f`);
-                Lore.unshift(`§7Players Logged: ${top_info?.players ?? 0}.`);
-
-                const renderedItem = await renderLore(Name, Lore);
-                const upload = await uploadImage(renderedItem);
-
-                if (!config.minecraft.commands.integrate_images) {
-                    this.send(`/${channel} Guild Top was sent in Discord.`);
-    
-                    this.sendDiscordFollowup(channel, upload.data.link, [renderedItem]);
-                    return;
-                }
-
-                this.send(`/${channel} Guild Top: ${upload.data.link}`);
-
-                return;
             }
 
             let overall_flag = 0;
@@ -126,14 +76,14 @@ class topCommand extends minecraftCommand {
 
             let placement_info = await SCFAPI.getCutoffScore(player_uuid, overall_flag);
 
-            if (placement_info.data.place == null || placement_info.data.place == undefined) {
+            if (!placement_info.place) {
                 return this.send(
                     `/${channel} Unable to retrieve place, maybe the player sent no messages? Try running !top <username> overall. ${display_flag}`
                 );
             }
 
             this.send(
-                `/${channel} ${username}'s place: ${placement_info.data.place} | Weekly Score: ${placement_info.data.count} ${display_flag}`
+                `/${channel} ${username}'s place: ${placement_info.place} | Weekly Score: ${placement_info.score} ${display_flag}`
             );
         } catch (error) {
             Logger.warnMessage(error);

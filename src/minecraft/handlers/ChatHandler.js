@@ -176,7 +176,7 @@ class StateHandler extends eventHandler {
                     .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                     .setFooter({
                         text: `/help [command] for more information`,
-                        iconURL: config.API.SCF.logo
+                        iconURL: config.branding.logo
                     });
 
                 await client.channels.cache
@@ -299,7 +299,7 @@ class StateHandler extends eventHandler {
                 .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                 .setFooter({
                     text: `/help [command] for more information`,
-                    iconURL: config.API.SCF.logo
+                    iconURL: config.branding.logo
                 });
 
             await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
@@ -556,9 +556,17 @@ class StateHandler extends eventHandler {
                 console.log('Continuing without SBU integration due to service unavailability');
             }
 
-            let request_res = await SCFAPI.handleLeave(username);
+            let success = false;
 
-            if(request_res){
+            try{
+                let uuid = await getUUID(username);
+                success = await SCFAPI.handleLeave(uuid);
+            }
+            catch(e){
+                console.log(e);
+            }
+
+            if(success){
                 this.minecraft.broadcastHeadedEmbed({
                     message: 'Successfully unverified ' + username,
                     title: `Member Unverification`,
@@ -706,10 +714,17 @@ class StateHandler extends eventHandler {
                 console.log('Continuing without SBU integration due to service unavailability');
             }
 
+            let success = false;
 
-            let request_res = await SCFAPI.handleLeave(username);
+            try{
+                let uuid = await getUUID(username);
+                success = await SCFAPI.handleLeave(uuid);
+            }
+            catch(e){
+                console.log(e);
+            }
 
-            if(request_res){
+            if(success){
                 this.minecraft.broadcastHeadedEmbed({
                     message: 'Successfully unverified ' + username,
                     title: `Member Unverification`,
