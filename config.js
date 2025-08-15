@@ -96,12 +96,16 @@ class Config {
                     skykings: this.env('skykings_enabled') == 'true'
                 },
 
+                tools: {
+                    mojang: 'https://mojang.dssoftware.ru/',
+                    hypixel: "hypixel.dssoftware.ru",
+                    error_reporting: 'https://webhook.scfprojects.su/',
+                },
+
                 SCF: {
                     provider: this.env('scf_url'),
-                    mojang: 'https://mojang.dssoftware.ru/',
                     enabled: !!this.env('scf_api'),
                     key: this.env('scf_api'),
-                    error_reporting: 'https://webhook.scfprojects.su/',
                     logExtensively: true
                 }
             },

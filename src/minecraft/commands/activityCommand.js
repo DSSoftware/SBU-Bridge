@@ -48,7 +48,7 @@ class topCommand extends minecraftCommand {
 
             let placement_info = await SCFAPI.getRollingScore(player_uuid, 1);
 
-            score = placement_info.data.count ?? 0;
+            score = placement_info.score ?? 0;
 
             const aps = gexp + 500 * score;
 

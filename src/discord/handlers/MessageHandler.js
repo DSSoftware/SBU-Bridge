@@ -24,16 +24,16 @@ class MessageHandler {
             nick: undefined
         };
         try {
-            let player_info = await SCFAPI.getLinked(discord_id).catch(() => {
+            let uuid = await SCFAPI.getLinked(discord_id).catch(() => {
                 throw {
                     name: 'Failed to obtain API Data.',
                     doNotHandle: true
                 };
             });
 
-            if (!player_info?.data?.exists) {
+            if (!uuid) {
                 return response;
-            }            let uuid = player_info?.data?.uuid;
+            }
 
             let hypixel_info = await hypixelRequest(`https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`)
                 .catch((error) => {
@@ -44,8 +44,8 @@ class MessageHandler {
                 return response;
             }
 
-            response.uuid = player_info?.data?.uuid;
-            response.nick = await playerAPI.getUsername(player_info?.data?.uuid);
+            response.uuid = uuid;
+            response.nick = await playerAPI.getUsername(uuid);
 
             let guild_info = await hypixelRequest(`https://api.hypixel.net/v2/guild?key=${config.API.hypixelAPIkey}&player=${uuid}`)
                 .catch((error) => {

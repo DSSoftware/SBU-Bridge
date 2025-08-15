@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const status = {};
 
-for(const service of Object.keys(config.behavior)){
+for (const service of Object.keys(config.behavior)) {
     status[service] = {
         status: false,
         errorsCounter: 0,
@@ -12,20 +12,22 @@ for(const service of Object.keys(config.behavior)){
     };
 }
 
-setInterval(() => {
-    for(const service of Object.keys(status)){
-        if(status[service].errorsCounter != 0){
-            console.log(`Service ${service} had ${status[service].errorsCounter} errors in the past 5 minutes.`);
+setInterval(
+    () => {
+        for (const service of Object.keys(status)) {
+            if (status[service].errorsCounter != 0) {
+                console.log(`Service ${service} had ${status[service].errorsCounter} errors in the past 5 minutes.`);
+            }
+            status[service].errorsCounter = 0;
         }
-        status[service].errorsCounter = 0;
-    }
-}, 5*60*1000);
-
+    },
+    5 * 60 * 1000
+);
 
 function disableFeature(feature) {
     status[feature].errorsCounter += 1;
 
-    if((status[feature].errorsCounter < 5) && (status[feature].disableCounter == 0)){
+    if (status[feature].errorsCounter < 5 && status[feature].disableCounter == 0) {
         return;
     }
 
@@ -35,7 +37,7 @@ function disableFeature(feature) {
 
     console.log(`[FEATURES] Disabled feature ${feature} (Disable #${disable_ctr}).`);
 
-    if(disable_ctr >= 10){
+    if (disable_ctr >= 10) {
         console.log(`[FEATURES] Permanently disabled feature ${feature} (Disable #${disable_ctr}).`);
         disable_updated += 7 * 24 * 60 * 60 * 1000;
         permanent_disable = true;
@@ -48,7 +50,7 @@ function disableFeature(feature) {
         updated: disable_updated
     };
 
-    if(permanent_disable){
+    if (permanent_disable) {
         process.send({
             event_id: 'exceptionCaught',
             exception: 'Service Permanently Disabled',
@@ -79,7 +81,7 @@ function getFeatureStatus(feature) {
     if (data.status) {
         return 'OPERATIONAL';
     }
-    if (data.updated + 5*60*1000*(data.disableCounter+1) > Date.now()) {
+    if (data.updated + 5 * 60 * 1000 * (data.disableCounter + 1) > Date.now()) {
         let status = config.behavior?.[feature] ?? 'REPLACE';
         if (status == 'FATAL') {
             console.log(`[FEATURE] Critical component - ${feature} - is down. Will disable the bridge.`);
@@ -92,7 +94,7 @@ function getFeatureStatus(feature) {
 }
 
 async function SCFCheckBlacklist(uuid) {
-    const require_service = "Blacklist";
+    const require_service = 'Blacklist';
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
             resolve(false);
@@ -102,18 +104,15 @@ async function SCFCheckBlacklist(uuid) {
         let isBanned = false;
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_banned = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=isBanned&uuid=${uuid}&api=${config.API.SCF.key}`
-                )
-            ]).catch((error) => {
-                console.log(error);
+            try {
+                let response = await config.SCF.API.server.isBlacklisted(uuid);
+                isBanned = response.banned;
+            } catch (e) {
+                console.log(e);
                 disableFeature(require_service);
                 resolve(false);
-            });
-            
-            player_banned = player_banned?.[0]?.data ?? {};
-            isBanned = player_banned.data === true;
+                return;
+            }
         }
 
         resolve(isBanned);
@@ -121,13 +120,13 @@ async function SCFCheckBlacklist(uuid) {
 }
 
 async function SCFgetUUID(username) {
-    const require_service = "Mojang";
+    const require_service = 'Mojang';
     return new Promise(async (resolve, reject) => {
         let data = null;
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try {
-                data = (await axios.get(`${config.API.SCF.mojang}?nick=${username}`)).data;
+                data = (await axios.get(`${config.API.tools.mojang}?nick=${username}`)).data;
 
                 if (data?.success == true && data?.id != null) {
                     resolve(data);
@@ -144,12 +143,11 @@ async function SCFgetUUID(username) {
             }
         }
 
-        try{
+        try {
             data = await axios.get(`https://api.minecraftservices.com/minecraft/profile/lookup/name/${username}`);
 
             resolve(data?.data);
-        }
-        catch(e){
+        } catch (e) {
             reject('Invalid username.');
             return;
         }
@@ -157,34 +155,33 @@ async function SCFgetUUID(username) {
 }
 
 async function SCFgetUsername(uuid) {
-    const require_service = "Mojang";
+    const require_service = 'Mojang';
     return new Promise(async (resolve, reject) => {
         let data = null;
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try {
-                data = (await axios.get(`${config.API.SCF.mojang}?uuid=${uuid}`)).data;
+                data = (await axios.get(`${config.API.tools.mojang}?uuid=${uuid}`)).data;
                 resolve(data);
                 return;
-            } catch(e){
+            } catch (e) {
                 console.log(e);
                 disableFeature(require_service);
             }
         }
 
-        try{
+        try {
             data = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
 
             resolve(data?.data);
-        }
-        catch(e){
+        } catch (e) {
             resolve({});
         }
     });
 }
 
 async function SCFCheckBridgelock(uuid) {
-    const require_service = "Bridgelock";
+    const require_service = 'Bridgelock';
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
             resolve(false);
@@ -194,18 +191,16 @@ async function SCFCheckBridgelock(uuid) {
         let isLocked = false;
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_banned = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=isBridgeLocked&uuid=${uuid}&api=${config.API.SCF.key}`
-                )
-            ]).catch((error) => {
-                console.log(error);
+            try{
+                let response = await config.SCF.API.bridgelock.check(uuid);
+                isLocked = response.locked;
+            }
+            catch(e){
+                console.log(e);
                 disableFeature(require_service);
                 resolve(false);
-            });
-
-            player_banned = player_banned?.[0]?.data ?? {};
-            isLocked = player_banned?.data?.locked === true;
+                return;
+            }
         }
 
         resolve(isLocked);
@@ -213,35 +208,29 @@ async function SCFCheckBridgelock(uuid) {
 }
 
 async function SCFgetLinked(discord_id) {
-    const require_service = "Link";
+    const require_service = 'Link';
     return new Promise(async (resolve, reject) => {
-        let response = undefined;
-
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_info = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=getLinked&discord_id=${discord_id}&api=${config.API.SCF.key}`
-                )
-            ]).catch((error) => {
+            try{
+                let response = await config.SCF.API.bridge.getLinked(null, discord_id);
+                resolve(response.uuid);
+                return;
+            }
+            catch(e){
                 console.log(error);
                 disableFeature(require_service);
-                reject("Failed to obtain API response.");
-            });
-
-            player_info = player_info?.[0]?.data ?? {};
-            response = player_info;
-        }
-        else{
-            reject("Failed to obtain API response.");
+                reject('Failed to obtain API response.');
+                return;
+            }
+        } else {
+            reject('Failed to obtain API response.');
             return;
         }
-
-        resolve(response);
     });
 }
 
 async function SCFsaveMessage(source, nick, uuid, guild) {
-    const require_service = "Score";
+    const require_service = 'Score';
     return new Promise(async (resolve, reject) => {
         if (uuid == undefined) {
             resolve(false);
@@ -249,14 +238,15 @@ async function SCFsaveMessage(source, nick, uuid, guild) {
         }
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let message_send = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=saveGuildMessage&uuid=${uuid}&source=${source}&api=${config.API.SCF.key}&nick=${nick}&guild_id=${guild}`
-                )
-            ]).catch((error) => {
-                console.log(error);
+            try{
+                await config.SCF.API.score.saveMessage(uuid, nick, guild)
+            }
+            catch(e){
+                console.log(e);
                 disableFeature(require_service);
-            });
+                resolve(false);
+                return;
+            }
         }
 
         resolve(true);
@@ -264,20 +254,18 @@ async function SCFsaveMessage(source, nick, uuid, guild) {
 }
 
 async function SCFsaveStatus(botConnected, commit_version) {
-    const require_service = "Status";
+    const require_service = 'Status';
     return new Promise(async (resolve, reject) => {
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let statusURL = `${config.API.SCF.provider}?method=updateBridgeStatus&api=${config.API.SCF.key}&connected=${botConnected}&version=${commit_version}`;
-
-            axios.get(statusURL)
-                .then(function (response) {
-                    resolve(true);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    disableFeature(require_service);
-                    resolve(false);
-                });
+            try{
+                await config.SCF.API.bridge.setStatus(botConnected, commit_version);
+            }
+            catch(e){
+                console.log(e);
+                disableFeature(require_service);
+                resolve(false);
+                return;
+            }
         }
 
         resolve(true);
@@ -285,156 +273,135 @@ async function SCFsaveStatus(botConnected, commit_version) {
 }
 
 async function SCFsaveLinked(discord_id, uuid) {
-    const require_service = "InternalAPI";
+    const require_service = 'InternalAPI';
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
-            reject("This feature is not supported by this instance.");
+            reject('This feature is not supported by this instance.');
             return;
         }
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_info = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=saveLinked&discord_id=${discord_id}&uuid=${uuid}&api=${config.API.SCF.key}`
-                )
-            ]).catch((error) => {
-                console.log(error);
+            try {
+                await config.SCF.API.bridge.link(discord_id, uuid);
+                resolve();
+                return;
+            } catch (e) {
+                console.log(e);
                 disableFeature(require_service);
-                reject(error);
-            });
-
-            player_info = player_info?.[0]?.data ?? {};
-            resolve(player_info);
+                reject(e);
+                return;
+            }
         }
 
-        reject("Failed to execute the request. Please try again later.");
+        reject('Failed to execute the request. Please try again later.');
     });
 }
 
 async function SCFgetCutoffScore(uuid, overall) {
-    const require_service = "InternalAPI";
-    return new Promise(async (resolve, reject) => {
-        if (!config.API.SCF.enabled) {
-            resolve({});
-            return;
+    const require_service = 'InternalAPI';
+    let response = {
+        place: undefined,
+        score: undefined
+    };
+    if (!config.API.SCF.enabled) {
+        return response;
+    }
+
+    if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+        try{
+            let info = await config.SCF.API.score.getCutoff(uuid, overall);
+            response.place = info.place;
+            response.score = info.score;
         }
-
-        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_info = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=getCutoffPlace&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
-                )
-            ]).catch((error) => {
-                console.log(error);
-                disableFeature(require_service);
-                resolve({});
-            });
-
-            player_info = player_info?.[0]?.data ?? {};
-            resolve(player_info);
+        catch(e){
+            console.log(e);
+            disableFeature(require_service);
         }
+    }
 
-        resolve({});
-    });
+    return response;
 }
 
 async function SCFgetRollingScore(uuid, overall) {
-    const require_service = "InternalAPI";
-    return new Promise(async (resolve, reject) => {
-        if (!config.API.SCF.enabled) {
-            resolve({});
-            return;
+    const require_service = 'InternalAPI';
+    let response = {
+        place: undefined,
+        score: undefined
+    };
+    if (!config.API.SCF.enabled) {
+        return response;
+    }
+
+    if (getFeatureStatus(require_service) == 'OPERATIONAL') {
+        try{
+            let info = await config.SCF.API.score.getRolling(uuid, overall);
+            response.place = info.place;
+            response.score = info.score;
         }
-
-        if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_info = await Promise.all([
-                axios.get(
-                    `${config.API.SCF.provider}?method=getRollingPlace&uuid=${uuid}&api=${config.API.SCF.key}&overall=${overall}`
-                )
-            ]).catch((error) => {
-                console.log(error);
-                disableFeature(require_service);
-                resolve({});
-            });
-
-            player_info = player_info?.[0]?.data ?? {};
-            resolve(player_info);
+        catch(e){
+            console.log(e);
+            disableFeature(require_service);
         }
+    }
 
-        resolve({});
-    });
+    return response;
 }
 
 async function SCFgetMessagesTop(guild_id) {
-    const require_service = "InternalAPI";
+    const require_service = 'InternalAPI';
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
-            resolve({});
+            resolve([]);
             return;
         }
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
-            let player_info = await Promise.all([
-                axios.get(
-                    `https://scfdev.dssoftware.ru/api.php?method=getMessagesTop&api=${config.API.SCF.key}&guild_id=${guild_id}`
-                )
-            ]).catch((error) => {
-                console.log(error);
+            try{
+                let top = await config.SCF.API.score.getTop(guild_id);
+                top.list[0].
+                resolve(top);
+            }
+            catch(e){
+                console.log(e);
                 disableFeature(require_service);
-                resolve({});
-            });
-
-            player_info = player_info?.[0]?.data ?? {};
-            resolve(player_info);
+                resolve([]);
+                return;
+            }
         }
 
-        resolve({});
+        resolve([]);
     });
 }
 
-async function SCFSendIGCMessage(uuid, message) {
-    return new Promise(async (resolve, reject) => {
-        return;
-        axios.post(config.discord.IGC.endpoint, {
-            message: message,
-            uuid: uuid, 
-            collector: config.discord.IGC.collectorID
-        }).then(function (response) {
-            resolve(true);
-        })
-        .catch(function (error) {
-            resolve(false);
-        });
-
-    });
-}
-
-async function SCFhandleLeave(username){
+async function SCFhandleLeave(uuid) {
     return new Promise(async (resolve, reject) => {
         if (!config.API.SCF.enabled) {
             resolve(true);
             return;
         }
-        
-        let player_info = await Promise.all([
-            axios.get(
-                `https://scfdev.dssoftware.ru/discord/handler.php?api=${config.API.SCF.key}&action=guild_kick&nick=${username}`
-            )
-        ]).catch((error) => {
-            console.log(error);
-            resolve(false);
-        });
 
-        resolve(true);
+        try{
+            await config.SCF.API.longpoll.create("userLeave", "scf_management", {
+                version: 1,
+                uuid: uuid,
+            })
+            resolve(true);
+            return;
+        }
+        catch(e){
+            console.log(e);
+            resolve(false);
+            return;
+        }
     });
 }
 
-async function SCFHypixelRequest(url){
-    const require_service = "Hypixel";
+async function SCFHypixelRequest(url) {
+    const require_service = 'Hypixel';
     return new Promise(async (resolve, reject) => {
         let data = null;
 
-        let proxy_url = url.replace("api.hypixel.net", "hypixel.dssoftware.ru");
+        let proxy_url = url.replace('api.hypixel.net', config.API.tools.hypixel);
 
         if (getFeatureStatus(require_service) == 'OPERATIONAL') {
             try {
@@ -442,7 +409,10 @@ async function SCFHypixelRequest(url){
 
                 resolve(data);
             } catch (e) {
-                if ((e?.response?.status ?? '').toString().startsWith('5') || (e?.response?.status ?? '').toString() == '429') {
+                if (
+                    (e?.response?.status ?? '').toString().startsWith('5') ||
+                    (e?.response?.status ?? '').toString() == '429'
+                ) {
                     console.log(e);
                     disableFeature(require_service);
                 } else {
@@ -452,12 +422,11 @@ async function SCFHypixelRequest(url){
             }
         }
 
-        try{
+        try {
             data = await axios.get(url);
 
             resolve(data?.data);
-        }
-        catch(e){
+        } catch (e) {
             reject('Invalid username.');
             return;
         }
@@ -478,6 +447,5 @@ module.exports = {
     getRollingScore: SCFgetRollingScore,
     getMessagesTop: SCFgetMessagesTop,
     handleLeave: SCFhandleLeave,
-    sendIGCMessage: SCFSendIGCMessage,
-    hypixelRequest: SCFHypixelRequest,
+    hypixelRequest: SCFHypixelRequest
 };

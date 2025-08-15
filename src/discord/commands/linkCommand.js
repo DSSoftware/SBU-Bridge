@@ -38,13 +38,11 @@ module.exports = {
             );
         }
 
-        let data = await SCFAPI.saveLinked(user.id, uuid).catch((error) => {
+        try{
+            await SCFAPI.saveLinked(user.id, uuid);
+        } catch (error) {
             Logger.warnMessage(error);
             throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
-        });
-
-        if ((data?.response ?? 'FAULT') == 'FAULT') {
-            throw new HypixelDiscordChatBridgeError(data?.info ?? 'Failed to connect to API.');
         }
 
         const embed = new EmbedBuilder()

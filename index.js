@@ -5,7 +5,7 @@ const configLoader = require('#root/config.js');
     const cluster = require('node:cluster');
     const axios = require('axios');
     const Logger = require('./src/Logger.js');
-    const error_reporting_url = config.API.SCF.error_reporting;
+    const error_reporting_url = config.API.tools.error_reporting;
 
     const fetch = require('node-fetch');
     if (cluster.isPrimary) {
