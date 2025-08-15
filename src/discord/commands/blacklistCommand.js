@@ -63,7 +63,7 @@ module.exports = {
             .setDescription(`Successfully executed \`/ignore ${arg} ${name}\``)
             .setFooter({
                 text: '/help for more info',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

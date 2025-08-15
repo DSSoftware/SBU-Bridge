@@ -176,7 +176,7 @@ class StateHandler extends eventHandler {
                     .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                     .setFooter({
                         text: `/help [command] for more information`,
-                        iconURL: config.API.SCF.logo
+                        iconURL: config.branding.logo
                     });
 
                 await client.channels.cache
@@ -299,7 +299,7 @@ class StateHandler extends eventHandler {
                 .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
                 .setFooter({
                     text: `/help [command] for more information`,
-                    iconURL: config.API.SCF.logo
+                    iconURL: config.branding.logo
                 });
 
             await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });

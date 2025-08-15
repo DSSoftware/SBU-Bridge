@@ -15,7 +15,7 @@ module.exports = {
             .setDescription(`Client Latency: \`${clientLatency}ms\`\nAPI Latency: \`${apiLatency}ms\``)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         interaction.followUp({ embeds: [embed] });

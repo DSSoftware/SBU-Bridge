@@ -39,7 +39,7 @@ module.exports = {
             .setDescription(`Successfully executed \`/g invite ${name}\``)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

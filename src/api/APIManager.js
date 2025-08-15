@@ -26,26 +26,22 @@ async function asyncExec(cmd) {
 
 class APIManager {
     startLongpoll() {
-        if (!config.longpoll.enabled) return;
+        if (!config.API.SCF.enabled) return;
 
         setInterval(async () => {
             if (isActionRunning) {
                 return;
             }
 
-            let request_url = `${config.longpoll.provider}?method=getRequests&api=${config.API.SCF.key}`;
-
             isActionRunning = true;
 
             try {
-                let response = await axios.get(request_url).catch(e => {
-                    // Do nothing
-                });
-                for (let action of Object.values(response?.data?.requests ?? {})) {
+                let requests = await config.SCF.API.longpoll.getApplicable();
+                for (let action of requests) {
                     try {
-                        let act_rid = action?.rid ?? 'NONE';
-                        let act_type = action?.action ?? 'NONE';
-                        let act_data = action?.data ?? {};
+                        let act_rid = action.rid ?? 'NONE';
+                        let act_type = action.action ?? 'NONE';
+                        let act_data = action.data ?? {};
                         let completed = false;
 
                         if (act_type == 'kick') {
@@ -147,10 +143,7 @@ class APIManager {
                         }
 
                         if (completed) {
-                            let confirm_url = `${config.longpoll.provider}?method=completeRequest&api=${config.API.SCF.key}&rid=${act_rid}`;
-                            await axios.get(confirm_url).catch(e => {
-                                // Do nothing.
-                            });
+                            await config.SCF.API.longpoll.remove(act_rid)
                         }
                         await new Promise(resolve => setTimeout(resolve, 500));
                     } catch (e) {

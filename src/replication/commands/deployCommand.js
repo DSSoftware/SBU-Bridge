@@ -32,7 +32,7 @@ module.exports = {
             .setDescription('The bot is restarting. This might take few seconds.')
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         interaction.followUp({ embeds: [restartEmbed] });

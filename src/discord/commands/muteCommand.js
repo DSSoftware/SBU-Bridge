@@ -46,7 +46,7 @@ module.exports = {
             .setDescription(`Successfully executed \`/g mute ${name} ${time}\``)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

@@ -48,8 +48,8 @@ module.exports = {
             .setAuthor({ name: 'Kick' })
             .setDescription(`Successfully kicked ${names}`)
             .setFooter({
-                text: `by @phoenix.owo | /help [command] for more information`,
-                iconURL: config.API.SCF.logo
+                text: `/help [command] for more information`,
+                iconURL: config.branding.logo
             });
 
         await interaction.followUp({

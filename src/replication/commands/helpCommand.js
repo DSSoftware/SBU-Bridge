@@ -59,7 +59,7 @@ module.exports = {
                 )
                 .setFooter({
                     text: '/help [command] for more information',
-                    iconURL: config.API.SCF.logo
+                    iconURL: config.branding.logo
                 });
 
             await interaction.followUp({ embeds: [helpMenu] });
@@ -93,7 +93,7 @@ module.exports = {
                 .setDescription(description + '\n')
                 .setFooter({
                     text: '() = required, [] = optional',
-                    iconURL: config.API.SCF.logo
+                    iconURL: config.branding.logo
                 });
 
             await interaction.followUp({ embeds: [embed] });

@@ -64,7 +64,7 @@ module.exports = {
             .setDescription(description)
             .setFooter({
                 text: '/help [command] for more information',
-                iconURL: config.API.SCF.logo
+                iconURL: config.branding.logo
             });
 
         return await interaction.followUp({ embeds: [embed] });
