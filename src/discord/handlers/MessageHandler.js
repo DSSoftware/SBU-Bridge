@@ -100,6 +100,8 @@ class MessageHandler {
                 const hasBridgeRole = config.API.SBU.bridge_role && userRoles.includes(config.API.SBU.bridge_role);
                 const hasBridgePlusRole = config.API.SBU.bridgeplus_role && userRoles.includes(config.API.SBU.bridgeplus_role);
                 const hasBlacklistRole = config.API.SBU.bridge_blacklist_role && userRoles.includes(config.API.SBU.bridge_blacklist_role);
+                const hasBridgeExternalRole = config.API.SBU.bridge_external_role && userRoles.includes(config.API.SBU.bridge_external_role);
+
 
                 // If user has blacklist role (declined), deny access
                 if (hasBlacklistRole) {
@@ -110,7 +112,7 @@ class MessageHandler {
                 // If approval system is enabled, check for bridge roles and handle approval process
                 if (config.API.SBU.require_approval) {
                     // If user doesn't have bridge or bridgeplus role
-                    if (!hasBridgeRole && !hasBridgePlusRole) {
+                    if (!hasBridgeRole && !hasBridgePlusRole && !hasBridgeExternalRole) {
                         // Check if user is blacklisted first
                         const isBlacklisted = await this.checkIfUserBlacklisted(message.author.id);
                         if (isBlacklisted) {
@@ -522,6 +524,7 @@ class MessageHandler {
             const hasBridgeRole = config.API.SBU.bridge_role && userRoles.includes(config.API.SBU.bridge_role);
             const hasBridgePlusRole = config.API.SBU.bridgeplus_role && userRoles.includes(config.API.SBU.bridgeplus_role);
             const hasDeniedRole = config.API.SBU.denied_role && userRoles.includes(config.API.SBU.denied_role);
+            const hasBridgeExternalRole = config.API.SBU.bridge_external_role && userRoles.includes(config.API.SBU.bridge_external_role);
 
             console.log(`Checking approval status for ${member.user.username}:`, {
                 hasBridgeRole,
@@ -531,7 +534,7 @@ class MessageHandler {
             });
 
             // If user has bridge roles, they are approved
-            if (hasBridgeRole || hasBridgePlusRole) {
+            if (hasBridgeRole || hasBridgePlusRole || hasBridgeExternalRole) {
                 return 'approved';
             }
 
@@ -579,7 +582,7 @@ class MessageHandler {
         const oldRoles = oldMember.roles.cache.map(role => role.id);
         const newRoles = newMember.roles.cache.map(role => role.id);
 
-        const bridgeRoles = [config.API.SBU.bridge_role, config.API.SBU.bridgeplus_role].filter(Boolean);
+        const bridgeRoles = [config.API.SBU.bridge_role, config.API.SBU.bridgeplus_role, config.API.SBU.bridge_external_role].filter(Boolean);
         const deniedRole = config.API.SBU.denied_role;
 
         const hadBridgeRole = bridgeRoles.some(roleId => oldRoles.includes(roleId));

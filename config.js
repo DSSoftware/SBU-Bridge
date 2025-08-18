@@ -90,6 +90,7 @@ class Config {
                     bridge_role: this.env('bridge_role'),
                     bridgeplus_role: this.env('bridgeplus_role'),
                     bridge_blacklist_role: this.env('bridge_blacklist_role'),
+                    bridge_external_role: this.env('bridge_external_role'),
                     require_approval: this.env('sbu_approval') == 'true' || false
                 },
 
