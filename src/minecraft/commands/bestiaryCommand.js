@@ -82,18 +82,27 @@ class BestiaryCommand extends minecraftCommand {
             );
 
             if (playerUsername === username) {
-                const bestiaryData = this.getBestiaryObject(bestiary).sort(
-                    (a, b) => a.nextTierKills - a.kills - (b.nextTierKills - b.kills)
-                );
+                const bestiaryData = this.getBestiaryObject(bestiary)
+                    .filter((mob) => mob.nextTierKills != null) // Only include mobs that aren't maxed
+                    .sort((a, b) => {
+                        const remainingA = a.nextTierKills - a.kills;
+                        const remainingB = b.nextTierKills - b.kills;
+                        return remainingA - remainingB;
+                    });
 
                 const topFive = bestiaryData.slice(0, 5);
                 const topFiveMobs = topFive.map((mob) => {
-                    return `${mob.name}: ${mob.kills} / ${mob.nextTierKills} (${mob.nextTierKills - mob.kills})`;
+                    const remaining = mob.nextTierKills - mob.kills;
+                    return `${mob.name}: ${mob.kills} / ${mob.nextTierKills} (${remaining})`;
                 });
 
                 await new Promise((resolve) => setTimeout(resolve, 1000));
 
-                this.send(`/${channel} Closest to level up: ${topFiveMobs.join(', ')}`);
+                if (topFiveMobs.length > 0) {
+                    this.send(`/${channel} Closest to level up: ${topFiveMobs.join(', ')}`);
+                } else {
+                    this.send(`/${channel} All bestiary mobs are maxed!`);
+                }
             }
         } catch (error) {
             Logger.warnMessage(error);
