@@ -38,18 +38,42 @@ class BestiaryCommand extends minecraftCommand {
             }
 
             if (mob) {
-                const mobData = this.getBestiaryObject(bestiary).find((m) =>
-                    m.name.toLowerCase().includes(mob.toLowerCase())
+                const allMobs = this.getBestiaryObject(bestiary);
+
+                // Debug: Show all mob names that contain "worm" to see what's available
+                const wormMobs = allMobs.filter((m) =>
+                    m.name.toLowerCase().includes('worm')
+                );
+
+                if (wormMobs.length > 0) {
+                    console.log(`Available worm-related mobs for ${username}:`, wormMobs.map(m => `"${m.name}"`));
+                }
+
+                // Only look for exact match (case insensitive)
+                const mobData = allMobs.find((m) =>
+                    m.name.toLowerCase() === mob.toLowerCase()
                 );
 
                 if (mobData) {
+                    const isMaxed = mobData.nextTierKills == null;
+                    const displayText = isMaxed
+                        ? `${mobData.kills} (MAXED)`
+                        : `${mobData.kills} / ${mobData.nextTierKills} (${mobData.nextTierKills - mobData.kills})`;
+
                     this.send(
-                        `/${channel} ${username}'s ${mobData.name} Bestiary: ${mobData.kills} / ${mobData.nextTierKills} (${
-                            mobData.nextTierKills - mobData.kills
-                        }) `
+                        `/${channel} ${username}'s ${mobData.name} Bestiary: ${displayText}`
                     );
 
                     await new Promise((resolve) => setTimeout(resolve, 1000));
+                } else {
+                    // Show available worm-related mobs if searching for "worm"
+                    if (mob.toLowerCase() === 'worm' && wormMobs.length > 0) {
+                        const mobNames = wormMobs.map(m => m.name).join(', ');
+                        this.send(`/${channel} No exact match for "worm". Available: ${mobNames}`);
+                    } else {
+                        this.send(`/${channel} No exact match found for "${mob}".`);
+                    }
+                    return;
                 }
             }
 
@@ -81,16 +105,19 @@ class BestiaryCommand extends minecraftCommand {
         return Object.keys(bestiary.categories)
             .map((category) => {
                 if (category === 'fishing') {
-                    Object.keys(bestiary.categories[category]).map((key) => {
-                        if (key === 'name') return;
-                        return bestiary.categories[category][key].mobs.map((mob) => mob);
-                    });
+                    return Object.keys(bestiary.categories[category])
+                        .map((key) => {
+                            if (key === 'name') return null;
+                            return bestiary.categories[category][key].mobs?.map((mob) => mob) || [];
+                        })
+                        .filter(Boolean)
+                        .flat();
                 } else {
-                    return bestiary.categories[category].mobs.map((mob) => mob);
+                    return bestiary.categories[category].mobs?.map((mob) => mob) || [];
                 }
             })
             .flat()
-            .filter((mob) => mob?.nextTierKills != null);
+            .filter((mob) => mob?.kills != null);
     }
 }
 
