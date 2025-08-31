@@ -14,7 +14,7 @@
     "offlineInvite": "{username} was offline invited to the guild!",
     "guildMuteMessage": "Guild Chat has been muted for {time}!",
     "guildUnmuteMessage": "Guild Chat has been unmuted!",
-    "guildJoinMessage": "Welcome to the guild! Feel free to ask any questions and start chatting with /gc anytime!❤",
+    "guildJoinMessage": "Welcome to the guild! Feel free to ask any questions and start chatting with /gc anytime! ❤",
     "userMuteMessage": "{username} has been muted for {time}!",
     "userUnmuteMessage": "{username} has been unmuted!",
     "setrankFailMessage": "{username} not found.",
