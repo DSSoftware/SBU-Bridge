@@ -14,7 +14,7 @@ class Hypixel {
             return instance;
         }
 
-        instance = new HypixelAPIReborn.Client(config.API.hypixelAPIkey, {
+        instance = new HypixelAPIReborn.Client(api_key, {
             cache: true
         });
     }
