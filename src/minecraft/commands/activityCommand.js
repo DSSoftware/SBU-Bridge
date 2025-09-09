@@ -2,7 +2,8 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
 const config = require('#root/config.js').getConfig();
-const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
+const HypixelWrapper = require('#root/src/contracts/API/HypixelRebornAPI.js');
+const hypixel = new HypixelWrapper().init(config.API.hypixelAPIkey);
 const SCFAPI = require('../../../API/utils/scfAPIHandler.js');
 
 class topCommand extends minecraftCommand {

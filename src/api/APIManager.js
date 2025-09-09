@@ -1,14 +1,10 @@
 const Logger = require('../Logger.js');
 const config = require('#root/config.js').getConfig();
-const axios = require('axios');
 const { getUUID } = require('../contracts/API/PlayerDBAPI');
-const hypixel = require('../contracts/API/HypixelRebornAPI.js');
 const Skykings = require('../../API/utils/skykings');
 const Blacklist = require('../../API/utils/blacklist');
 const SCFAPI = require('../../API/utils/scfAPIHandler.js');
 const getDungeons = require('../../API/stats/dungeons.js');
-const getSkills = require('../../API/stats/skills.js');
-const getSlayer = require('../../API/stats/slayer.js');
 const { getLatestProfile } = require('../../API/functions/getLatestProfile.js');
 const { exec } = require('child_process');
 

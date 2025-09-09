@@ -1,5 +1,7 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const hypixel = require('../../contracts/API/HypixelRebornAPI.js');
+const config = require('#root/config.js').getConfig();
+const HypixelWrapper = require('#root/src/contracts/API/HypixelRebornAPI.js');
+const hypixel = new HypixelWrapper().init(config.API.hypixelAPIkey);
 const { capitalize, formatNumber } = require('../../contracts/helperFunctions.js');
 
 class GuildInformationCommand extends minecraftCommand {

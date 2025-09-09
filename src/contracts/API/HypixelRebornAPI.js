@@ -1,10 +1,23 @@
 const HypixelAPIReborn = require('hypixel-api-reborn');
-const config = require('#root/config.js').getConfig();
 
-console.log(config);
+let instance = null;
 
-const hypixel = new HypixelAPIReborn.Client(config.API.hypixelAPIkey, {
-    cache: true
-});
+class Hypixel {
+    init(api_key) {
+        console.log(api_key);
+        
+        if (!api_key) {
+            throw "Invalid API Key";
+        }
 
-module.exports = hypixel;
+        if (instance) {
+            return instance;
+        }
+
+        instance = new HypixelAPIReborn.Client(config.API.hypixelAPIkey, {
+            cache: true
+        });
+    }
+}
+
+module.exports = Hypixel;
