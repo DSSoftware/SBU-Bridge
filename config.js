@@ -28,11 +28,11 @@ class Config {
             let resp = await axios.get(url);
 
             external_config.config = resp.data;
-            external_config.fetched = true;
         } catch (e) {
             console.log(e);
             console.log('[CONFIG] Failed to fetch config. Ignoring external config.');
         }
+        external_config.fetched = true;
     }
 
     async init() {

@@ -1,4 +1,5 @@
 const HypixelAPIReborn = require('hypixel-api-reborn');
+const config = require()
 
 let instance = null;
 
