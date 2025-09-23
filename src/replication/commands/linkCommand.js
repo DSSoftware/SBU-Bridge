@@ -30,7 +30,7 @@ module.exports = {
         let hypixel_info = await SCFAPI.hypixelRequest(
             `https://api.hypixel.net/v2/player?key=${config.API.hypixelAPIkey}&uuid=${uuid}`
         ).catch((error) => {});
-        let tag = hypixel_info.player.socialMedia?.links?.DISCORD || undefined;
+        let tag = hypixel_info?.player.socialMedia?.links?.DISCORD || undefined;
 
         if (tag != user.user.username) {
             throw new HypixelDiscordChatBridgeError(
@@ -38,13 +38,11 @@ module.exports = {
             );
         }
 
-        let data = await SCFAPI.saveLinked(user.id, uuid).catch((error) => {
+        try{
+            await SCFAPI.saveLinked(user.id, uuid);
+        } catch (error) {
             Logger.warnMessage(error);
             throw new HypixelDiscordChatBridgeError(`Failed to connect to API. Try again later.`);
-        });
-
-        if ((data?.response ?? 'FAULT') == 'FAULT') {
-            throw new HypixelDiscordChatBridgeError(data?.info ?? 'Failed to connect to API.');
         }
 
         const embed = new EmbedBuilder()
