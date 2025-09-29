@@ -13,7 +13,8 @@ class DiscordLinkCommand extends minecraftCommand {
 
     onCommand(username, message, channel = 'gc') {
         try {
-            this.send(`/${channel} Join our discord - ${config.minecraft.guild.discord_invite}`);
+            //this.send(`/${channel} Join our discord - ${config.minecraft.guild.discord_invite}`);
+            this.send(/${channel} Disabled!, please use /g discord instead);
         } catch (error) {
             this.send(`/${channel} Something went wrong...`);
         }
