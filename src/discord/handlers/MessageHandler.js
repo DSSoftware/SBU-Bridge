@@ -125,7 +125,7 @@ class MessageHandler {
                         let approvalData = sender_cache.get(approvalKey);
 
                         // If no cached data or cache is old, check API status
-                        if (!approvalData || (Date.now() - approvalData.last_save) > 300000) { // 5 minutes cache
+                        if (!approvalData || (Date.now() - approvalData.last_save) > 259200000) { // 5 minutes cache
                             try {
                                 console.log(`Checking approval status for user ${message.author.username} (${message.author.id})`);
                                 const apiStatus = await this.checkApprovalStatus(message.author.id);
@@ -558,7 +558,7 @@ class MessageHandler {
             }
 
             // If cached data exists and it's recent, use it (for denied status only at this point)
-            if (cachedData && cachedData.status === 'denied' && (Date.now() - cachedData.last_save) < 300000) { // 5 minutes
+            if (cachedData && cachedData.status === 'denied' && (Date.now() - cachedData.last_save) < 259200000) { // 3 days
                 console.log(`Using cached denied status for ${member.user.username}: ${cachedData.status}`);
                 return cachedData.status;
             }
