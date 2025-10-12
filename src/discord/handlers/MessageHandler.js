@@ -469,13 +469,16 @@ class MessageHandler {
     }
 
     shouldBroadcastMessage(message) {
-        const isBot =
+        // Block bot messages UNLESS they are in the allowedBots list
+        const isBlockedBot =
             message.author.bot &&
-            config.discord.channels.allowedBots.includes(message.author.id) === false &&
-            message.webhookId === null
-                ? true
-                : false;
-        const isValid = !isBot && (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
+            message.webhookId === null &&
+            !config.discord.channels.allowedBots.includes(message.author.id);
+
+        const isValid =
+            !isBlockedBot &&
+            (message.content.length > 0 || message?.attachments?.size > 0 || message?.embeds?.size > 0);
+
         const validChannelIds = [
             config.discord.channels.officerChannel,
             config.discord.channels.guildChatChannel,
