@@ -11,8 +11,16 @@ async function lookupUUID(uuid) {
             return;
         }
         try {
-            const response = await axios.get(`https://old.skykings.net/api/lookup?key=${key}&uuid=${uuid}`);
-            resolve(response.data.entries.length > 0);
+            const response = await axios.get(`https://api.skykings.net/user/lookup`, {
+                params: {
+                    uuid: uuid
+                },
+                headers: {
+                    'x-api-key': key
+                }
+            });
+            // Check if the user exists in the response (indicating they are flagged)
+            resolve(response.data && Object.keys(response.data).length > 0);
         } catch (error) {
             Logger.warnMessage(error);
             resolve(false);
