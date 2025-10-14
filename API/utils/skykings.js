@@ -19,8 +19,8 @@ async function lookupUUID(uuid) {
                     'x-api-key': key
                 }
             });
-            // Check if the user exists in the response (indicating they are flagged)
-            resolve(response.data && Object.keys(response.data).length > 0);
+            // Check if the API call was successful and if the user is flagged as a scammer
+            resolve(response.data?.success === true && response.data?.result?.scammer === true);
         } catch (error) {
             Logger.warnMessage(error);
             resolve(false);
