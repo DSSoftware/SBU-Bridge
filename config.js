@@ -1,75 +1,8 @@
-require('dotenv').config();
-const axios = require('axios');
-const SCFAPIClient = require("scf-api");
-
-let external_config = {
-    fetched: false,
-    config: {}
-};
-
-/**
- * @type {SCFAPIClient.default}
- */
-let SCF;
-
 class Config {
-    async fetchExternalConfig() {
-        try {
-            if (external_config.fetched) return;
-            if (!process.env.config_url) {
-                console.log('[CONFIG] No Config URL setup, using local config.');
-                external_config.fetched = true;
-                return;
-            }
-            console.log('[CONFIG] Fetching external config...');
-
-            let url = `${process.env.config_url}${process.env.scf_api}`;
-
-            let resp = await axios.get(url);
-
-            external_config.config = resp.data;
-        } catch (e) {
-            console.log(e);
-            console.log('[CONFIG] Failed to fetch config. Ignoring external config.');
-        }
-        external_config.fetched = true;
-    }
-
-    async init() {
-        await this.fetchExternalConfig();
-        let config = this.getConfig();
-
-        return config;
-    }
-
-    env(variable) {
-        if (!external_config.fetched) {
-            throw 'Trying to use an uninitialized external config.';
-        }
-
-        let process_env = process.env?.[variable];
-        let external_env = external_config.config?.[variable];
-
-        let final_env = external_env ?? process_env;
-
-        return final_env;
-    }
-
     getConfig() {
-        if (!SCF) {
-            SCF = new SCFAPIClient(this.env('scf_url'), this.env('discord_token'));
-            SCF.errorHandler((error) => {
-                console.log('[SCF API] Error:', error);
-            });
-        }
         return {
-            SCF: SCF,
-            branding: {
-                logo: this.env('scf_logo'),
-            },
             API: {
                 hypixelAPIkey: this.env('keys_hypixel'),
-                imgurAPIkey: this.env('keys_imgur'),
                 skykingsAPIkey: this.env('keys_skykings'),
 
                 // Add this new section
@@ -103,15 +36,7 @@ class Config {
                 tools: {
                     mojang: 'https://mojang.dssoftware.ru/',
                     hypixel: "hypixel.dssoftware.ru",
-                    error_reporting: 'https://webhook.scfprojects.su/',
                 },
-
-                SCF: {
-                    provider: this.env('scf_url'),
-                    enabled: !!this.env('scf_api'),
-                    key: this.env('scf_api'),
-                    logExtensively: true
-                }
             },
             minecraft: {
                 bot: {
@@ -235,63 +160,13 @@ class Config {
                     filterWords: ['dox', 'doxx', 'doxed', 'doxxed', 'doxing', 'doxxing', 'doxes', 'doxxes', 'ez', 'ip'],
                     joinMessage: true,
                     autoLimbo: true,
-                    discordFallback: false
                 }
             },
             discord: {
-                token: this.env('discord_token'),
-                serverID: this.env('discord_server'),
                 channels: {
-                    guildChatChannel: this.env('channel_guild'),
-                    officerChannel: this.env('channel_officer'),
-                    loggingChannel: this.env('channel_logging'),
-                    debugMode: !!this.env('channel_debug'),
-                    debugChannel: this.env('channel_debug'),
                     allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417']
                 }
             },
-            replication: {
-                enabled: this.env('replica_enabled') == 'true',
-                token: this.env('replica_token'),
-                serverID: this.env('replica_server'),
-                channels: {
-                    guild: this.env('replica_guild'),
-                    officer: this.env('replica_officer'),
-                    logging: this.env('replica_logging'),
-                    debug: false
-                }
-            },
-            logging: {
-                verbose: true
-            },
-            /*
-                Sets default behavior when the feature is disabled by healthcheck:
-        
-                FATAL: Crashes the application with a 123 error code (Critical error)
-                REPLACE: Uses alternative if possible, otherwise disables feature
-            */
-            behavior: {
-                // User link service, responsible for correct IGN for discord messages.
-                Link: 'REPLACE',
-                // Assigns user a score for speaking in guild chat.
-                Score: 'REPLACE',
-                // Internal SCF API
-                InternalAPI: 'REPLACE',
-                // Locks user from using bridges. DEPENDS ON LINK SERVICE.
-                Bridgelock: 'REPLACE',
-                // Provides external action API, used for kicks, invites and more.
-                Longpoll: 'REPLACE',
-                // Stops unwanted players from joining.
-                Blacklist: 'REPLACE',
-                // Sends bridge's status to the control server.
-                Status: 'REPLACE',
-                // Mojang Proxy API. CRITICAL - FATAL or REPLACE REQUIRED.
-                Mojang: 'REPLACE',
-                // Hypixel Proxy API. CRITICAL - FATAL OR REPLACE REQUIRED.
-                Hypixel: 'REPLACE',
-                // Logging to Database
-                Logging: 'REPLACE'
-            }
         };
     }
 }
