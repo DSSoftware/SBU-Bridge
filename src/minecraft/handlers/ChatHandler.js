@@ -34,50 +34,6 @@ class StateHandler extends eventHandler {
             console.log(event?.clickEvent?.value);
         }
 
-        // NOTE: fixes "100/100❤     100/100✎ Mana" spam in the debug channel
-        if (message.includes('✎ Mana') && message.includes('❤') && message.includes('/')) {
-            return;
-        }
-
-        if (config.discord.channels.debugMode === true) {
-            this.minecraft.broadcastMessage({
-                fullMessage: colouredMessage,
-                message: message,
-                chat: 'debugChannel'
-            });
-        }
-
-        /*if (this.isDirectMessage(message) && config.discord.IGC.enabled === true) {
-            let raw_message = replaceAllRanks(message);
-            raw_message = raw_message.replace("From ", "");
-            let raw_components = string.split(': ');
-            const [igc_username, igc_message] = [raw_components.shift(), components.join(': ')];
-
-            if(igc_message.startsWith("[IGC]")){
-                igc_message = igc_message.replace("[IGC] ", "");
-
-                let uuid = undefined;
-                try {
-                    uuid = await getUUID(igc_username);
-                    if (uuid == undefined) {
-                        throw 'Failed to obtain UUID';
-                    }
-                } catch (e) {
-                    return;
-                }
-
-                if(uuid == undefined){
-                    return;
-                }
-
-                SCFAPI.sendIGCMessage(uuid, igc_message);
-            }
-        }*/
-
-        if (this.isLobbyJoinMessage(message) && config.bot.other.autoLimbo === true) {
-            return bot.chat("/limbo");
-        }
-
         if (this.isRequestMessage(message)) {
             let username = replaceAllRanks(
                 message.split('has')[0].replaceAll('-----------------------------------------------------\n', '')
@@ -1181,14 +1137,6 @@ class StateHandler extends eventHandler {
             });
         }
 
-        /*if (this.isPartyMessage(message)) {
-      this.minecraft.broadcastCleanEmbed({ 
-        message: `${message}`, 
-        color: 15548997, 
-        channel: 'Guild' 
-      })  
-    }*/
-
         const regex =
             config.bot.other.messageMode === 'minecraft'
                 ? /^(?<chatType>§[0-9a-fA-F](Guild|Officer)) > (?<rank>§[0-9a-fA-F](?:\[.*?\])?)?\s*(?<username>[^§\s]+)\s*(?:(?<guildRank>§[0-9a-fA-F](?:\[.*?\])?))?\s*§f: (?<message>.*)/
@@ -1464,10 +1412,6 @@ class StateHandler extends eventHandler {
 
     isAlreadyHasRank(message) {
         return message.includes('They already have that rank!') && !message.includes(':');
-    }
-
-    isLobbyJoinMessage(message) {
-        return (message.endsWith(' the lobby!') || message.endsWith(' the lobby! <<<')) && message.includes('[MVP+');
     }
 
     isTooFast(message) {

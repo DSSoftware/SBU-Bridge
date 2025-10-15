@@ -1,12 +1,8 @@
 const CommunicationBridge = require('../contracts/CommunicationBridge.js');
 const { replaceVariables } = require('../contracts/helperFunctions.js');
-const StateHandler = require('./handlers/StateHandler.js');
-const ErrorHandler = require('./handlers/ErrorHandler.js');
 const ChatHandler = require('./handlers/ChatHandler.js');
 const CommandHandler = require('./CommandHandler.js');
 const config = require('#root/config.js').getConfig();
-const mineflayer = require('mineflayer');
-const Logger = require('../Logger.js');
 const Filter = require('bad-words');
 const filter = new Filter();
 filter.removeWords('god', 'damn');
@@ -19,34 +15,14 @@ class MinecraftManager extends CommunicationBridge {
 
         this.app = app;
 
-        this.stateHandler = new StateHandler(this);
-        this.errorHandler = new ErrorHandler(this);
         this.chatHandler = new ChatHandler(this, new CommandHandler(this));
     }
 
     connect() {
-        global.bot = this.createBotConnection();
-        global.debug_chat_handler = this.chatHandler;
-        this.bot = bot;
-
-        this.errorHandler.registerEvents(this.bot);
-        this.stateHandler.registerEvents(this.bot);
         this.chatHandler.registerEvents(this.bot);
 
         require('./other/eventNotifier.js');
         require('./other/skyblockNotifier.js');
-    }
-
-    createBotConnection() {
-        return mineflayer.createBot({
-            host: 'mc.hypixel.net',
-            port: 25565,
-            auth: 'microsoft',
-            version: '1.8.9',
-            viewDistance: 'tiny',
-            chatLengthLimit: 256,
-            profilesFolder: './auth-cache'
-        });
     }
 
     chunkSubstr(str, size) {

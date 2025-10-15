@@ -84,10 +84,6 @@ class Application {
 
         sendStatus();
         setInterval(sendStatus, 30000);
-
-        process.send({
-            event_id: 'initialized',
-        });
     }
 }
 

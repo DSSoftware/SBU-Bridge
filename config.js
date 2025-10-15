@@ -162,11 +162,6 @@ class Config {
                     autoLimbo: true,
                 }
             },
-            discord: {
-                channels: {
-                    allowedBots: ['155149108183695360', '1224056601829441619', '1049379596006588417']
-                }
-            },
         };
     }
 }
