@@ -14,9 +14,8 @@ async function checkBlacklist(uuid) {
                 Authorization: `Bearer ${config.API.SBU.key}`
             }
         });
-
+        console.log(`SBU Banlist response for ${uuid}: ${JSON.stringify(response.data)}`);
         if (response?.data) {
-            console.log(`SBU Banlist response for ${uuid}: ${JSON.stringify(response.data)}`);
             // Return true if banned, otherwise false.
             return response.data?.banned === true;
         }
