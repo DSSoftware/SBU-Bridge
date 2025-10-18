@@ -1,19 +1,31 @@
 const config = require('#root/config.js').getConfig();
 const sbuHelper = require('../../src/api/sbuHelper.js');
+const Logger = require('../../src/Logger');
 
 async function checkBlacklist(uuid) {
     if (config.API.banlist.enabled === false) {
         return false;
     }
 
-    const response = await sbuHelper.safeApiCall(`/api/banlist/${uuid}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${config.API.SBU.key}`
-        }
-    });
+    try {
+        const response = await sbuHelper.safeApiCall(`/api/banlist/${uuid}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${config.API.SBU.key}`
+            }
+        });
 
-    return response?.data?.banned === true;
+        Logger.debugMessage(`SBU Banlist response for ${uuid}: ${JSON.stringify(response.data)}`);
+        // Return the full response object if banned, otherwise false.
+        return response.data?.banned === true ? response.data : false;
+    } catch (error) {
+        // A 404 is expected for users who are not banned.
+        if (error.response?.status !== 404) {
+            Logger.warnMessage(`SBU Banlist check for ${uuid} failed!`);
+            Logger.warnMessage(error);
+        }
+        return false;
+    }
 }
 
 module.exports = {
