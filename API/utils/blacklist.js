@@ -6,7 +6,7 @@ async function checkBlacklist(uuid) {
         return false;
     }
 
-    const response = await sbuHelper.safeApiCall(`/${uuid}`, {
+    const response = await sbuHelper.safeApiCall(`/api/banlist/${uuid}`, {
         method: 'GET'
     });
 
