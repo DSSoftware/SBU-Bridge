@@ -15,9 +15,13 @@ async function checkBlacklist(uuid) {
             }
         });
 
-        Logger.debugMessage(`SBU Banlist response for ${uuid}: ${JSON.stringify(response.data)}`);
-        // Return the full response object if banned, otherwise false.
-        return response.data?.banned === true ? response.data : false;
+        if (response?.data) {
+            console.log(`SBU Banlist response for ${uuid}: ${JSON.stringify(response.data)}`);
+            // Return true if banned, otherwise false.
+            return response.data?.banned === true;
+        }
+
+        return false;
     } catch (error) {
         // A 404 is expected for users who are not banned.
         if (error.response?.status !== 404) {
