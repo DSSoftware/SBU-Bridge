@@ -2,9 +2,6 @@ class Config {
     getConfig() {
         return {
             API: {
-                hypixelAPIkey: this.env('keys_hypixel'),
-                skykingsAPIkey: this.env('keys_skykings'),
-
                 // Add this new section
                 SBU: {
                     enabled: this.env('sbu_enabled') == 'true',
@@ -41,20 +38,7 @@ class Config {
             minecraft: {
                 bot: {
                     prefix: '!',
-                    messageFormat: '{username} » {message}',
                     messageRepeatBypassLength: 28,
-                    unique_id: this.env('unique_id') + ' | Prefix: ' + this.env('guild_prefix'),
-                    guild_prefix: this.env('guild_prefix'),
-                    replication_prefix: this.env('replica_prefix')
-                },
-                commands: {
-                    normal: true,
-                    soopy: this.env('soopy') == 'true',
-                    /*
-                        true (integrated)   = send image link in the minecraft message
-                        false (discrete)    = replace image with text where possible
-                    */
-                    integrate_images: false
                 },
                 guild: {
                     guildId: this.env('guild_id'),
@@ -125,32 +109,6 @@ class Config {
             },
             bot: {
                 commands: {
-                    permissions: {
-                        mod: [
-                            '924332988743966751',
-                            '801634222577156097', // SBU MODS
-                            '1048690255903072339',
-                            '1048690255903072340', // SCF MODS
-                            '1261265160140754954' // Guild Staff
-                        ],
-                        admin: [
-                            '808070562046935060',
-                            '766041783137468506',
-                            '803275569356865556 ', // SBU ADMINS
-                            '1370636617303195728',
-                            '1048690255903072342',
-                            '1220104308767588503',
-                            '1061976889570369538', // SCF ADMINS
-                            '1266856339406192700', // GUILD ADMINS
-                            '1273749696296386581', // SCF Star Role
-                            this.env('guild_admin_id') ?? '' // CUSTOM GUILD ADMINS
-                        ],
-                        ownerIDs: [
-                            this.env('guildmaster_id'),
-                            '476365125922586635' // Guild owner + me
-                        ],
-                        dev: ['819237478073499648']
-                    },
                     notifyContent: this.env('notify_content'),
                     errorContent: '<@&1249416749334396959>'
                 },
