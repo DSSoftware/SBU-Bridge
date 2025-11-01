@@ -1,31 +1,13 @@
 const { replaceAllRanks, replaceVariables } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
-const eventHandler = require('../../contracts/EventHandler.js');
 const messages = require('../../../messages.json');
 const { EmbedBuilder } = require('discord.js');
 const config = require('#root/config.js').getConfig();
-const Logger = require('../../Logger.js');
-const Skykings = require('../../../API/utils/skykings');
-const Blacklist = require('../../../API/utils/blacklist');
-const SCFAPI = require('../../../API/utils/scfAPIHandler');
 const getDungeons = require('../../../API/stats/dungeons.js');
 const sbuHelper = require('../../api/sbuHelper.js');
 
 class StateHandler extends eventHandler {
-    constructor(minecraft, command, discord) {
-        super();
-        this.minecraft = minecraft;
-        this.discord = discord;
-        this.command = command;
-    }
-
-    registerEvents(bot) {
-        this.bot = bot;
-        this.bot.on('message', (message) => this.onMessage(message));
-    }
-
     async onMessage(event) {
         const message = event.toString();
         const colouredMessage = event.toMotd();
