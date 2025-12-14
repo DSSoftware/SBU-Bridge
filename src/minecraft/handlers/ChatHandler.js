@@ -166,32 +166,6 @@ class StateHandler extends eventHandler {
             }
         }
 
-        if (this.isLoginMessage(message)) {
-            if (config.bot.other.joinMessage === true) {
-                const username = message.split('>')[1].trim().split('joined.')[0].trim();
-                return this.minecraft.broadcastPlayerToggle({
-                    fullMessage: colouredMessage,
-                    username: username,
-                    message: replaceVariables(messages.loginMessage, { username }),
-                    color: 2067276,
-                    channel: 'Guild'
-                });
-            }
-        }
-
-        if (this.isLogoutMessage(message)) {
-            if (config.bot.other.joinMessage === true) {
-                const username = message.split('>')[1].trim().split('left.')[0].trim();
-                return this.minecraft.broadcastPlayerToggle({
-                    fullMessage: colouredMessage,
-                    username: username,
-                    message: replaceVariables(messages.logoutMessage, { username }),
-                    color: 15548997,
-                    channel: 'Guild'
-                });
-            }
-        }
-
         if (this.isJoinMessage(message)) {
             let username = message
                 .replace(/\[(.*?)\]/g, '')
@@ -699,82 +673,10 @@ class StateHandler extends eventHandler {
             ];
         }
 
-        if (this.isPromotionMessage(message)) {
-            const username = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(/ +/g)[0];
-            const rank = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(' to ')
-                .pop()
-                .trim();
-            return [
-                this.minecraft.broadcastCleanEmbed({
-                    message: replaceVariables(messages.promotionMessage, {
-                        username,
-                        rank
-                    }),
-                    color: 2067276,
-                    channel: 'Guild'
-                }),
-                this.minecraft.broadcastCleanEmbed({
-                    message: replaceVariables(messages.promotionMessage, {
-                        username,
-                        rank
-                    }),
-                    color: 2067276,
-                    channel: 'Logger'
-                })
-            ];
-        }
-
-        if (this.isDemotionMessage(message)) {
-            const username = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(/ +/g)[0];
-            const rank = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(' to ')
-                .pop()
-                .trim();
-            return [
-                this.minecraft.broadcastCleanEmbed({
-                    message: replaceVariables(messages.demotionMessage, {
-                        username,
-                        rank
-                    }),
-                    color: 15548997,
-                    channel: 'Guild'
-                }),
-                this.minecraft.broadcastCleanEmbed({
-                    message: replaceVariables(messages.demotionMessage, {
-                        username,
-                        rank
-                    }),
-                    color: 15548997,
-                    channel: 'Logger'
-                })
-            ];
-        }
 
         if (this.isCannotMuteMoreThanOneMonth(message)) {
             return this.minecraft.broadcastCleanEmbed({
                 message: messages.cannotMuteMoreThanOneMonthMessage,
-                color: 15548997,
-                channel: 'Guild'
-            });
-        }
-
-        if (this.isBlockedMessage(message)) {
-            const blockedMsg = message.match(/".+"/g)[0].slice(1, -1);
-            return this.minecraft.broadcastCleanEmbed({
-                message: replaceVariables(messages.messageBlockedByHypixel, {
-                    message: blockedMsg
-                }),
                 color: 15548997,
                 channel: 'Guild'
             });
@@ -789,21 +691,6 @@ class StateHandler extends eventHandler {
                     }
                 ]
             });
-
-            try {
-                if (config.replication.enabled) {
-                    replication_client.channels.cache.get(config.replication.channels.guild).send({
-                        embeds: [
-                            {
-                                color: 15548997,
-                                description: messages.repeatMessage
-                            }
-                        ]
-                    });
-                }
-            } catch (e) {
-                Logger.errorMessage('Failed to broadcast to replication!');
-            }
             return;
         }
 
@@ -1237,16 +1124,6 @@ class StateHandler extends eventHandler {
         return bot.username === username;
     }
 
-    isAlreadyBlacklistedMessage(message) {
-        return (
-            message.includes(`You've already ignored that player! /ignore remove Player to unignore them!`) &&
-            !message.includes(':')
-        );
-    }
-    isBlacklistRemovedMessage(message) {
-        return message.startsWith('Removed') && message.includes('from your ignore list.') && !message.includes(':');
-    }
-
     isBlacklistMessage(message) {
         return message.startsWith('Added') && message.includes('to your ignore list.') && !message.includes(':');
     }
@@ -1263,40 +1140,12 @@ class StateHandler extends eventHandler {
         return message.includes('GUILD QUEST TIER ') && message.includes('COMPLETED') && !message.includes(':');
     }
 
-    isLoginMessage(message) {
-        return message.startsWith('Guild >') && message.endsWith('joined.') && !message.includes(':');
-    }
-
-    isLogoutMessage(message) {
-        return message.startsWith('Guild >') && message.endsWith('left.') && !message.includes(':');
-    }
-
-    isJoinMessage(message) {
-        return message.includes('joined the guild!') && !message.includes(':');
-    }
-
-    isLeaveMessage(message) {
-        return message.includes('left the guild!') && !message.includes(':');
-    }
-
     isKickMessage(message) {
         return message.includes('was kicked from the guild by') && !message.includes(':');
     }
 
     isPartyMessage(message) {
         return message.includes('has invited you to join their party!') && !message.includes(':');
-    }
-
-    isPromotionMessage(message) {
-        return message.includes('was promoted from') && !message.includes(':');
-    }
-
-    isDemotionMessage(message) {
-        return message.includes('was demoted from') && !message.includes(':');
-    }
-
-    isRequestMessage(message) {
-        return message.includes('has requested to join the Guild!');
     }
 
     isBlockedMessage(message) {
