@@ -1,11 +1,3 @@
 {
-    "messageBlockedByHypixel": "Message `{message}` was blocked by Hypixel",
-    "repeatMessage": "You cannot say the same message twice!",
-
-    "notInGuildMessage": "{username} is not in the guild.",
-    "playerNotFoundMessage": "Player {username} not found.",
-
-
-    "joinMessage": "{username} joined the guild!",
-    "guildJoinMessage": "Welcome to the guild! Feel free to ask any questions and start chatting with /gc anytime! ❤",
+    "guildJoinMessage": "Welcome to the guild! Feel free to ask any questions and start chatting with /gc anytime! ❤"
 }

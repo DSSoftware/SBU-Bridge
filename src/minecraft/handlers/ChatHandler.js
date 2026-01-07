@@ -167,85 +167,12 @@ class StateHandler extends eventHandler {
         }
 
         if (this.isJoinMessage(message)) {
-            let username = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(/ +/g)[0];
-            try {
-                username = username.trim();
-            } catch (e) {
-                Logger.warnMessage(e);
-            }
-
-            let uuid;
-            try {
-                uuid = await getUUID(username);
-            } catch (e) {
-                Logger.warnMessage(e);
-            }
-
-            const skykings_scammer = await Skykings.lookupUUID(uuid);
-            const blacklisted = await Blacklist.checkBlacklist(uuid);
-            const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
-
-            const statsEmbed = new EmbedBuilder()
-                .setColor(2067276)
-                .setTitle(`${username} has joined the Guild!`)
-                .addFields(
-                    {
-                        name: 'Skykings Flag',
-                        value: `\`${skykings_scammer}\``,
-                        inline: true
-                    },
-                    {
-                        name: 'Blacklist Flag',
-                        value: `\`${blacklisted}\``,
-                        inline: true
-                    },
-                    {
-                        name: 'SCF Flag',
-                        value: `\`${scf_blacklisted}\``,
-                        inline: true
-                    }
-                )
-                .setThumbnail(`https://www.mc-heads.net/avatar/${username}`)
-                .setFooter({
-                    text: `/help [command] for more information`,
-                    iconURL: config.branding.logo
-                });
-
-            await client.channels.cache.get(`${config.discord.channels.loggingChannel}`).send({ embeds: [statsEmbed] });
-
-            if (skykings_scammer === true || blacklisted === true || scf_blacklisted === true) {
-                this.minecraft.broadcastHeadedEmbed({
-                    message: 'Banned player (' + username + ') tried to join the guild.',
-                    title: `Banned player`,
-                    icon: `https://mc-heads.net/avatar/${username}`,
-                    color: 15548997,
-                    channel: 'Logger'
-                });
 
                 bot.chat(`/guild kick ${username} You were banned from this guild. Submit an appeal to rejoin.`);
 
-                return;
-            }
-
-            await delay(1000);
             let invite_message = config.minecraft.guild.join_message
                 ? config.minecraft.guild.join_message
                 : messages.guildJoinMessage;
-
-            bot.chat(
-                `/gc ${replaceVariables(invite_message, {
-                    prefix: config.minecraft.bot.prefix
-                })}`
-            );
-
-            if (!!config.bot.commands.notifyContent) {
-                await client.channels.cache
-                    .get(`${config.discord.channels.loggingChannel}`)
-                    .send(`${config.bot.commands.notifyContent}\n:inbox_tray: ${username} has joined the guild!`);
-            }
 
             try {
                 // Check if SBU service is available before making calls
@@ -463,58 +390,8 @@ class StateHandler extends eventHandler {
             }
         }
 
-
-        if (this.isRepeatMessage(message)) {
-            client.channels.cache.get(config.discord.channels.guildChatChannel).send({
-                embeds: [
-                    {
-                        color: 15548997,
-                        description: messages.repeatMessage
-                    }
-                ]
-            });
-            return;
-        }
-
         if (this.isMuted(message)) {
-            const formattedMessage = message.split(' ').slice(1).join(' ');
-            this.minecraft.broadcastHeadedEmbed({
-                message: formattedMessage.charAt(0).toUpperCase() + formattedMessage.slice(1),
-
-                title: `Bot is currently muted.`,
-                color: 15548997,
-                channel: 'Guild'
-            });
             process.exit(123);
-        }
-
-        if (this.isNotInGuild(message)) {
-            const username = message
-                .replace(/\[(.*?)\]/g, '')
-                .trim()
-                .split(' ')[0];
-            return this.minecraft.broadcastCleanEmbed({
-                message: replaceVariables(messages.notInGuildMessage, {
-                    username
-                }),
-                color: 15548997,
-                channel: 'Guild'
-            });
-        }
-
-        if (this.isTooFast(message)) {
-            return Logger.warnMessage(message);
-        }
-
-        if (this.isPlayerNotFound(message)) {
-            const username = message.split(' ')[8].slice(1, -1);
-            return this.minecraft.broadcastCleanEmbed({
-                message: replaceVariables(messages.playerNotFoundMessage, {
-                    username
-                }),
-                color: 15548997,
-                channel: 'Guild'
-            });
         }
 
         const regex =
@@ -635,10 +512,6 @@ class StateHandler extends eventHandler {
         return bot.username === username;
     }
 
-    isBlacklistMessage(message) {
-        return message.startsWith('Added') && message.includes('to your ignore list.') && !message.includes(':');
-    }
-
     isGuildMessage(message) {
         return message.startsWith('Guild >') && message.includes(':');
     }
@@ -647,133 +520,8 @@ class StateHandler extends eventHandler {
         return message.startsWith('Officer >') && message.includes(':');
     }
 
-    isGuildQuestCompletion(message) {
-        return message.includes('GUILD QUEST TIER ') && message.includes('COMPLETED') && !message.includes(':');
-    }
-
-    isKickMessage(message) {
-        return message.includes('was kicked from the guild by') && !message.includes(':');
-    }
-
-    isPartyMessage(message) {
-        return message.includes('has invited you to join their party!') && !message.includes(':');
-    }
-
-    isBlockedMessage(message) {
-        return message.includes('We blocked your comment') && !message.includes(':');
-    }
-
-    isRepeatMessage(message) {
-        return message == 'You cannot say the same message twice!';
-    }
-
-    isNoPermission(message) {
-        return (
-            (message.includes('You must be the Guild Master to use that command!') ||
-                message.includes('You do not have permission to use this command!') ||
-                message.includes(
-                    "I'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error."
-                ) ||
-                message.includes('You cannot mute a guild member with a higher guild rank!') ||
-                message.includes('You cannot kick this player!') ||
-                message.includes('You can only promote up to your own rank!') ||
-                message.includes('You cannot mute yourself from the guild!') ||
-                message.includes("is the guild master so can't be demoted!") ||
-                message.includes("is the guild master so can't be promoted anymore!") ||
-                message.includes('You do not have permission to kick people from the guild!')) &&
-            !message.includes(':')
-        );
-    }
-
-    isIncorrectUsage(message) {
-        return message.includes('Invalid usage!') && !message.includes(':');
-    }
-
-    isOnlineInvite(message) {
-        return (
-            message.includes('You invited') &&
-            message.includes('to your guild. They have 5 minutes to accept.') &&
-            !message.includes(':')
-        );
-    }
-
-    isOfflineInvite(message) {
-        return (
-            message.includes('You sent an offline invite to') &&
-            message.includes('They will have 5 minutes to accept once they come online!') &&
-            !message.includes(':')
-        );
-    }
-
-    isFailedInvite(message) {
-        return (
-            (message.includes('is already in another guild!') ||
-                message.includes('You cannot invite this player to your guild!') ||
-                (message.includes("You've already invited") &&
-                    message.includes('to your guild! Wait for them to accept!')) ||
-                message.includes('is already in your guild!')) &&
-            !message.includes(':')
-        );
-    }
-
-    isUserMuteMessage(message) {
-        return message.includes('has muted') && message.includes('for') && !message.includes(':');
-    }
-
-    isUserUnmuteMessage(message) {
-        return message.includes('has unmuted') && !message.includes(':');
-    }
-
-    isCannotMuteMoreThanOneMonth(message) {
-        return message.includes('You cannot mute someone for more than one month') && !message.includes(':');
-    }
-
-    isGuildMuteMessage(message) {
-        return message.includes('has muted the guild chat for') && !message.includes(':');
-    }
-
-    isGuildUnmuteMessage(message) {
-        return message.includes('has unmuted the guild chat!') && !message.includes(':');
-    }
-
-    isSetrankFail(message) {
-        return message.includes("I couldn't find a rank by the name of ") && !message.includes(':');
-    }
-
-    isAlreadyMuted(message) {
-        return message.includes('This player is already muted!') && !message.includes(':');
-    }
-
-    isNotInGuild(message) {
-        return message.includes(' is not in your guild!') && !message.includes(':');
-    }
-
-    isLowestRank(message) {
-        return message.includes("is already the lowest rank you've created!") && !message.includes(':');
-    }
-
-    isAlreadyHasRank(message) {
-        return message.includes('They already have that rank!') && !message.includes(':');
-    }
-
-    isTooFast(message) {
-        return message.includes('You are sending commands too fast! Please slow down.') && !message.includes(':');
-    }
-
     isMuted(message) {
         return message.includes('Your mute will expire in') && !message.includes(':');
-    }
-
-    isPlayerNotFound(message) {
-        return message.startsWith(`Can't find a player by the name of`);
-    }
-
-    isGuildLevelUpMessage(message) {
-        return message.includes('The guild has reached Level') && !message.includes(':');
-    }
-
-    isDirectMessage(message) {
-        return (message.startsWith('From '));
     }
 
     minecraftChatColorToHex(color) {

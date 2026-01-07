@@ -23,17 +23,6 @@ class Config {
                     bridge_external_role: this.env('bridge_external_role'),
                     require_approval: this.env('sbu_approval') == 'true' || false
                 },
-
-                banlist: {
-                    enabled: this.env('banlist_enabled') == 'true',
-                    URL: this.env('banlist_url'),
-                    skykings: this.env('skykings_enabled') == 'true'
-                },
-
-                tools: {
-                    mojang: 'https://mojang.dssoftware.ru/',
-                    hypixel: "hypixel.dssoftware.ru",
-                },
             },
             minecraft: {
                 bot: {
