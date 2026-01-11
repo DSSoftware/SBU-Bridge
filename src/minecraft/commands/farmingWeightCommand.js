@@ -43,7 +43,7 @@ class topCommand extends minecraftCommand {
                 if (profile_weight >= weight) {
                     weight = profile_weight;
 
-                    let farming_lb = `https://api.elitebot.dev/Leaderboard/ranks/${player_uuid}/${profile_id}`;
+                    let farming_lb = `https://api.elitebot.dev/leaderboard/rank/${player_uuid}/${profile_id}`;
 
                     let lb_info = await Promise.all([axios.get(farming_lb)]).catch((error) => {});
 
