@@ -55,53 +55,6 @@ class APIManager {
                         }
                         if (act_type == 'invite') {
                             const username = act_data.username;
-
-                            const uuid = await getUUID(username);
-                            const skykings_scammer = await Skykings.lookupUUID(uuid);
-                            const blacklisted = await Blacklist.checkBlacklist(uuid);
-                            const scf_blacklisted = await SCFAPI.checkBlacklist(uuid);
-
-                            // Checking the requirements
-
-                            let passed_requirements = true;
-
-                            try {
-                                let profile = await getLatestProfile(uuid);
-
-                                const skyblockLevel = (profile?.profile?.leveling?.experience || 0) / 100 ?? 0;
-                                const dungeonsStats = getDungeons(profile.profile, undefined);
-                                const catacombsLevel = Math.round(
-                                    dungeonsStats?.catacombs?.skill?.levelWithProgress || 0
-                                );
-
-                                // MAIN REQS
-                                if (skyblockLevel < config.minecraft.guildRequirements.requirements.skyblockLevel) {
-                                    passed_requirements = false;
-                                }
-                                if (catacombsLevel < config.minecraft.guildRequirements.requirements.catacombsLevel) {
-                                    passed_requirements = false;
-                                }
-                                // MAIN REQS
-
-                            } catch (e) {
-                                // Failed to lookup player data.
-                                Logger.warnMessage(e);
-                            }
-                            //
-
-                            if (
-                                skykings_scammer !== true &&
-                                blacklisted !== true &&
-                                scf_blacklisted !== true &&
-                                passed_requirements === true
-                            ) {
-                                bot.chat(`/guild invite ${username}`);
-                            }
-
-                            completed = true;
-                        }
-                        if (act_type == 'forceInvite') {
-                            const username = act_data.username;
                             const uuid = act_data.uuid;
 
                             const skykings_scammer = await Skykings.lookupUUID(uuid);
