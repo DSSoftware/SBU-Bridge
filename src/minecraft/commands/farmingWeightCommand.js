@@ -27,7 +27,7 @@ class topCommand extends minecraftCommand {
 
             let farming_weight = `https://api.elitebot.dev/Weight/${player_uuid}`;
 
-            let weight_info = await Promise.all([axios.get(farming_weight)]).catch((error) => {
+            let weight_info = await axios.get(farming_weight).catch((error) => {
                 throw 'No player with that IGN found.';
             });
 
@@ -44,11 +44,13 @@ class topCommand extends minecraftCommand {
                     weight = profile_weight;
 
                     let farming_lb = `https://api.elitebot.dev/leaderboard/rank/${player_uuid}/${profile_id}`;
-                    let lb_info = await Promise.all([axios.get(farming_lb)]).catch((error) => {});
+                    try{
+                        let lb_info = await axios.get(farming_lb);
+                        lb_info = lb_info[0].data ?? {};
 
-                    lb_info = lb_info[0].data ?? {};
-
-                    position = lb_info?.misc?.farmingweight ?? 'N/A';
+                        position = lb_info?.misc?.farmingweight ?? 'N/A';
+                    }
+                    catch(e){}
                 }
             }
 
