@@ -1427,7 +1427,7 @@ class StateHandler extends eventHandler {
     }
 
     isUserMuteMessage(message) {
-        return message.includes('has muted') && message.includes('for') && !message.includes(':');
+        return message.includes('has muted2') && message.includes('for') && !message.includes(':');
     }
 
     isUserUnmuteMessage(message) {
