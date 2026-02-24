@@ -23,12 +23,14 @@ class MutationCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
-            const data = await getLatestProfile(username, { garden: true });
+            const data = await getLatestProfile(username);
             console.log(data.garden);
             username = formatUsername(username, data.profileData?.game_mode);
 
+            let mutation_amount = data?.v2?.profile?.garden_player_data.analyzed_greenhouse_crops;
+
             this.send(
-                `/${channel} ${username} has x / 40 mutations unlocked`
+                `/${channel} ${username} has ${mutation_amount} / 40 mutations unlocked`
             );
         } catch (error) {
             Logger.warnMessage(error);

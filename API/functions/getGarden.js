@@ -6,7 +6,7 @@ const { hypixelRequest } = require('../utils/scfAPIHandler.js');
 async function getGarden(profileID, uuid) {
     try {
         const data = await hypixelRequest(
-            `https://api.hypixel.net/v2/skyblock/garden?key=${config.API.hypixelAPIkey}&profile=${profileID}`
+            `https://hypixel.dssoftware.ru/v2/skyblock/garden?key=${config.API.hypixelAPIkey}&profile=${profileID}`
         );
 
         if (data === undefined || data.success === false) {
