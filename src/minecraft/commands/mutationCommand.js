@@ -24,7 +24,7 @@ class MutationCommand extends minecraftCommand {
             username = this.getArgs(message)[0] || username;
 
             const data = await getLatestProfile(username, { garden: true });
-            console.log(data);
+            console.log(data.garden);
             username = formatUsername(username, data.profileData?.game_mode);
 
             this.send(
