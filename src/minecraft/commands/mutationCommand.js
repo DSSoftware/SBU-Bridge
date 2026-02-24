@@ -30,7 +30,7 @@ class MutationCommand extends minecraftCommand {
             let mutation_amount = data?.v2?.profile?.garden_player_data.copper;
 
             this.send(
-                `/${channel} ${username} has x / 40 mutations unlocked`
+                `/${channel} ${username} has ${mutation_amount} / 40 mutations unlocked`
             );
         } catch (error) {
             Logger.warnMessage(error);
