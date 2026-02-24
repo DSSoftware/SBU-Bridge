@@ -27,8 +27,6 @@ class MutationCommand extends minecraftCommand {
 
             username = formatUsername(username, data.profileData?.game_mode);
 
-
-
             this.send(
                 `/${channel} ${username} has x / 40 mutations unlocked`
             );
