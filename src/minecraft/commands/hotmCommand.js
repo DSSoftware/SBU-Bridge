@@ -7,12 +7,12 @@ function formatNumber(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 }
 
-class Hotm2Command extends minecraftCommand {
+class HotmCommand extends minecraftCommand {
     constructor(minecraft) {
         super(minecraft);
 
-        this.name = 'hotm2';
-        this.aliases = ['heart2', 'mining2'];
+        this.name = 'hotm';
+        this.aliases = ['heart', 'mining'];
         this.description = "Shows player's HOTM stats.";
         this.options = [
             {
@@ -104,4 +104,4 @@ class Hotm2Command extends minecraftCommand {
     }
 }
 
-module.exports = Hotm2Command;
+module.exports = HotmCommand;
