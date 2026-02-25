@@ -1,4 +1,5 @@
 const { getMuseum } = require('./getMuseum.js');
+const { getGarden } = require('./getGarden.js');
 const { isUuid } = require('../utils/uuid.js');
 const config = require('#root/config.js').getConfig();
 const axios = require('axios');
@@ -76,7 +77,8 @@ async function getLatestProfile(uuid, options = { museum: false, garden: false }
         profile: profilev2,
         profileData: profileDatav2,
         uuid: uuid,
-        ...(options.museum ? await getMuseum(profileDatav2.profile_id, uuid) : {})
+        ...(options.museum ? await getMuseum(profileDatav2.profile_id, uuid) : {},
+            options.garden ? await getGarden(profileDatav2.profile_id, uuid) : {})
     };
 
     cache.set(uuid, output);
