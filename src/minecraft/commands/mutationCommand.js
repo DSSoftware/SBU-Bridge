@@ -24,7 +24,6 @@ class MutationCommand extends minecraftCommand {
             username = this.getArgs(message)[0] || username;
 
             const data = await getLatestProfile(username);
-            console.log(data.garden);
             username = formatUsername(username, data.profileData?.game_mode);
 
             let mutation_amount = data?.v2?.profile?.garden_player_data.analyzed_greenhouse_crops.length;
