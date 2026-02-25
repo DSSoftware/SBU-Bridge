@@ -31,7 +31,7 @@ class VisitorCommand extends minecraftCommand {
             const count_vis = data.garden.commission_data.total_completed;
 
             this.send(
-                `/${channel} ${username} has ${count_vis} visitors served | -> ${uni_vis} unique ones. `
+                `/${channel} ${username} has ${count_vis} visitors served - (${uni_vis} unique). `
             );
         } catch (error) {
             Logger.warnMessage(error);
