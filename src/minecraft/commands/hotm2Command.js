@@ -71,7 +71,7 @@ class Hotm2Command extends minecraftCommand {
 
             username = formatUsername(username, data.profileData?.game_mode);
 
-            let hotm_xp = data?.v2?.profile?.skill_tree.nodes.experience.mining;
+            let hotm_xp = data?.v2?.profile?.skill_tree.experience.mining;
             let hotm_level_data = await this.getHOTMLevel(hotm_xp);
 
             let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_exp)} EXP)`;
