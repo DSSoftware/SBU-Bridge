@@ -84,7 +84,6 @@ class Hotm2Command extends minecraftCommand {
             );
         } catch (error) {
             Logger.warnMessage(error);
-
             this.send(`/${channel} [ERROR] ${error}`);
         }
     }
