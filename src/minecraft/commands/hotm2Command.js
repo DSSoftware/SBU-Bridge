@@ -93,8 +93,9 @@ class Hotm2Command extends minecraftCommand {
                 xp_left = "(MAX)";
             }
 
+            let nucleus_runs = data?.v2?.profile?.leveling.completions.NUCLEUS_RUNS;
             this.send(
-                `/${channel} ${username} HOTM Level: ${hotm_level_data?.level} ${xp_left} | COTM: ${cotm} | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite.`
+                `/${channel} ${username} HOTM Level: ${hotm_level_data?.level} ${xp_left} | COTM: ${cotm} | Powder: ${mithril_powder} Mithril | ${gemstone_powder} Gemstone | ${glacite_powder} Glacite. ${nucleus_runs} Nucleus Runs completed.`
             );
         } catch (error) {
             Logger.warnMessage(error);
