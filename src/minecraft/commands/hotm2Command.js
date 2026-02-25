@@ -74,7 +74,7 @@ class Hotm2Command extends minecraftCommand {
             let hotm_xp = data?.v2?.profile?.skill_tree.experience.mining;
             let hotm_level_data = await this.getHOTMLevel(hotm_xp);
 
-            let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_exp)} EXP)`;
+            let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_xp)} EXP)`;
             if(hotm_level_data?.next_level == null){
                 xp_left = "(MAX)";
             }
