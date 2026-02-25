@@ -7,7 +7,7 @@ const { hypixelRequest } = require('../utils/scfAPIHandler.js');
 
 const cache = new Map();
 
-async function getLatestProfile(uuid, options = { museum: false }) {
+async function getLatestProfile(uuid, options = { museum: false, garden: false }) {
     if (!isUuid(uuid)) {
         uuid = await getUUID(uuid).catch((error) => {
             throw error;
