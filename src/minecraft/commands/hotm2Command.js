@@ -3,6 +3,10 @@ const { formatNumber, formatUsername } = require('../../contracts/helperFunction
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const Logger = require('#root/src/Logger.js');
 
+function formatNumber(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+}
+
 class Hotm2Command extends minecraftCommand {
     constructor(minecraft) {
         super(minecraft);
@@ -79,6 +83,10 @@ class Hotm2Command extends minecraftCommand {
             let mithril_powder = data?.v2?.profile?.mining_core.powder_mithril + data?.v2?.profile?.mining_core.powder_spent_mithril;
             let gemstone_powder = data?.v2?.profile?.mining_core.powder_gemstone + data?.v2?.profile?.mining_core.powder_spent_gemstone;
             let glacite_powder = data?.v2?.profile?.mining_core.powder_glacite + data?.v2?.profile?.mining_core.powder_spent_glacite;
+
+            mithril_powder = formatNumber(mithril_powder);
+            gemstone_powder = formatNumber(gemstone_powder);
+            glacite_powder = formatNumber(glacite_powder);
 
             let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_xp)} EXP)`;
             if(hotm_level_data?.next_level == null){
