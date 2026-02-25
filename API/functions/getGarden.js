@@ -13,17 +13,13 @@ async function getGarden(profileID, uuid) {
             throw 'Request to Hypixel API failed. Please try again!';
         }
 
-        if (data.members === null || Object.keys(data.members).length === 0) {
+        if (data.garden === null || Object.keys(data.garden).length === 0) {
             // throw "Profile doesn't have a museum.";
         }
 
-        if (data.members[uuid] === undefined) {
-            // throw "Player doesn't have a museum.";
-        }
-
         return {
-            garden: data.members ? data.members[uuid] : null,
-            gardenData: data.members ? data.members : null
+            garden: data.garden ? data.garden : null,
+            gardenData: data.garden ? data.garden : null
         };
     } catch (e) {
         throw new Error(e);
