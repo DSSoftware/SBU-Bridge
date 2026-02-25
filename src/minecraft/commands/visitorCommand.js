@@ -2,7 +2,6 @@ const minecraftCommand = require('../../contracts/minecraftCommand.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const Logger = require('#root/src/Logger.js');
-const { getGarden } = require('#root/API/functions/getGarden');
 
 class VisitorCommand extends minecraftCommand {
     constructor(minecraft) {
