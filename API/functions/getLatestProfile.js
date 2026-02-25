@@ -77,8 +77,9 @@ async function getLatestProfile(uuid, options = { museum: false, garden: false }
         profile: profilev2,
         profileData: profileDatav2,
         uuid: uuid,
-        ...(options.museum ? await getMuseum(profileDatav2.profile_id, uuid) : {},
-            options.garden ? await getGarden(profileDatav2.profile_id, uuid) : {})
+        ...(options.museum ? await getMuseum(profileDatav2.profile_id, uuid) : {}),
+        ...(options.garden ? await getGarden(profileDatav2.profile_id, uuid) : {})
+
     };
 
     cache.set(uuid, output);
