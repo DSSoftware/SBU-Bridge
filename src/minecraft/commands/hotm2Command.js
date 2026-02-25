@@ -90,4 +90,4 @@ class Hotm2Command extends minecraftCommand {
     }
 }
 
-module.exports = MutationCommand;
+module.exports = Hotm2Command;
