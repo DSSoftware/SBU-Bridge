@@ -74,11 +74,11 @@ class Hotm2Command extends minecraftCommand {
             let hotm_xp = data?.v2?.profile?.skill_tree.experience.mining;
             let hotm_level_data = await this.getHOTMLevel(hotm_xp);
 
-            let cotm = 10;
+            let cotm = data?.v2?.profile?.skill_tree.nodes.mining.core_of_the_mountain;
 
-            let mithril_powder = 100;
-            let gemstone_powder = 100;
-            let glacite_powder = 100;
+            let mithril_powder = data?.v2?.profile?.mining_core.powder_mithril_total;
+            let gemstone_powder = data?.v2?.profile?.mining_core.powder_gemstone_total;
+            let glacite_powder = data?.v2?.profile?.mining_core.powder_glacite_total;
 
             let xp_left = `(${formatNumber(hotm_level_data?.xp_left)} / ${formatNumber(hotm_level_data?.xp_to_next)} EXP | Total: ${formatNumber(hotm_xp)} EXP)`;
             if(hotm_level_data?.next_level == null){
