@@ -39,7 +39,7 @@ class ChipsCommand extends minecraftCommand {
 
 
             this.send(
-                `/${channel} ${username} Chips: Crop: ${cropshot} | Hyper: ${hypercharge} | Quick: ${quickdraw} | Vermin: ${vermin} | Rare: ${rarefinder} | Mecha: ${mechamind} | Synth: ${synthesis} | Ever: ${evergreen} | Over: ${overdrive} | Sowl: ${sowledge} `
+                `/${channel} ${username} Chips: Crop: ${cropshot} `
             );
         } catch (error) {
             Logger.warnMessage(error);
