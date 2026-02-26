@@ -39,7 +39,7 @@ class ChipsCommand extends minecraftCommand {
 
 
             this.send(
-                `/${channel} ${username} Chips: Crop: ${cropshot} `
+                `/${channel} ${username} Chips: Crop: ${cropshot}`
             );
         } catch (error) {
             Logger.warnMessage(error);
