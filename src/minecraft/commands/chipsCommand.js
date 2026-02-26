@@ -26,16 +26,18 @@ class ChipsCommand extends minecraftCommand {
             const data = await getLatestProfile(username);
             username = formatUsername(username, data.profileData?.game_mode);
 
-            let cropshot = data?.v2?.profile?.player_data.garden_chips.cropshot;
-            let hypercharge = data?.v2?.profile?.player_data.garden_chips.hypercharge;
-            let quickdraw = data?.v2?.profile?.player_data.garden_chips.quickdraw;
-            let vermin = data?.v2?.profile?.player_data.garden_chips.vermin_vaporizor;
-            let rarefinder = data?.v2?.profile?.player_data.garden_chips.rarefinder;
-            let mechamind = data?.v2?.profile?.player_data.garden_chips.mechamind;
-            let synthesis = data?.v2?.profile?.player_data.garden_chips.synthesis;
-            let evergreen = data?.v2?.profile?.player_data.garden_chips.evergreen;
-            let overdrive = data?.v2?.profile?.player_data.garden_chips.overdrive;
-            let sowledge = data?.v2?.profile?.player_data.garden_chips.sowledge;
+            const gardenChips = data?.v2?.profile?.player_data?.garden_chips || {};
+
+            let cropshot = gardenChips.cropshot ?? 0;
+            let hypercharge = gardenChips.hypercharge ?? 0;
+            let quickdraw = gardenChips.quickdraw ?? 0;
+            let vermin = gardenChips.vermin_vaporizor ?? 0;
+            let rarefinder = gardenChips.rarefinder ?? 0;
+            let mechamind = gardenChips.mechamind ?? 0;
+            let synthesis = gardenChips.synthesis ?? 0;
+            let evergreen = gardenChips.evergreen ?? 0;
+            let overdrive = gardenChips.overdrive ?? 0;
+            let sowledge = gardenChips.sowledge ?? 0;
 
 
             this.send(
