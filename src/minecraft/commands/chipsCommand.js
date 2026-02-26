@@ -31,7 +31,7 @@ class ChipsCommand extends minecraftCommand {
             let cropshot = gardenChips.cropshot ?? 0;
             let hypercharge = gardenChips.hypercharge ?? 0;
             let quickdraw = gardenChips.quickdraw ?? 0;
-            let vermin = gardenChips.vermin_vaporizor ?? 0;
+            let vermin = gardenChips.vermin_vaporizer ?? 0;
             let rarefinder = gardenChips.rarefinder ?? 0;
             let mechamind = gardenChips.mechamind ?? 0;
             let synthesis = gardenChips.synthesis ?? 0;
