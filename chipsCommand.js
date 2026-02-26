@@ -8,8 +8,8 @@ class ChipsCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'chips';
-        this.aliases = ['chips'];
-        this.description = 'Shows the Farming Chips of a User.';
+        this.aliases = ['chip'];
+        this.description = 'Shows the Garden Chips of a User.';
         this.options = [
             {
                 name: 'username',
@@ -24,13 +24,13 @@ class ChipsCommand extends minecraftCommand {
             username = this.getArgs(message)[0] || username;
 
             const data = await getLatestProfile(username);
+            console.log(data.garden);
             username = formatUsername(username, data.profileData?.game_mode);
 
             let cropshot = 2;
 
-
             this.send(
-                `/${channel} ${username} Chips: Crop: ${cropshot}`
+                `/${channel} ${username} Chips | Cropshot: ${cropshot} `
             );
         } catch (error) {
             Logger.warnMessage(error);
