@@ -26,7 +26,7 @@ class ChipsCommand extends minecraftCommand {
             const data = await getLatestProfile(username);
             username = formatUsername(username, data.profileData?.game_mode);
 
-            let cropshot = data?.v2?.profile?.player_data.garden_chips.cropshot;
+            let cropshot = 2;
 
 
             this.send(
