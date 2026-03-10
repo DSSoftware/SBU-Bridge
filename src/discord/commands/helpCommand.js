@@ -41,26 +41,44 @@ module.exports = {
                 })
                 .join('');
 
+            // Split minecraft commands into chunks to avoid exceeding 1024 character limit
+            const chunkSize = 1024;
+            const minecraftCommandChunks = [];
+            let currentChunk = '';
+
+            minecraftCommands.split('\n').forEach((line) => {
+                if ((currentChunk + line + '\n').length > chunkSize) {
+                    if (currentChunk) minecraftCommandChunks.push(currentChunk.trim());
+                    currentChunk = line + '\n';
+                } else {
+                    currentChunk += line + '\n';
+                }
+            });
+            if (currentChunk) minecraftCommandChunks.push(currentChunk.trim());
+
             const helpMenu = new EmbedBuilder()
                 .setColor(0x0099ff)
                 .setTitle('Hypixel Discord Chat Bridge Commands')
                 .setDescription('() = required argument, [] = optional argument')
-                .addFields(
-                    {
-                        name: '**Minecraft**: ',
-                        value: `${minecraftCommands}`,
-                        inline: true
-                    },
-                    {
-                        name: '**Discord**: ',
-                        value: `${discordCommands}`,
-                        inline: true
-                    }
-                )
-                .setFooter({
-                    text: '/help [command] for more information',
-                    iconURL: config.branding.logo
+                .addFields({
+                    name: '**Discord**: ',
+                    value: `${discordCommands}`,
+                    inline: false
                 });
+
+            // Add minecraft command chunks as separate fields
+            minecraftCommandChunks.forEach((chunk, index) => {
+                helpMenu.addFields({
+                    name: index === 0 ? '**Minecraft**: ' : '**Minecraft (continued)**: ',
+                    value: chunk,
+                    inline: false
+                });
+            });
+
+            helpMenu.setFooter({
+                text: '/help [command] for more information',
+                iconURL: config.branding.logo
+            });
 
             await interaction.followUp({ embeds: [helpMenu] });
         } else {
