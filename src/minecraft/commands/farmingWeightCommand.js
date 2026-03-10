@@ -31,7 +31,10 @@ class topCommand extends minecraftCommand {
                 throw 'No player with that IGN found.';
             });
 
-            weight_info = weight_info[0].data ?? {};
+            weight_info = weight_info?.data ?? {};
+
+            let profileID = weight_info.selectedProfileId;
+            //console.log(weight_info?.data.selectedProfileId);
 
             let weight = 0;
             let position = 'N/A';
@@ -43,14 +46,13 @@ class topCommand extends minecraftCommand {
                 if (profile_weight >= weight) {
                     weight = profile_weight;
 
-                    let farming_lb = `https://api.elitebot.dev/leaderboard/rank/${player_uuid}/${profile_id}`;
-                    try{
+                    let farming_lb = `https://api.elitebot.dev/leaderboards/${player_uuid}/${profile_id}`;
+                    try {
                         let lb_info = await axios.get(farming_lb);
-                        lb_info = lb_info[0].data ?? {};
+                        lb_info = lb_info.data.ranks.farmingweight.rank ?? 'N/AA';
 
-                        position = lb_info?.misc?.farmingweight ?? 'N/A';
-                    }
-                    catch(e){}
+                        position = lb_info;
+                    } catch (e) {}
                 }
             }
 
