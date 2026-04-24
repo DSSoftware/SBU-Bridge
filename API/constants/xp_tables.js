@@ -11,7 +11,8 @@ module.exports = {
         carpentry: 50,
         runecrafting: 25,
         social: 25,
-        dungeoneering: 50
+        dungeoneering: 50,
+        hunting: 25
     },
     normal: [
         50, 125, 200, 300, 500, 750, 1000, 1500, 2000, 3500, 5000, 7500, 10000, 15000, 20000, 30000, 50000, 75000,
