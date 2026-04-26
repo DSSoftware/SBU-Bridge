@@ -37,7 +37,7 @@ class SkillAverageOverflowCommand extends minecraftCommand {
             let sa_skills = 0;
 
             const skillsFormatted = Object.keys(profile)
-                .filter((skill) => skill !== 'runecrafting' && skill !== 'social')
+                .filter((skill) => skill !== 'runecrafting' && skill !== 'social' && skill !== 'dungeoneering')
                 .map((skill) => {
                     const level = profile[skill].totalXp;
 
