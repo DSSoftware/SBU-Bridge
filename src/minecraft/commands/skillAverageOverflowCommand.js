@@ -56,8 +56,16 @@ class SkillAverageOverflowCommand extends minecraftCommand {
                     const maxXp = this.getMaxXp(skill);
                     const overflow = Math.max(0, totalXp - maxXp);
 
+                    let table = 'normal';
+                    if (skill === 'runecrafting') table = 'runecrafting';
+                    if (skill === 'social') table = 'social';
+                    if (skill === 'dungeoneering') table = 'catacombs';
+
+                    const nextLevelXp = xp_tables[table][xp_tables.max_levels[skill] || 60] || 200000000;
+                    const overflowLevel = (overflow / nextLevelXp).toFixed(2);
+
                     const skillName = skill[0].toUpperCase() + skill.slice(1);
-                    return `${skillName} ${formatNumber(overflow)}`;
+                    return `${skillName} ${overflowLevel}`;
                 })
                 .join(' | ');
 
