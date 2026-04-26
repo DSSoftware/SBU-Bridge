@@ -44,35 +44,18 @@ class SkillAverageOverflowCommand extends minecraftCommand {
                     return;
                 }
 
-                const experienceKey = `experience_skill_${skill}`;
-                const experience = profile[experienceKey] || 0;
+                const skillInfo = skillsData[skill];
+                const level = Math.floor(skillInfo.levelWithProgress ?? 0);
+                const levelWithProgress = skillInfo.levelWithProgress ?? 0;
+                const overflowLevel = levelWithProgress - level;
 
-                let table = 'normal';
-                if (skill === 'runecrafting') table = 'runecrafting';
-                if (skill === 'social') table = 'social';
-                if (skill === 'dungeoneering') table = 'catacombs';
+                // Only count if there's actual overflow
+                if (overflowLevel > 0) {
+                    overflow_points += overflowLevel;
+                    overflow_skills++;
 
-                let maxLevel = xp_tables.max_levels[skill] || 60;
-                let totalXpForMaxLevel = 0;
-
-                // Calculate total XP needed to reach max level
-                for (let i = 0; i < maxLevel; i++) {
-                    totalXpForMaxLevel += xp_tables[table][i];
-                }
-
-                // Calculate overflow XP and convert to levels
-                if (experience > totalXpForMaxLevel) {
-                    const overflowXp = experience - totalXpForMaxLevel;
-                    const xpPerLevel = xp_tables[table][maxLevel] || 200000000;
-                    const overflowLevel = Math.floor(overflowXp / xpPerLevel);
-
-                    if (overflowLevel > 0) {
-                        overflow_points += overflowLevel;
-                        overflow_skills++;
-
-                        const skillName = skill[0].toUpperCase() + skill.slice(1);
-                        skillsList.push(`${skillName} +${overflowLevel}`);
-                    }
+                    const skillName = skill[0].toUpperCase() + skill.slice(1);
+                    skillsList.push(`${skillName} +${Math.floor(overflowLevel)}`);
                 }
             });
 
