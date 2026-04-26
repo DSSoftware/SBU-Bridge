@@ -3,6 +3,7 @@ const { formatUsername } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
 const getSkills = require('../../../API/stats/skills.js');
+const xp_tables = require('../../../API/constants/xp_tables.js');
 
 class SkillAverageOverflowCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -30,27 +31,44 @@ class SkillAverageOverflowCommand extends minecraftCommand {
 
             username = formatUsername(username, data.profileData.cute_name);
 
-            const profile = getSkills(data.profile);
-
+            const profile = data.profile;
             let overflow_points = 0;
             let overflow_skills = 0;
+            const skillsList = [];
 
-            const skillsFormatted = Object.keys(profile)
-                .map((skill) => {
-                    const levelWithProgress = profile[skill].levelWithProgress ?? 0;
-                    const level = Math.floor(levelWithProgress);
-                    const overflowLevel = levelWithProgress - level;
+            const skillsToCheck = ['farming', 'mining', 'combat', 'foraging', 'fishing', 'enchanting', 'alchemy', 'taming'];
 
-                    // Only count overflow for skills that aren't runecrafting or social
-                    if (skill !== 'runecrafting' && skill !== 'social') {
-                        overflow_points += overflowLevel;
-                        overflow_skills++;
-                    }
+            skillsToCheck.forEach((skill) => {
+                const experienceKey = `experience_skill_${skill}`;
+                const experience = profile[experienceKey] || 0;
+
+                let table = 'normal';
+                if (skill === 'runecrafting') table = 'runecrafting';
+                if (skill === 'social') table = 'social';
+
+                let maxLevel = xp_tables.max_levels[skill] || 60;
+                let totalXpForMaxLevel = 0;
+
+                // Calculate total XP needed to reach max level
+                for (let i = 0; i < maxLevel; i++) {
+                    totalXpForMaxLevel += xp_tables[table][i];
+                }
+
+                // Calculate overflow XP and convert to levels
+                if (experience > totalXpForMaxLevel) {
+                    const overflowXp = experience - totalXpForMaxLevel;
+                    const xpPerLevel = xp_tables[table][maxLevel] || 200000000;
+                    const overflowLevel = Math.floor(overflowXp / xpPerLevel);
+
+                    overflow_points += overflowLevel;
+                    overflow_skills++;
 
                     const skillName = skill[0].toUpperCase() + skill.slice(1);
-                    return `${skillName} +${overflowLevel.toFixed(2)}`;
-                })
-                .join(' | ');
+                    skillsList.push(`${skillName} +${overflowLevel}`);
+                }
+            });
+
+            const skillsFormatted = skillsList.join(' | ');
 
             let skillAverageOverflow = 'N/A';
 
