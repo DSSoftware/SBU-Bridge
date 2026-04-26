@@ -34,7 +34,7 @@ class SkillAverageOverflowCommand extends minecraftCommand {
             const profile = data.profile;
             const skillsData = getSkills(profile);
 
-            let overflow_points = 0;
+            let overflow_xp = 0;
             let overflow_skills = 0;
             const skillsList = [];
 
@@ -44,18 +44,30 @@ class SkillAverageOverflowCommand extends minecraftCommand {
                     return;
                 }
 
-                const skillInfo = skillsData[skill];
-                const level = Math.floor(skillInfo.levelWithProgress ?? 0);
-                const levelWithProgress = skillInfo.levelWithProgress ?? 0;
-                const overflowLevel = levelWithProgress - level;
+                const experienceKey = `experience_skill_${skill}`;
+                const experience = profile[experienceKey] || 0;
 
-                // Only count if there's actual overflow
-                if (overflowLevel > 0) {
-                    overflow_points += overflowLevel;
+                let table = 'normal';
+                if (skill === 'runecrafting') table = 'runecrafting';
+                if (skill === 'social') table = 'social';
+                if (skill === 'dungeoneering') table = 'catacombs';
+
+                let maxLevel = xp_tables.max_levels[skill] || 60;
+                let totalXpForMaxLevel = 0;
+
+                // Calculate total XP needed to reach max level
+                for (let i = 0; i < maxLevel; i++) {
+                    totalXpForMaxLevel += xp_tables[table][i];
+                }
+
+                // Calculate overflow XP
+                if (experience > totalXpForMaxLevel) {
+                    const overflowXpAmount = experience - totalXpForMaxLevel;
+                    overflow_xp += overflowXpAmount;
                     overflow_skills++;
 
                     const skillName = skill[0].toUpperCase() + skill.slice(1);
-                    skillsList.push(`${skillName} +${Math.floor(overflowLevel)}`);
+                    skillsList.push(`${skillName} +${overflowXpAmount.toLocaleString()}`);
                 }
             });
 
@@ -64,10 +76,10 @@ class SkillAverageOverflowCommand extends minecraftCommand {
             let skillAverageOverflow = 'N/A';
 
             if (overflow_skills !== 0) {
-                skillAverageOverflow = (overflow_points / overflow_skills).toFixed(2);
+                skillAverageOverflow = Math.floor(overflow_xp / overflow_skills).toLocaleString();
             }
 
-            this.send(`/${channel} ${username}'s Skill Average Overflow: +${skillAverageOverflow ?? 0} (${skillsFormatted})`);
+            this.send(`/${channel} ${username}'s Skill Average Overflow: +${skillAverageOverflow ?? 0} XP (${skillsFormatted})`);
         } catch (error) {
             this.send(`/${channel} [ERROR] ${error}`);
         }
