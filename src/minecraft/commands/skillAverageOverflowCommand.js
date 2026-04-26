@@ -62,7 +62,7 @@ class SkillAverageOverflowCommand extends minecraftCommand {
                     if (skill === 'dungeoneering') table = 'catacombs';
 
                     const nextLevelXp = xp_tables[table][xp_tables.max_levels[skill]] || 7000000;
-                    const overflowLevel = (overflow / nextLevelXp).toFixed(2);
+                    const overflowLevel = overflow > 0 ? (overflow / nextLevelXp).toFixed(2) : '(not max)';
 
                     const skillName = skill[0].toUpperCase() + skill.slice(1);
                     return `${skillName} ${overflowLevel}`;
