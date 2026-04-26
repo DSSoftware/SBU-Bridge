@@ -34,20 +34,23 @@ class SkillAverageOverflowCommand extends minecraftCommand {
 
             let total_xp = 0;
             let xp_skills = 0;
+            const skillsWithXp = [];
 
-            const skillsFormatted = Object.keys(profile)
-                .map((skill) => {
-                    const totalXp = profile[skill].totalXp ?? 0;
+            Object.keys(profile).forEach((skill) => {
+                const totalXp = profile[skill].totalXp ?? 0;
 
-                    if (skill != 'runecrafting' && skill != 'social') {
-                        total_xp += totalXp;
-                        xp_skills++;
+                if (skill != 'runecrafting' && skill != 'social') {
+                    total_xp += totalXp;
+                    xp_skills++;
+
+                    if (totalXp > 0) {
+                        const skillName = skill[0].toUpperCase() + skill.slice(1);
+                        skillsWithXp.push(`${skillName} ${totalXp.toLocaleString()}`);
                     }
+                }
+            });
 
-                    const skillName = skill[0].toUpperCase() + skill.slice(1);
-                    return `${skillName} ${totalXp.toLocaleString()}`;
-                })
-                .join(' | ');
+            const skillsFormatted = skillsWithXp.length > 0 ? skillsWithXp.join(' | ') : 'No XP';
 
             let skillAverageXp = 'N/A';
 
