@@ -994,11 +994,3 @@ class SkillAverageOverflowCommand extends minecraftCommand {
 }
 
 module.exports = SkillAverageOverflowCommand;
-```
-
-Key changes:
-1. **Added `getMaxXp()` method** to calculate the maximum XP for each skill based on its max level
-2. **Calculate overflow** by subtracting max XP from total XP (using `Math.max(0, ...)` to ensure no negative values)
-3. **Removed the average calculation** and related variables
-4. **Updated message** to show "Skill Overflow" instead of "Skill Average"
-5. **Imported `xp_tables`** to access max levels and XP
