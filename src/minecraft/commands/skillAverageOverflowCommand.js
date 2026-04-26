@@ -20,6 +20,7 @@ class SkillAverageOverflowCommand extends minecraftCommand {
         ];
     }
 
+
     async onCommand(username, message, channel = 'gc') {
         try {
             username = this.getArgs(message)[0] || username;
@@ -32,35 +33,32 @@ class SkillAverageOverflowCommand extends minecraftCommand {
 
             const profile = getSkills(data.profile);
 
-            let total_xp = 0;
-            let xp_skills = 0;
-            const skillsWithXp = [];
+            let sa_points = 0;
+            let sa_skills = 0;
 
-            Object.keys(profile).forEach((skill) => {
-                const totalXp = profile[skill].totalXp ?? 0;
+            const skillsFormatted = Object.keys(profile)
+                .map((skill) => {
+                    const level = profile[skill].totalXp;
 
-                if (skill != 'runecrafting' && skill != 'social') {
-                    total_xp += totalXp;
-                    xp_skills++;
-
-                    if (totalXp > 0) {
-                        const skillName = skill[0].toUpperCase() + skill.slice(1);
-                        skillsWithXp.push(`${skillName} ${totalXp.toLocaleString()}`);
+                    if (skill != 'runecrafting' && skill != 'social') {
+                        sa_points += level;
+                        sa_skills++;
                     }
-                }
-            });
 
-            const skillsFormatted = skillsWithXp.length > 0 ? skillsWithXp.join(' | ') : 'No XP';
+                    const skillName = skill[0].toUpperCase() + skill.slice(1);
+                    return `${skillName} ${level}`;
+                })
+                .join(' | ');
 
-            let skillAverageXp = 'N/A';
+            let skillAverage = 'N/A';
 
-            if (xp_skills != 0) {
-                skillAverageXp = Math.floor(total_xp / xp_skills).toLocaleString();
+            if (sa_skills != 0) {
+                skillAverage = (sa_points / sa_skills).toFixed(2);
             }
 
-            this.send(`/${channel} ${username}'s Skill Average XP: ${skillAverageXp ?? 0} (${skillsFormatted})`);
+            this.send(`/${channel} ${username}'s Skill Average: ${skillAverage ?? 0} (${skillsFormatted})`);
         } catch (error) {
-            this.send(`/${channel} [ERROR] ${error}`);
+            this.send(`/${channel} [ERROR] ${error}}`);
         }
     }
 }
