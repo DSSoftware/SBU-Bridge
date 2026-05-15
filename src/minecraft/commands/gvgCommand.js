@@ -12,7 +12,7 @@ class GvgCommand extends minecraftCommand {
 
     async onCommand(username, message, channel = 'gc') {
         try {
-            this.send(`/${channel} Find out about the Skykings Guild vs Guild Event on https://skykings.net/guild-war.`);
+            this.send(`/${channel} Find out about the Skykings Guild vs Guild Event on skykings.net/guild-war.`);
         } catch (error) {
             this.send(`/${channel} [ERROR] ${error}`);
         }
