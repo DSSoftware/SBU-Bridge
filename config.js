@@ -115,7 +115,7 @@ class Config {
             },
             minecraft: {
                 bot: {
-                    prefix: '!!!!!!!!!!!!!!!!!!!!!!',
+                    prefix: '!',
                     messageFormat: '{username} » {message}',
                     messageRepeatBypassLength: 28,
                     unique_id: this.env('unique_id') + ' | Prefix: ' + this.env('guild_prefix'),
