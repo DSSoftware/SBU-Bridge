@@ -8,7 +8,7 @@ class VisitorCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'visitor';
-        this.aliases = ['visitor'];
+        this.aliases = [];
         this.description = 'Shows Garden Visitor Stats of a User.';
         this.options = [
             {

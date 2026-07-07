@@ -9,7 +9,7 @@ class GuildInformationCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'guild';
-        this.aliases = ['g'];
+        this.aliases = [];
         this.description = 'View information of a guild';
         this.options = [
             {

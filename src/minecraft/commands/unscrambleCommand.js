@@ -29,7 +29,7 @@ class unscrambleCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'unscramble';
-        this.aliases = ['unscramble', 'unscrambleme', 'unscrambleme', 'us'];
+        this.aliases = ['unscramble', 'us'];
         this.description = 'Unscramble the word and type it in chat to win!';
         this.options = [
             {

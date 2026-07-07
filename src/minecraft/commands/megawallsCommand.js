@@ -9,7 +9,7 @@ class EightBallCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'megawalls';
-        this.aliases = ['mw'];
+        this.aliases = [];
         this.description = 'View the Megawalls stats of a player';
         this.options = [
             {

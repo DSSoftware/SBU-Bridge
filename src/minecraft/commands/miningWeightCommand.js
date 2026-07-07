@@ -6,7 +6,7 @@ class MiningWeightCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'mweight';
-        this.aliases = ['mwe', 'miningweight'];
+        this.aliases = ['mw', 'miningweight'];
         this.description = 'Sends your mining weight';
         this.options = [
             {

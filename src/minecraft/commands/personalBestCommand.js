@@ -10,7 +10,7 @@ class PersonalBestCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = "personalbest";
-        this.aliases = ["personalbest", "pb"];
+        this.aliases = ["pb"];
         this.description = "Returns the fastest time (s+) of any dungeon";
         this.options = [
             {

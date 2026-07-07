@@ -131,7 +131,7 @@ class chocolateCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'chocolate';
-        this.aliases = ['cf', 'hoppity', 'choc'];
+        this.aliases = ['cf', 'hoppity'];
         this.description = 'Sends your Chocolate Factory stats';
         this.options = [
             {

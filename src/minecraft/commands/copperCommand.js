@@ -8,7 +8,7 @@ class CopperCommand extends minecraftCommand {
         super(minecraft);
 
         this.name = 'copper';
-        this.aliases = ['copper'];
+        this.aliases = [];
         this.description = 'Shows the Copper of a User.';
         this.options = [
             {
