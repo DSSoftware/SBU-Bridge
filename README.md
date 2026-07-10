@@ -349,6 +349,7 @@ If you think that message format is boring, you can check out my repository for 
 
 ## Credits
 
+- [jacobs.strassburger.dev](https://github.com/KartoffelChipss/jacob-contests)
 - [Hypixel API Reborn](https://github.com/Hypixel-API-Reborn/hypixel-api-reborn)
 - [SkyHelper API](https://github.com/Altpapier/SkyHelperAPI)
 - [PlayerDB API](https://playerdb.co/)

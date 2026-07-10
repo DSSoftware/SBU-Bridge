@@ -5,6 +5,56 @@ const config = require('#root/config.js').getConfig();
 const axios = require('axios');
 const Logger = require('#root/src/Logger.js');
 
+async function getContestCrops(timestamp) {
+    let next_contest = {
+        time: null,
+        crops: []
+    };
+
+    // Try DawJaw API first
+    try {
+        const response = await axios.get('https://dawjaw.net/jacobs');
+        const contests = response.data;
+
+        for (const contest of contests) {
+            if (contest.time < timestamp) {
+                continue;
+            }
+
+            if (next_contest.time === null || contest.time < next_contest.time) {
+                next_contest.time = contest.time;
+                next_contest.crops = contest.crops;
+            }
+        }
+
+        return next_contest;
+    }
+    catch (e) {}
+
+    // Try strassburger.dev API
+    try {
+        const response = await axios.get('https://jacobs.strassburger.dev/api/jacobcontests');
+        const contests = response.data;
+
+        for (const contest of contests) {
+            if (contest.timestamp < timestamp) {
+                continue;
+            }
+
+            if (next_contest.time === null || contest.timestamp < next_contest.time) {
+                next_contest.time = contest.timestamp;
+                next_contest.crops = contest.cropNames;
+            }
+        }
+
+        return next_contest;
+    }
+    catch (e) {}
+
+    // We have no datasources, just return null, I guess.
+    return next_contest;
+}
+
 if (config.minecraft.skyblockEventsNotifications.enabled) {
     const { notifiers, customTime } = config.minecraft.skyblockEventsNotifications;
 
@@ -26,13 +76,12 @@ if (config.minecraft.skyblockEventsNotifications.enabled) {
 
                 let extraInfo = '';
                 if (event == 'JACOBS_CONTEST') {
-                    const { data: jacobResponse } = await axios.get('https://dawjaw.net/jacobs');
-                    const jacobCrops = jacobResponse.find(
-                        (crop) => crop.time >= Math.floor(eventData.events[0].start_timestamp / 1000)
-                    );
+                    let contest_time = Math.floor(eventData.events[0].start_timestamp / 1000);
 
-                    if (jacobCrops?.crops !== undefined) {
-                        extraInfo = ` (${jacobCrops.crops.join(', ')})`;
+                    let contest = await getContestCrops(contest_time)
+
+                    if (contest.crops.length > 0) {
+                        extraInfo = ` (${contest.crops.join(', ')})`;
                     }
                 }
 
