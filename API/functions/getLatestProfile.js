@@ -48,15 +48,21 @@ async function getLatestProfile(uuid, options = { museum: false, garden: false }
     // Remapping new points to old system
     profilev2.coin_purse = profilev2?.currencies?.coin_purse;
 
-    profilev2.inv_armor = profilev2?.inventory?.inv_armor;
-    profilev2.equipment_contents = profilev2?.inventory?.equipment_contents;
+    const loadoutContents = getLoadoutBackpackContents(profilev2);
+    const hasLoadoutContents = Object.keys(loadoutContents).length > 0;
+
+    profilev2.inv_armor = hasLoadoutContents ? undefined : profilev2?.inventory?.inv_armor;
+    profilev2.equipment_contents = hasLoadoutContents ? undefined : profilev2?.inventory?.equipment_contents;
     profilev2.wardrobe_contents = profilev2?.inventory?.wardrobe_contents;
     profilev2.inv_contents = profilev2?.inventory?.inv_contents;
     profilev2.ender_chest_contents = profilev2?.inventory?.ender_chest_contents;
     profilev2.personal_vault_contents = profilev2?.inventory?.personal_vault_contents;
 
     profilev2.backpack_icons = profilev2?.inventory?.backpack_icons;
-    profilev2.backpack_contents = profilev2?.inventory?.backpack_contents;
+    profilev2.backpack_contents = {
+        ...(profilev2?.inventory?.backpack_contents ?? {}),
+        ...loadoutContents
+    };
 
     profilev2.talisman_bag = profilev2?.inventory?.bag_contents?.talisman_bag;
     profilev2.fishing_bag = profilev2?.inventory?.bag_contents?.fishing_bag;
@@ -85,6 +91,24 @@ async function getLatestProfile(uuid, options = { museum: false, garden: false }
     cache.set(uuid, output);
 
     return output;
+}
+
+function getLoadoutBackpackContents(profile) {
+    const loadoutContents = {};
+
+    for (const [slot, armor] of Object.entries(profile?.loadout?.armor ?? {})) {
+        if (armor?.data != null) {
+            loadoutContents[`loadout_armor_${slot}`] = armor;
+        }
+    }
+
+    for (const [slot, equipment] of Object.entries(profile?.loadout?.equipment ?? {})) {
+        if (equipment?.data != null) {
+            loadoutContents[`loadout_equipment_${slot}`] = equipment;
+        }
+    }
+
+    return loadoutContents;
 }
 
 module.exports = { getLatestProfile };
