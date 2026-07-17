@@ -1,17 +1,47 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const { formatUsername, formatNumber } = require('../../contracts/helperFunctions.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { getUUID } = require('../../contracts/API/PlayerDBAPI.js');
-const getSkills = require('../../../API/stats/skills.js');
+const { formatUsername } = require('../../contracts/helperFunctions.js');
 const xp_tables = require('../../../API/constants/xp_tables.js');
+const Logger = require('#root/src/Logger.js');
 
-class SkillAverageOverflowCommand extends minecraftCommand {
+const SKILL_ORDER = [
+    'farming',
+    'mining',
+    'combat',
+    'foraging',
+    'fishing',
+    'enchanting',
+    'alchemy',
+    'carpentry',
+    'runecrafting',
+    'social',
+    'taming',
+    'hunting'
+];
+
+const XP_KEYS = {
+    farming: 'SKILL_FARMING',
+    mining: 'SKILL_MINING',
+    combat: 'SKILL_COMBAT',
+    foraging: 'SKILL_FORAGING',
+    fishing: 'SKILL_FISHING',
+    enchanting: 'SKILL_ENCHANTING',
+    alchemy: 'SKILL_ALCHEMY',
+    carpentry: 'SKILL_CARPENTRY',
+    runecrafting: 'SKILL_RUNECRAFTING',
+    social: 'SKILL_SOCIAL',
+    taming: 'SKILL_TAMING',
+    hunting: 'SKILL_HUNTING'
+};
+
+class SkillsOverflowCommand extends minecraftCommand {
     constructor(minecraft) {
         super(minecraft);
 
-        this.name = 'skillAverageOverflow';
-        this.aliases = ['sao'];
-        this.description = 'Skill Average Overflow of specified user.';
+        this.name = 'skillsoverflow';
+        this.aliases = ['saof', 'sao'];
+        this.description = 'Uncapped skills and uncapped skill average.';
         this.options = [
             {
                 name: 'username',
@@ -21,59 +51,107 @@ class SkillAverageOverflowCommand extends minecraftCommand {
         ];
     }
 
-    getMaxXp(skill) {
-        let table = 'normal';
-        if (skill === 'runecrafting') table = 'runecrafting';
-        if (skill === 'social') table = 'social';
-        if (skill === 'dungeoneering') table = 'catacombs';
-
-        let maxXp = 0;
-        const maxLevel = xp_tables.max_levels[skill] || 60;
-
-        for (let i = 0; i < maxLevel; i++) {
-            maxXp += xp_tables[table][i];
-        }
-
-        return maxXp;
-    }
-
     async onCommand(username, message, channel = 'gc') {
         try {
             username = this.getArgs(message)[0] || username;
 
             const uuid = await getUUID(username);
-
             const data = await getLatestProfile(uuid);
 
-            username = formatUsername(username, data.profileData.cute_name);
+            const displayName = formatUsername(username, data.profileData?.game_mode);
+            const experience = data?.profile?.player_data?.experience ?? {};
 
-            const profile = getSkills(data.profile);
+            let saPoints = 0;
+            let saSkills = 0;
 
-            const skillsFormatted = Object.keys(profile)
-                .filter((skill) => skill !== 'runecrafting' && skill !== 'social' && skill !== 'dungeoneering')
-                .map((skill) => {
-                    const totalXp = profile[skill].totalXp;
-                    const maxXp = this.getMaxXp(skill);
-                    const overflow = Math.max(0, totalXp - maxXp);
+            const skillsFormatted = SKILL_ORDER.map((skill) => {
+                const totalXp = Number(experience?.[XP_KEYS[skill]] || 0);
+                const uncapped = calcUncappedSkill(skill, totalXp);
+                const level = Math.floor(uncapped.levelWithProgress ?? 0);
 
-                    let table = 'normal';
-                    if (skill === 'runecrafting') table = 'runecrafting';
-                    if (skill === 'social') table = 'social';
-                    if (skill === 'dungeoneering') table = 'catacombs';
+                if (skill !== 'runecrafting' && skill !== 'social') {
+                    saPoints += level;
+                    saSkills++;
+                }
 
-                    const nextLevelXp = xp_tables[table][xp_tables.max_levels[skill]] || 7000000;
-                    const overflowLevel = overflow > 0 ? (overflow / nextLevelXp).toFixed(2) : '(not max)';
+                const skillName = skill[0].toUpperCase() + skill.slice(1);
+                return `${skillName} ${level}`;
+            }).join(' | ');
 
-                    const skillName = skill[0].toUpperCase() + skill.slice(1);
-                    return `${skillName} ${overflowLevel}`;
-                })
-                .join(' | ');
+            const uncappedSkillAverage = saSkills > 0 ? (saPoints / saSkills).toFixed(2) : 'N/A';
 
-            this.send(`/${channel} ${username}'s Skill Overflow: (${skillsFormatted})`);
+            this.send(
+                `/${channel} ${displayName}'s Uncapped Skill Average: ${uncappedSkillAverage} (${skillsFormatted})`
+            );
         } catch (error) {
-            this.send(`/${channel} [ERROR] ${error}}`);
+            Logger.warnMessage(error);
+            this.send(`/${channel} [ERROR] ${error}`);
         }
     }
 }
 
-module.exports = SkillAverageOverflowCommand;
+function calcUncappedSkill(skill, experience) {
+    const tableName = getSkillTableName(skill);
+    const xpTable = xp_tables?.[tableName] ?? xp_tables.normal;
+    const tableMaxLevel = Number(xpTable.length);
+    const fallbackXpForNext = Number(xpTable[xpTable.length - 1] ?? 1);
+
+    if (!Number.isFinite(experience) || experience <= 0) {
+        return {
+            totalXp: 0,
+            level: 0,
+            xpCurrent: 0,
+            xpForNext: Number(xpTable[0] ?? fallbackXpForNext),
+            progress: 0,
+            levelWithProgress: 0
+        };
+    }
+
+    let xpSpent = 0;
+    let level = 0;
+
+    for (let currentLevel = 1; currentLevel <= tableMaxLevel; currentLevel++) {
+        const requiredXp = Number(xpTable[currentLevel - 1] ?? fallbackXpForNext);
+        if (xpSpent + requiredXp > experience) {
+            break;
+        }
+
+        xpSpent += requiredXp;
+        level = currentLevel;
+    }
+
+    const postCapXpForNext = Math.max(1, fallbackXpForNext);
+    while (xpSpent + postCapXpForNext <= experience) {
+        xpSpent += postCapXpForNext;
+        level++;
+    }
+
+    const xpForNext = level < tableMaxLevel ? Number(xpTable[level] ?? postCapXpForNext) : postCapXpForNext;
+
+    const xpCurrent = Math.max(0, experience - xpSpent);
+    const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+    const levelWithProgress = level + progress;
+
+    return {
+        totalXp: experience,
+        level,
+        xpCurrent,
+        xpForNext,
+        progress,
+        levelWithProgress
+    };
+}
+
+function getSkillTableName(skill) {
+    if (skill === 'runecrafting') {
+        return 'runecrafting';
+    }
+
+    if (skill === 'social') {
+        return 'social';
+    }
+
+    return 'normal';
+}
+
+module.exports = SkillsOverflowCommand;

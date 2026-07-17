@@ -80,9 +80,9 @@ class HotmCommand extends minecraftCommand {
 
             let cotm = data?.v2?.profile?.skill_tree.nodes.mining.core_of_the_mountain;
 
-            let mithril_powder = data?.v2?.profile?.mining_core.powder_mithril + data?.v2?.profile?.mining_core.powder_spent_mithril;
-            let gemstone_powder = data?.v2?.profile?.mining_core.powder_gemstone + data?.v2?.profile?.mining_core.powder_spent_gemstone;
-            let glacite_powder = data?.v2?.profile?.mining_core.powder_glacite + data?.v2?.profile?.mining_core.powder_spent_glacite;
+            let mithril_powder = data?.v2?.profile?.mining_core?.powder_mithril ?? 0;
+            let gemstone_powder = data?.v2?.profile?.mining_core?.powder_gemstone ?? 0;
+            let glacite_powder = data?.v2?.profile?.mining_core?.powder_glacite ?? 0;
 
             mithril_powder = formatNumber(mithril_powder);
             gemstone_powder = formatNumber(gemstone_powder);
