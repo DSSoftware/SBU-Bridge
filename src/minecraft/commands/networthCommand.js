@@ -39,7 +39,6 @@ class NetWorthCommand extends minecraftCommand {
                     includeAllEntries: false
                 }
             );
-
             const displayUsername = await getUsername(data.uuid);
             username = formatUsername(displayUsername ?? username, profile.profile?.mode);
 

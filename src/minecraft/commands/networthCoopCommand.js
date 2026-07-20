@@ -83,7 +83,7 @@ class NetWorthCoopCommand extends minecraftCommand {
             const coopBankLabel = coopBank > 0 ? formatNumber(coopBank) : 'N/A';
 
             this.send(
-                `/${channel} ${displayUsername}'s Total Coop NW: ${formatNumber(totalCoopNetworth)} | ${coopNetworth.map((member) => member.label).join(' | ')} | Coop Bank: ${coopBankLabel} | Profile: ${profileName}`
+                `/${channel} ${displayUsername}'s Total Coop NW: ${formatNumber(totalCoopNetworth)} | Coop Bank: ${coopBankLabel} | ${coopNetworth.map((member) => member.label).join(' | ')}`
             );
 
             this.send(`/${channel} ${displayUsername}'s Coop NW | ${coopNetworth.join(' | ')}`);
