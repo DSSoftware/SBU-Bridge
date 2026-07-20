@@ -50,7 +50,7 @@ class SkyblockCommand extends minecraftCommand {
             const lilyWeight = Math.floor(weight?.lily?.total || 0).toLocaleString();
             const skillAverage = (
                 Object.keys(skills)
-                    .filter((skill) => !['runecrafting', 'social'].includes(skill))
+                    .filter((skill) => !['runecrafting', 'social', 'hunting'].includes(skill))
                     .map((skill) => skills[skill].level)
                     .reduce((a, b) => a + b, 0) /
                 (Object.keys(skills).length - 2)
