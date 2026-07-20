@@ -1,7 +1,8 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const { ProfileNetworthCalculator } = require('skyhelper-networth');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
+const { getNetworth } = require('../../../API/utils/skykings.js');
 const { formatNumber, formatUsername } = require('../../contracts/helperFunctions.js');
+const { getUsername } = require('../../contracts/API/PlayerDBAPI.js');
 const Logger = require('#root/src/Logger.js');
 
 class NetWorthCommand extends minecraftCommand {
@@ -24,57 +25,37 @@ class NetWorthCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
-            const data = await getLatestProfile(username, { museum: true });
+            const data = await getLatestProfile(username);
 
-            username = formatUsername(username, data.profileData?.game_mode);
-
-            let personal_bank = data?.v2?.profile?.profile?.bank_account;
-
-            let coop_bank = data.profileData?.banking?.balance || 0;
-
-            let coins_total = coop_bank + (personal_bank || 0);
-
-            const networthManager = new ProfileNetworthCalculator(data.profile, data.museum, coins_total);
-            const profile = await networthManager.getNetworth();
-
-            if (profile.noInventory === true) {
-                return this.send(`/${channel} ${username} has an Inventory API off!`);
-            }
-
-            const networth = formatNumber(profile.networth);
-            const unsoulboundNetworth = formatNumber(profile.unsoulboundNetworth);
-            const purse = formatNumber(profile.purse);
-            const bank = profile.bank ? formatNumber(profile.bank) : 'N/A';
-            const museum = data.museum ? formatNumber(profile.types.museum?.total ?? 0) : 'N/A';
-
-            let banking_data = 'N/A';
-
-            if (Object.entries(data.profileData?.members ?? {}).length == 1) {
-                // No personal bank, just coop (Solo profile)
-                if (data.profileData?.banking?.balance != undefined) {
-                    banking_data = formatNumber(coop_bank);
+            const profile = await getNetworth(
+                {
+                    profiles: data.profiles
+                },
+                data.uuid,
+                {
+                    profileName: data.profileData?.cute_name,
+                    top: 25,
+                    includeBank: true,
+                    includeAllEntries: false
                 }
-            } else {
-                // Coop bank + Personal bank (Coop profile)
-                let coop_label = 'N/A';
-                let personal_label = 'N/A';
+            );
 
-                if (data.profileData?.banking?.balance != undefined) {
-                    coop_label = formatNumber(coop_bank);
-                }
-                if (personal_bank != undefined) {
-                    personal_label = formatNumber(personal_bank);
-                }
+            const displayUsername = await getUsername(data.uuid);
+            username = formatUsername(displayUsername ?? username, profile.profile?.mode);
 
-                banking_data = `${coop_label} / ${personal_label}`;
-            }
+            const networth = formatNumber(profile.totals?.networth ?? 0);
+            const purse = formatNumber(profile.totals?.purse ?? 0);
+            const bank = formatNumber(profile.totals?.bank ?? 0);
+            const itemsValue = formatNumber(profile.totals?.items_value ?? 0);
+            const petsValue = formatNumber(profile.totals?.pets_value ?? 0);
+            const profileName = profile.profile?.name ?? data.profileData?.cute_name ?? 'Unknown';
 
             this.send(
-                `/${channel} ${username}'s Networth is ${networth} | Unsoulbound Networth: ${unsoulboundNetworth} | Purse: ${purse} | Bank: ${banking_data} | Museum: ${museum}`
+                `/${channel} ${username}'s Networth is ${networth} | Purse: ${purse} | Bank: ${bank} | Items: ${itemsValue} | Pets: ${petsValue} | Profile: ${profileName}`
             );
         } catch (error) {
             Logger.warnMessage(error);
-            this.send(`/${channel} [ERROR] ${error}`);
+            this.send(`/${channel} [ERROR] ${error.message ?? error}`);
         }
     }
 }
