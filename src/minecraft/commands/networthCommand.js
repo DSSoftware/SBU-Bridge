@@ -43,11 +43,12 @@ class NetWorthCommand extends minecraftCommand {
             const displayUsername = await getUsername(data.uuid);
             username = formatUsername(displayUsername ?? username, profile.profile?.mode);
 
-            const networth = formatNumber(profile.totals?.networth ?? 0);
-            const purse = formatNumber(profile.totals?.purse ?? 0);
-            const bank = formatNumber(profile.totals?.bank ?? 0);
-            const itemsValue = formatNumber(profile.totals?.items_value ?? 0);
-            const petsValue = formatNumber(profile.totals?.pets_value ?? 0);
+            const totals = profile.totals ?? {};
+            const networth = formatNumber(totals.networth ?? 0);
+            const purse = formatNumber(totals.purse ?? 0);
+            const bank = formatNumber((totals.bank ?? 0) + (totals.coop_bank ?? 0));
+            const itemsValue = formatNumber(totals.items_value ?? 0);
+            const petsValue = formatNumber(totals.pets_value ?? 0);
             const profileName = profile.profile?.name ?? data.profileData?.cute_name ?? 'Unknown';
 
             this.send(

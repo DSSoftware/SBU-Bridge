@@ -1,5 +1,5 @@
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
-const { ProfileNetworthCalculator } = require('skyhelper-networth');
+const { getNetworth } = require('../../../API/utils/skykings.js');
 const { getLatestProfile } = require('../../../API/functions/getLatestProfile.js');
 const { getMuseum } = require('../../../API/functions/getMuseum.js');
 const { getUsername } = require('../../contracts/API/PlayerDBAPI.js');
@@ -26,10 +26,11 @@ class NetWorthCoopCommand extends minecraftCommand {
         try {
             username = this.getArgs(message)[0] || username;
 
-            const data = await getLatestProfile(username, { museum: true });
+            const data = await getLatestProfile(username);
 
-            const displayUsername = formatUsername(username, data.profileData?.game_mode);
-            const coopBank = data.profileData?.banking?.balance || 0;
+            const displayUsernameRaw = await getUsername(data.uuid);
+            const displayUsername = formatUsername(displayUsernameRaw ?? username, data.profileData?.game_mode);
+            const profileName = data.profileData?.cute_name ?? 'Unknown';
             const members = Object.entries(data.profileData?.members ?? {}).filter(([, memberProfile]) => {
                 return memberProfile?.profile?.deletion_notice == null;
             });
@@ -39,50 +40,56 @@ class NetWorthCoopCommand extends minecraftCommand {
             }
 
             const coopNetworth = await Promise.all(
-                members.map(async ([uuid, memberProfile]) => {
-                    remapProfileInventory(memberProfile);
+                members.map(async ([memberUuid]) => {
+                    const memberUsername = await getUsername(memberUuid).catch(() => null);
 
-                    const memberUsername = await getUsername(uuid);
-                    const memberMuseumData = await getMuseum(data.profileData.profile_id, uuid).catch(() => {
-                        return { museum: null };
-                    });
-
-                    const personalBank = memberProfile?.profile?.bank_account;
-                    const coinsTotal = personalBank || 0;
-
-                    const networthManager = new ProfileNetworthCalculator(
-                        memberProfile,
-                        memberMuseumData?.museum,
-                        coinsTotal
+                    const profile = await getNetworth(
+                        {
+                            profiles: data.profiles
+                        },
+                        memberUuid,
+                        {
+                            profileName: data.profileData?.cute_name,
+                            top: 25,
+                            includeBank: true,
+                            includeAllEntries: false
+                        }
                     );
 
-                    const memberNetworth = await networthManager.getNetworth();
-
-                    if (memberNetworth.noInventory === true) {
-                        return {
-                            label: `${memberUsername ?? uuid}: API off`,
-                            networth: 0
-                        };
-                    }
+                    const rawNetworth = profile.totals?.networth ?? 0;
+                    const purse = profile.totals?.purse ?? 0;
+                    const bank = profile.totals?.bank ?? 0;
+                    const coopBank = profile.totals?.coop_bank ?? 0;
+                    const networth = rawNetworth - coopBank;
 
                     return {
-                        label: `${memberUsername ?? uuid}: ${formatNumber(memberNetworth.networth)}`,
-                        networth: memberNetworth.networth ?? 0
+                        username: memberUsername ?? memberUuid,
+                        networth,
+                        purse,
+                        bank,
+                        coopBank,
+                        label: `${memberUsername ?? memberUuid}: ${formatNumber(networth)}`
                     };
                 })
             );
 
-            const coopBankLabel = data.profileData?.banking?.balance != undefined ? formatNumber(coopBank) : 'N/A';
-            const totalCoopNetworth = coopNetworth.reduce((total, member) => total + member.networth, coopBank);
+            const coopBank = coopNetworth.find((member) => member.coopBank > 0)?.coopBank ?? 0;
+
+            const totalCoopNetworth =
+                coopNetworth.reduce((total, member) => {
+                    return total + member.networth;
+                }, 0) + coopBank;
+
+            const coopBankLabel = coopBank > 0 ? formatNumber(coopBank) : 'N/A';
 
             this.send(
-                `/${channel} ${displayUsername}'s Total Coop NW: ${formatNumber(totalCoopNetworth)} | ${coopNetworth.map((member) => member.label).join(' | ')} | Coop Bank: ${coopBankLabel}`
+                `/${channel} ${displayUsername}'s Total Coop NW: ${formatNumber(totalCoopNetworth)} | ${coopNetworth.map((member) => member.label).join(' | ')} | Coop Bank: ${coopBankLabel} | Profile: ${profileName}`
             );
 
             this.send(`/${channel} ${displayUsername}'s Coop NW | ${coopNetworth.join(' | ')}`);
         } catch (error) {
             Logger.warnMessage(error);
-            this.send(`/${channel} [ERROR] ${error}`);
+            this.send(`/${channel} [ERROR] ${error.message ?? error}`);
         }
     }
 }
