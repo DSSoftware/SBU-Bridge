@@ -46,7 +46,7 @@ class NetWorthCommand extends minecraftCommand {
             const networth = formatNumber(totals.networth ?? 0);
             const purse = formatNumber(totals.purse ?? 0);
             const bank = formatNumber((totals.bank ?? 0) + (totals.coop_bank ?? 0));
-            const itemsValue = formatNumber(totals.items_value ?? 0);
+            const itemsValue = formatNumber((totals.items_value ?? 0) - totals.pets_value ?? 0);
             const petsValue = formatNumber(totals.pets_value ?? 0);
             const profileName = profile.profile?.name ?? data.profileData?.cute_name ?? 'Unknown';
 
