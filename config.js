@@ -225,7 +225,7 @@ class Config {
                         dev: ['819237478073499648']
                     },
                     notifyContent: this.env('notify_content'),
-                    errorContent: '<@&1249416749334396959>'
+                    errorContent: '<@&1249416749334396959> <@&1370636248598970409>'
                 },
                 other: {
                     messageMode: 'bot',
