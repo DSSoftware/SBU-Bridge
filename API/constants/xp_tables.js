@@ -3,7 +3,7 @@ module.exports = {
         farming: 60,
         mining: 60,
         combat: 60,
-        foraging: 54,
+        foraging: 57,
         hunting: 50,
         fishing: 50,
         enchanting: 60,
