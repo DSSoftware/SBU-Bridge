@@ -3,9 +3,16 @@ const config = require('#root/config.js').getConfig();
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const getAnswer = (message, answer) => {
-    let message_parts = message.split(' ');
+    if (!message || answer === undefined || answer === null) return false;
+    const cleanMessage = message.trim().toLowerCase();
+    const cleanAnswer = answer.toString().trim().toLowerCase();
 
-    if (message_parts[message_parts.length - 1] == answer) {
+    if (cleanMessage === cleanAnswer) {
+        return true;
+    }
+
+    const message_parts = cleanMessage.split(/\s+/);
+    if (message_parts[message_parts.length - 1] === cleanAnswer) {
         return true;
     }
 
@@ -28,8 +35,8 @@ class QuickMathsCommand extends minecraftCommand {
     }
 
     async onCommand(username, message, channel = 'gc') {
-        if(last_used + this.cooldown >= (new Date()).getTime()){
-            if(notification) return;
+        if (last_used + this.cooldown >= (new Date()).getTime()) {
+            if (notification) return;
             notification = true;
             return this.send(`/${channel} You can only use !quickmaths command once every ${this.cooldown / 1000} seconds :(`);
         }
@@ -37,7 +44,6 @@ class QuickMathsCommand extends minecraftCommand {
         notification = false;
 
         try {
-            const userUsername = username;
             const operands = [Math.floor(Math.random() * 25), Math.floor(Math.random() * 25)];
             const operators = ['+', '-', '*', '/'];
             const operator = operators[Math.floor(Math.random() * operators.length)];
@@ -52,20 +58,44 @@ class QuickMathsCommand extends minecraftCommand {
             const startTime = Date.now();
             let answered = false;
 
-            const listener = (username, message) => {
-                if (!getAnswer(message, answer.toString())) {
+            const chatRegex =
+                config.bot.other.messageMode === 'minecraft'
+                    ? /^(?<chatType>§[0-9a-fA-F](Guild|Officer)) > (?<rank>§[0-9a-fA-F](?:\[.*?\])?)?\s*(?<username>[^§\s]+)\s*(?:(?<guildRank>§[0-9a-fA-F](?:\[.*?\])?))?\s*§f: (?<message>.*)/
+                    : /^(?<chatType>\w+) > (?:(?:\[(?<rank>[^\]]+)\] )?(?:(?<username>\w+)(?: \[(?<guildRank>[^\]]+)\])?: )?)?(?<message>.+)$/;
+
+            const discordRegex = /^(?<player>[^\s»:>\s]+(?:\s+[^\s»:>\s]+)*)\s*[»:>\s]\s*(?<msg>.*)/;
+
+            const listener = (rawMsg) => {
+                const msgString = rawMsg.toString();
+                const colouredMsg = rawMsg.toMotd ? rawMsg.toMotd() : msgString;
+                const match = (config.bot.other.messageMode === 'minecraft' ? colouredMsg : msgString).match(chatRegex);
+
+                if (!match || !match.groups) {
+                    return;
+                }
+
+                let sender = match.groups.username;
+                let text = match.groups.message;
+
+                const discordMatch = text.match(discordRegex);
+                if (discordMatch && discordMatch.groups) {
+                    sender = discordMatch.groups.player;
+                    text = discordMatch.groups.msg;
+                }
+
+                if (!getAnswer(text, answer.toString())) {
                     return;
                 }
 
                 answered = true;
-                this.send(`/${channel} Correct! It took you ${(Date.now() - startTime).toLocaleString()}ms`);
-                bot.removeListener('chat', listener);
+                this.send(`/${channel} Correct, ${sender}! It took you ${(Date.now() - startTime).toLocaleString()}ms`);
+                bot.removeListener('message', listener);
             };
 
-            bot.on('chat', listener);
+            bot.on('message', listener);
 
             setTimeout(() => {
-                bot.removeListener('chat', listener);
+                bot.removeListener('message', listener);
 
                 if (!answered) {
                     this.send(`/${channel} Time's up! The answer was ${answer}`);
