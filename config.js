@@ -8,7 +8,7 @@ let external_config = {
 };
 
 /**
- * @type {SCFAPIClient.default}
+ * @type {SCFAPIClient}
  */
 let SCF;
 
@@ -63,6 +63,7 @@ class Config {
             });
         }
         return {
+            /** @type {SCFAPIClient} */
             SCF: SCF,
             branding: {
                 logo: this.env('scf_logo'),

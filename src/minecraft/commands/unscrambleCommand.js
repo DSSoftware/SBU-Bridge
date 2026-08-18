@@ -1,5 +1,6 @@
 const { getRandomWord, scrambleWord } = require('../constants/words.js');
 const minecraftCommand = require('../../contracts/minecraftCommand.js');
+const config = require('#root/config.js').getConfig();
 
 const getAnswer = (message, answer) => {
     let message_parts = message.split(' ');
@@ -19,6 +20,14 @@ const getAnswer = (message, answer) => {
     return false;
 };
 
+async function generateWord(){
+    let word = config.SCF.API.gtw.createWord();
+    if(word){
+        return word;
+    }
+    return getRandomWord();
+}
+
 const cooldowns = new Map();
 
 let last_used = 0;
@@ -31,13 +40,7 @@ class unscrambleCommand extends minecraftCommand {
         this.name = 'unscramble';
         this.aliases = ['unscramble', 'us'];
         this.description = 'Unscramble the word and type it in chat to win!';
-        this.options = [
-            {
-                name: 'length',
-                description: 'Length of the word to unscramble',
-                required: false
-            }
-        ];
+        this.options = [];
         this.cooldown = 15 * 1000;
     }
 
@@ -53,8 +56,7 @@ class unscrambleCommand extends minecraftCommand {
 
         try {
             const userUsername = username;
-            const length = this.getArgs(message)[0];
-            const answer = getRandomWord(length);
+            const answer = await generateWord();
             const scrambledWord = scrambleWord(answer);
 
             const cooldownDuration = this.cooldown;
