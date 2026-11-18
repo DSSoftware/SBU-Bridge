@@ -27,21 +27,23 @@ class MiningWeightCommand extends minecraftCommand {
             let cw = 0;
 
             try {
-                axios.get(`https://ninjune.dev/api/coleweight?username=${username}`)
-                    .then (res => {
-                        if(res.data.name == undefined){
-                            this.send(`/${channel} ${username} not found `)
-                        } else {
-                            rank = res.data.rank;
-                            top = res.data.percentile;
-                            cw = res.data.coleweight;
+                let response = await axios.get(`https://ninjune.dev/api/coleweight?username=${username}`, {
+                    timeout: 5000
+                });
 
-                            this.send(`/${channel} ${username}'s Coleweight: ${cw} Top(%): ${top}% Rank: ${rank}`)
-                        }
-                    })
+                if (!response.data.name){
+                    this.send(`/${channel} ${username} not found `);
+                    return;
+                }
+
+                let rank = res.data.rank;
+                let top = res.data.percentile;
+                let cw = res.data.coleweight;
+                
+                this.send(`/${channel} ${username}'s Coleweight: ${cw} Top(%): ${top}% Rank: ${rank}`);
             }
             catch (error){
-                this.send(`/${channel} [API might be down!]`);
+                this.send(`/${channel} [ERROR] Failed to fetch your mining weight.`);
             }
 
         } catch (error) {
