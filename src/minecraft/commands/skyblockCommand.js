@@ -6,7 +6,45 @@ const getTalismans = require('../../../API/stats/talismans.js');
 const getDungeons = require('../../../API/stats/dungeons.js');
 const getSkills = require('../../../API/stats/skills.js');
 const getSlayer = require('../../../API/stats/slayer.js');
-const getWeight = require('../../../API/stats/weight.js');
+const axios = require('axios');
+const Logger = require('#root/src/Logger.js');
+
+// Returns N/A on any failure cause external
+async function getFarmingWeight(uuid) {
+    try {
+        const res = await axios.get(`https://api.elitebot.dev/Weight/${uuid}`);
+        const profiles = res?.data?.profiles ?? [];
+
+        let weight = 0;
+        for (const profile of profiles) {
+            const profileWeight = profile?.totalWeight ?? 0;
+            if (profileWeight >= weight) {
+                weight = profileWeight;
+            }
+        }
+
+        return weight.toFixed(2);
+    } catch (error) {
+        Logger.warnMessage(error);
+        return 'N/A';
+    }
+}
+
+// Returns N/A on any failure cause external
+async function getMiningWeight(username) {
+    try {
+        const res = await axios.get(`https://ninjune.dev/api/coleweight?username=${username}`);
+
+        if (res?.data?.name == undefined) {
+            return 'N/A';
+        }
+
+        return res.data.coleweight;
+    } catch (error) {
+        Logger.warnMessage(error);
+        return 'N/A';
+    }
+}
 
 class SkyblockCommand extends minecraftCommand {
     constructor(minecraft) {
@@ -29,6 +67,7 @@ class SkyblockCommand extends minecraftCommand {
             username = this.getArgs(message)[0] || username;
 
             const data = await getLatestProfile(username, { museum: true });
+            const rawUsername = username;
             username = formatUsername(username, data.profileData.game_mode);
 
             let personal_bank = data?.v2?.profile?.profile?.bank_account;
@@ -37,17 +76,15 @@ class SkyblockCommand extends minecraftCommand {
 
             const networthManager = new ProfileNetworthCalculator(data.profile, data.museum, coins_total);
 
-            const [skills, slayer, networth, weight, dungeons, talismans] = await Promise.all([
+            const [skills, slayer, networth, farmingWeight, miningWeight, dungeons, talismans] = await Promise.all([
                 getSkills(data.profile),
                 getSlayer(data.profile),
                 networthManager.getNetworth(),
-                getWeight(data.profile),
+                getFarmingWeight(data.uuid),
+                getMiningWeight(rawUsername),
                 getDungeons(data.profile, data.v2.profile),
                 getTalismans(data.profile)
             ]);
-
-            const senitherWeight = Math.floor(weight?.senither?.total || 0).toLocaleString();
-            const lilyWeight = Math.floor(weight?.lily?.total || 0).toLocaleString();
             const skillAverage = (
                 Object.keys(skills)
                     .filter((skill) => !['runecrafting', 'social', 'hunting'].includes(skill))
@@ -72,7 +109,7 @@ class SkyblockCommand extends minecraftCommand {
             this.send(
                 `/${channel} ${username}'s Level: ${
                     data.profile.leveling?.experience ? data.profile.leveling.experience / 100 : 0
-                } | Senither Weight: ${senitherWeight} | Lily Weight: ${lilyWeight} | Skill Average: ${skillAverage} | Slayer: ${slayerXp} | Catacombs: ${catacombsLevel} | Class Average: ${classAverage} | Networth: ${networthValue} | Accessories: ${talismanCount} | Recombobulated: ${recombobulatedCount} | Enriched: ${enrichmentCount}`
+                } | Mining Weight: ${miningWeight} | Farming Weight: ${farmingWeight} | Skill Average: ${skillAverage} | Slayer: ${slayerXp} | Catacombs: ${catacombsLevel} | Class Average: ${classAverage} | Networth: ${networthValue} | Accessories: ${talismanCount} | Recombobulated: ${recombobulatedCount} | Enriched: ${enrichmentCount}`
             );
         } catch (error) {
             this.send(`/${channel} [ERROR] ${error}`);
